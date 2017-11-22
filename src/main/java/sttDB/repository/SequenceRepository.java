@@ -1,6 +1,6 @@
-package repository;
+package sttDB.repository;
 
-import domain.Sequence;
+import sttDB.domain.Sequence;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.query.Param;
 

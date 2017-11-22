@@ -1,4 +1,4 @@
-package domain;
+package sttDB.domain;
 
 import org.springframework.data.annotation.Id;
 
