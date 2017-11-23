@@ -7,7 +7,7 @@ import java.math.BigInteger;
 public class Sequence {
 
     @Id
-    private BigInteger id = BigInteger.valueOf(0);
+    private BigInteger id;
 
     private String trinityId;
 
