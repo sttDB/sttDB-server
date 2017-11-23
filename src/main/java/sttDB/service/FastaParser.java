@@ -31,7 +31,6 @@ public class FastaParser {
     private void saveReceivedFile(MultipartHttpServletRequest request) throws IOException {
         Iterator<String> iterator = request.getFileNames();
         MultipartFile multiFile = request.getFile(iterator.next());
-        multiFile.getContentType();
         File f = new File("./receivedFiles/fasta.fasta");
         multiFile.transferTo(f);
     }
@@ -64,7 +63,7 @@ public class FastaParser {
     }
 
     private void insertNewSequence(Sequence sequence, String line) {
-        //agafar trinity i longitud
+        line.split(" ");
     }
 
 }
