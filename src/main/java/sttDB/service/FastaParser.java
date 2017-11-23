@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -17,11 +18,11 @@ public class FastaParser {
 
     @RequestMapping(value = "/uploadFasta", method = RequestMethod.POST)
     public void treatFasta(MultipartHttpServletRequest request) throws IOException {
-        saveRecievedFile(request);
+        saveReceivedFile(request);
         parseFile();
     }
 
-    private void saveRecievedFile(MultipartHttpServletRequest request) throws IOException {
+    private void saveReceivedFile(MultipartHttpServletRequest request) throws IOException {
         Iterator<String> iterator = request.getFileNames();
         MultipartFile multiFile = request.getFile(iterator.next());
         multiFile.getContentType();
@@ -33,7 +34,23 @@ public class FastaParser {
     }
 
     private void parseFile() throws FileNotFoundException {
-        Scanner fastaScanner = new Scanner(new File("./recievedFiles/fasta.fasta"));
+        Scanner fastaScanner = new Scanner(new FileReader("./recievedFiles/fasta.fasta"));
+        String trinityId="";
+        while(fastaScanner.hasNextLine()){
+            String line = fastaScanner.nextLine();
+            if(line.startsWith(">")){
+                trinityId = insertNewSequence();
+            }else{
+                addSequenceInfo(trinityId);
+            }
+        }
+    }
+
+    private String insertNewSequence() {
+        return null;
+    }
+
+    private void addSequenceInfo(String trinityId) {
 
     }
 
