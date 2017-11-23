@@ -63,7 +63,10 @@ public class FastaParser {
     }
 
     private void insertNewSequence(Sequence sequence, String line) {
-        line.split(" ");
+        String[] lineParts = line.split(" ");
+        sequence.setTrinityId(lineParts[0].split(">")[1]);
+        String sequenceLength = lineParts[1].split("len=")[1];
+        sequence.setLength(Integer.parseInt(sequenceLength));
     }
 
 }
