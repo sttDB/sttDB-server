@@ -23,7 +23,7 @@ public class FastaParser {
     @Autowired
     private SequenceRepository sequenceRepository;
 
-    @RequestMapping(value = "/uploadFasta", method = RequestMethod.POST)
+    @RequestMapping(value = "/uploadFasta", headers = "content-type=multipart/*", method = RequestMethod.POST)
     public void treatFasta(@RequestParam("fileName") MultipartFile file) throws IOException {
         saveReceivedFile(file);
         parseFile();
