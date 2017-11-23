@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.domain.Sequence;
@@ -23,16 +24,14 @@ public class FastaParser {
     private SequenceRepository sequenceRepository;
 
     @RequestMapping(value = "/uploadFasta", method = RequestMethod.POST)
-    public void treatFasta(MultipartHttpServletRequest request) throws IOException {
-        saveReceivedFile(request);
+    public void treatFasta(@RequestParam("fileName") MultipartFile file) throws IOException {
+        saveReceivedFile(file);
         parseFile();
     }
 
-    private void saveReceivedFile(MultipartHttpServletRequest request) throws IOException {
-        Iterator<String> iterator = request.getFileNames();
-        MultipartFile multiFile = request.getFile(iterator.next());
-        File f = new File("./receivedFiles/fasta.fasta");
-        multiFile.transferTo(f);
+    private void saveReceivedFile(MultipartFile multiFile) throws IOException {
+        File file = new File("./receivedFiles/fasta.fasta");
+        multiFile.transferTo(file);
     }
 
     private void parseFile() throws FileNotFoundException {
