@@ -2,10 +2,12 @@ package sttDB.domain;
 
 import org.springframework.data.annotation.Id;
 
+import java.math.BigInteger;
+
 public class Sequence {
 
     @Id
-    private Long id;
+    private BigInteger id = BigInteger.valueOf(0);
 
     private String trinityId;
 
@@ -17,8 +19,12 @@ public class Sequence {
 
     private String familyId;
 
-    public Long getId() {
+    public BigInteger getId() {
         return id;
+    }
+
+    public void setId(BigInteger id) {
+        this.id = id;
     }
 
     public String getTrinityId() {
