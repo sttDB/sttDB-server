@@ -13,6 +13,8 @@ public class Sequence {
 
     private String transcript;
 
+    private int length;
+
     private String familyId;
 
     public Long getId() {
@@ -41,6 +43,14 @@ public class Sequence {
 
     public void setTranscript(String transcript) {
         this.transcript = transcript;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
     }
 
     public String getFamilyId() {
