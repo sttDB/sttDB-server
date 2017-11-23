@@ -51,7 +51,7 @@ public class FastaParser {
     }
 
     private void addSequenceInfo(String trinityId) {
-
+        //need to see how to do it
     }
 
 }
