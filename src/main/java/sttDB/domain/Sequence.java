@@ -19,6 +19,8 @@ public class Sequence {
 
     private String familyId;
 
+    private String experiment;
+
     public BigInteger getId() {
         return id;
     }
@@ -65,5 +67,13 @@ public class Sequence {
 
     public void setFamilyId(String familyId) {
         this.familyId = familyId;
+    }
+
+    public String getExperiment() {
+        return experiment;
+    }
+
+    public void setExperiment(String experiment) {
+        this.experiment = experiment;
     }
 }
