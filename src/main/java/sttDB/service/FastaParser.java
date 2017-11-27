@@ -2,6 +2,7 @@ package sttDB.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,7 +24,7 @@ public class FastaParser {
     @Autowired
     private SequenceRepository sequenceRepository;
 
-    @RequestMapping(value = "/uploadFasta", headers = "content-type=multipart/*", method = RequestMethod.POST)
+    @PostMapping("/")
     public void treatFasta(@RequestParam("fileName") MultipartFile file) throws IOException {
         saveReceivedFile(file);
         parseFile();
