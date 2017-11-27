@@ -24,10 +24,15 @@ public class FastaParser {
     @Autowired
     private SequenceRepository sequenceRepository;
 
-    @PostMapping("/")
-    public void treatFasta(@RequestParam("fileName") MultipartFile file) throws IOException {
-        saveReceivedFile(file);
+    @PostMapping("/uploadFasta")
+    public void treatFasta(MultipartHttpServletRequest request) throws IOException {
+        saveReceivedFile(getFile(request));
         parseFile();
+    }
+
+    private MultipartFile getFile(MultipartHttpServletRequest request) {
+        Iterator<String> fileNames = request.getFileNames();
+        return request.getFile(fileNames.next());
     }
 
     private void saveReceivedFile(MultipartFile multiFile) throws IOException {
