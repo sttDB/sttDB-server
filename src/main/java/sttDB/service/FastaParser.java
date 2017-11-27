@@ -10,6 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.domain.Sequence;
 import sttDB.repository.SequenceRepository;
+import sttDB.service.storageService.FileSystemStorageService;
+import sttDB.service.storageService.StorageProperties;
+import sttDB.service.storageService.StorageService;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,24 +27,17 @@ public class FastaParser {
     @Autowired
     private SequenceRepository sequenceRepository;
 
+    @Autowired
+    private FastaFileManager fastaFileManager;
+
     @PostMapping("/uploadFasta")
     public void treatFasta(MultipartHttpServletRequest request) throws IOException {
-        saveReceivedFile(getFile(request));
+        fastaFileManager.setUsedFile(request);
         parseFile();
     }
 
-    private MultipartFile getFile(MultipartHttpServletRequest request) {
-        Iterator<String> fileNames = request.getFileNames();
-        return request.getFile(fileNames.next());
-    }
-
-    private void saveReceivedFile(MultipartFile multiFile) throws IOException {
-        File file = new File("./receivedFiles/fasta.fasta");
-        multiFile.transferTo(file);
-    }
-
     private void parseFile() throws FileNotFoundException {
-        Scanner fastaScanner = new Scanner(new FileReader("./receivedFiles/fasta.fasta"));
+        Scanner fastaScanner = new Scanner(new FileReader(fastaFileManager.getFasta()));
         Sequence sequence = new Sequence();
         String transcript = "";
         while (fastaScanner.hasNextLine()) {
