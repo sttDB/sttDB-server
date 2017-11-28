@@ -16,12 +16,12 @@ public class FastaFileManager {
 
     public FastaFileManager(){
         StorageProperties storageProperties = new StorageProperties();
-        storageProperties.setLocation("./receivedFiles/");
+        storageProperties.setLocation("./files/");
         storageService = new FileSystemStorageService(storageProperties);
     }
 
     public String getFasta() {
-        return storageService.loadAll().findFirst().toString();
+        return storageService.getLastUsedPath().toString();
     }
 
     public void setUsedFile(MultipartHttpServletRequest request) throws IOException {

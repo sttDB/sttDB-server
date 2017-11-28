@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
+    private Path lastUsed;
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
@@ -30,7 +31,8 @@ public class FileSystemStorageService implements StorageService {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
             }
-            Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
+            lastUsed = this.rootLocation.resolve(file.getOriginalFilename());
+            Files.copy(file.getInputStream(), lastUsed);
         } catch (IOException e) {
             throw new StorageException("Failed to store file " + file.getOriginalFilename(), e);
         }
@@ -68,6 +70,10 @@ public class FileSystemStorageService implements StorageService {
         } catch (MalformedURLException e) {
             throw new StorageFileNotFoundException("Could not read file: " + filename, e);
         }
+    }
+
+    public Path getLastUsedPath(){
+        return lastUsed;
     }
 
     @Override
