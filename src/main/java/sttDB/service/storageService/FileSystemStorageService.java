@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -31,6 +32,7 @@ public class FileSystemStorageService implements StorageService {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
             }
+            new File(this.rootLocation.resolve(file.getOriginalFilename()).toString()).delete();
             lastUsed = this.rootLocation.resolve(file.getOriginalFilename());
             Files.copy(file.getInputStream(), lastUsed);
         } catch (IOException e) {
