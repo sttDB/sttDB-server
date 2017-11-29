@@ -50,6 +50,7 @@ public class FastaParser {
         if (line.startsWith(">")) {
             closeLastSequence(sequence, transcript);
             insertNewSequence(sequence, line);
+            transcript="";
         } else {
             transcript+=line;
         }
