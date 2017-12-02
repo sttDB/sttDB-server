@@ -3,22 +3,14 @@ package sttDB.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.domain.Sequence;
 import sttDB.repository.SequenceRepository;
-import sttDB.service.storageService.FileSystemStorageService;
-import sttDB.service.storageService.StorageProperties;
-import sttDB.service.storageService.StorageService;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Scanner;
 
 @Controller
@@ -31,6 +23,7 @@ public class FastaParser {
     private FastaFileManager fastaFileManager;
 
     @PostMapping("/uploadFasta")
+    @ResponseBody
     public void treatFasta(MultipartHttpServletRequest request) throws IOException {
         fastaFileManager.setUsedFile(request);
         parseFile();
@@ -60,8 +53,16 @@ public class FastaParser {
     private void closeLastSequence(Sequence sequence, String transcript) {
         if(sequence.getTrinityId()!=null){
             sequence.setTranscript(transcript);
-            sequenceRepository.save(sequence);
+            sequenceRepository.save(convertSequence(sequence));
         }
+    }
+
+    private Sequence convertSequence(Sequence sequence) {
+        Sequence savedSequence = new Sequence();
+        savedSequence.setLength(sequence.getLength());
+        savedSequence.setTrinityId(sequence.getTrinityId());
+        savedSequence.setTranscript(sequence.getTranscript());
+        return savedSequence;
     }
 
     private void insertNewSequence(Sequence sequence, String line) {
