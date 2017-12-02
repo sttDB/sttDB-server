@@ -64,6 +64,7 @@ public class FastaParser {
         savedSequence.setLength(sequence.getLength());
         savedSequence.setTrinityId(sequence.getTrinityId());
         savedSequence.setTranscript(sequence.getTranscript());
+        savedSequence.setExperiment(fastaFileManager.getUsedFile());
         return savedSequence;
     }
 

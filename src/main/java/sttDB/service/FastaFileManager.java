@@ -13,6 +13,7 @@ import java.util.Iterator;
 @Component
 public class FastaFileManager {
     private StorageService storageService;
+    private String fileName="";
 
     public FastaFileManager(){
         StorageProperties storageProperties = new StorageProperties();
@@ -24,13 +25,18 @@ public class FastaFileManager {
         return storageService.getLastUsedPath().toString();
     }
 
+    public String getUsedFile(){
+        return fileName;
+    }
+
     public void setUsedFile(MultipartHttpServletRequest request) throws IOException {
         saveReceivedFile(getFile(request));
     }
 
     private MultipartFile getFile(MultipartHttpServletRequest request) {
         Iterator<String> fileNames = request.getFileNames();
-        return request.getFile(fileNames.next());
+        fileName = fileNames.next();
+        return request.getFile(fileName);
     }
 
     private void saveReceivedFile(MultipartFile multiFile) throws IOException {
