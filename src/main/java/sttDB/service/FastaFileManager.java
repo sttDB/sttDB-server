@@ -26,7 +26,7 @@ public class FastaFileManager {
     }
 
     public String getUsedFile(){
-        return usedFile.toString();
+        return usedFile.getOriginalFilename();
     }
 
     public void setUsedFile(MultipartHttpServletRequest request) throws IOException {
