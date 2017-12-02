@@ -57,6 +57,8 @@ public class FastaParser {
         }
     }
 
+    //This method intention is only to have the same object but in a different hash in every save that is done.
+    //When spring tries to save the same object(the hash) with different attributes, it only saves the first time.
     private Sequence convertSequence(Sequence sequence) {
         Sequence savedSequence = new Sequence();
         savedSequence.setLength(sequence.getLength());
