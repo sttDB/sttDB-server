@@ -9,7 +9,7 @@ import cucumber.api.java.en.When;
 public class ParseDataStepDefs {
 
 
-    @Given("^A user sends a file$")
+    @Given("^I send a file$")
     public void aUserSendsAFile() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
