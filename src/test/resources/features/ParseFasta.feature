@@ -7,10 +7,11 @@ Feature: Parse the incoming fasta files
     Given I send a file
     When The parser treats it
     And The data is saved
-    Then The database has information about families and DNA
+    Then I get 201 http response
+    And The database has information about families and DNA
 
   Scenario: A user sends a file that is not a fasta
     Given I have a file that is not a fasta
     And I send a file
     When The parser treats it
-    Then I get an 415 error
+    Then I get 415 http response
