@@ -1,7 +1,5 @@
 package steps;
 
-import cucumber.api.PendingException;
-import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -10,8 +8,11 @@ import org.springframework.http.MediaType;
 
 import java.io.File;
 
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 public class ParseDataStepDefs {
 
@@ -38,7 +39,13 @@ public class ParseDataStepDefs {
 
     @Then("^The database has information about DNA$")
     public void theDatabaseHasInformationAboutDNA() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/sequences/{id}", 1)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(jsonPath("$.length", is(4)))
+                .andExpect(jsonPath("$.trinityId", is("comp6_c0_seq1")))
+                .andExpect(jsonPath("$.transcript", is("GGTT")))
+                .andExpect(jsonPath("$.experiment", is("tests.fasta")));
     }
 }
