@@ -7,7 +7,7 @@ Feature: Parse the incoming fasta files
     Given I have a file named "tests.fasta"
     When I send the file
     Then I get 201 http response
-    And The database has information about families and DNA
+    And The database has information about DNA
 
   Scenario: A user sends a file that is not a fasta
     Given I have a file named "tests.txt"
