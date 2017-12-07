@@ -1,4 +1,4 @@
-package steps;
+package sttDB.steps;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -27,7 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ContextConfiguration(
-        classes = {SttDBApplication.class}, loader = SpringBootContextLoader.class
+        classes = {SttDBApplication.class},
+        loader = SpringBootContextLoader.class
 )
 @DirtiesContext
 @RunWith(SpringRunner.class)

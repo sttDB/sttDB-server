@@ -1,4 +1,4 @@
-package steps;
+package sttDB.steps;
 
 import cucumber.api.PendingException;
 import cucumber.api.java.en.Then;
