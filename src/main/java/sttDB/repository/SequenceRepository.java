@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface SequenceRepository extends MongoRepository<Sequence, Long> {
     public List<Sequence> findByTrinityId(@Param("trinityId") String trinityId);
+    public List<Sequence> findByTranscript(@Param("transcript") String transcript);
 }
