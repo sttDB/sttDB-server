@@ -1,6 +1,6 @@
-package repository;
+package sttDB.repository;
 
-import domain.Family;
+import sttDB.domain.Family;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
