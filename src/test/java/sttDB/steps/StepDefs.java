@@ -46,7 +46,7 @@ public class StepDefs {
     public void setup() {
         this.mockMvc = MockMvcBuilders
                 .webAppContextSetup(this.wac)
-                .apply(SecurityMockMvcConfigurers.springSecurity())
+//                .apply(SecurityMockMvcConfigurers.springSecurity())
                 .build();
         this.mapper.registerModule(new JavaTimeModule());
     }
