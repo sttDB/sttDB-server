@@ -36,7 +36,7 @@ public class FastaDownloader {
         response.setContentLength((int) (file.length()));
         response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
 
-        IOUtils.copy(fileInputStream, output);
+        IOUtils.copyLarge(fileInputStream, output);
         response.flushBuffer();
     }
 
