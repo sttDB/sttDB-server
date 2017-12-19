@@ -3,10 +3,11 @@ package sttDB.service;
 import sttDB.exception.InterproParsingException;
 
 import java.io.File;
+import java.util.List;
 
 public interface InterproParser {
 
-    void parse() throws InterproParsingException;
+    List<LineItems> parse() throws InterproParsingException;
 
     File getFileToParse();
 

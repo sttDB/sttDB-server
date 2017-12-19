@@ -3,11 +3,11 @@ package sttDB.service;
 import org.springframework.stereotype.Service;
 import sttDB.exception.InterproParsingException;
 
-import javax.sound.sampled.Line;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -18,14 +18,15 @@ public class TrapidInterproParser implements InterproParser {
     private File fileToParse;
 
     @Override
-    public void parse() throws InterproParsingException {
+    public List<LineItems> parse() throws InterproParsingException {
         try {
             Scanner scanner = new Scanner(new FileReader(fileToParse));
-            LineItems items;
+            List<LineItems> items = new LinkedList<>();
             skipHeader(scanner);
             while (scanner.hasNextLine()) {
-                items = parseLine(scanner.nextLine());
+                items.add(parseLine(scanner.nextLine()));
             }
+            return items;
         } catch (FileNotFoundException e) {
             throw new InterproParsingException(e);
         }
@@ -59,16 +60,4 @@ public class TrapidInterproParser implements InterproParser {
         this.fileToParse = fileToParse;
     }
 
-    private class LineItems {
-
-        String tirnityID;
-        String familyName;
-        String description;
-
-        public LineItems(String tirnityID, String familyName, String description) {
-            this.tirnityID = tirnityID;
-            this.familyName = familyName;
-            this.description = description;
-        }
-    }
 }
