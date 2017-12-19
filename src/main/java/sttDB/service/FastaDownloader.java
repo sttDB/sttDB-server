@@ -26,7 +26,7 @@ public class FastaDownloader {
     private SequenceRepository sequenceRepository;
 
     @RequestMapping(value = "/downloadFasta", method = RequestMethod.GET)
-    public void download(@RequestParam("ids") List<String> sequenceId, HttpServletResponse response) throws IOException {
+    public void download(@RequestParam("id") String sequenceId, HttpServletResponse response) throws IOException {
         File file = createFasta(sequenceId);
 
         InputStream fileInputStream = new FileInputStream(file);
@@ -40,13 +40,13 @@ public class FastaDownloader {
         response.flushBuffer();
     }
 
-    private File createFasta(List<String> sequenceId) throws IOException {
+    private File createFasta(String sequenceId) throws IOException {
         PrintWriter writer = new PrintWriter("searchedQuery.fasta", "UTF-8");
-        Iterator<String> stringIterator = sequenceId.iterator();
-        while(stringIterator.hasNext()){
-            List<Sequence> resultSequence = sequenceRepository.findByTrinityId(stringIterator.next());
-            writer.println(">" + resultSequence.get(0).getTrinityId() + " len= " + resultSequence.get(0).getLength());
-            writer.println(resultSequence.get(0).getTranscript());
+        Iterator<Sequence> sequenceIterator = sequenceRepository.findByTrinityIdLike(sequenceId).iterator();
+        while(sequenceIterator.hasNext()){
+            Sequence resultSequence = sequenceIterator.next();
+            writer.println(">" + resultSequence.getTrinityId() + " len= " + resultSequence.getLength());
+            writer.println(resultSequence.getTranscript());
         }
         writer.close();
         return new File("./searchedQuery.fasta");
