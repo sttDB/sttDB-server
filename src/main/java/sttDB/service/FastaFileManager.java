@@ -17,7 +17,7 @@ public class FastaFileManager {
 
     public FastaFileManager(){
         StorageProperties storageProperties = new StorageProperties();
-        storageProperties.setLocation("./files/");
+        storageProperties.setLocation("C:/Users/Nector/modules/files");
         storageService = new FileSystemStorageService(storageProperties);
     }
 
