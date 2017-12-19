@@ -2,10 +2,12 @@ package sttDB.domain;
 
 import org.springframework.data.annotation.Id;
 
+import java.math.BigInteger;
+
 public class Family {
 
     @Id
-    private Long id;
+    private BigInteger id;
 
     private String interproId;
 
@@ -13,7 +15,7 @@ public class Family {
 
 
 
-    public Long getId() {
+    public BigInteger getId() {
         return id;
     }
 
