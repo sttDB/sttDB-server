@@ -30,7 +30,7 @@ public class FastaParser {
     }
 
     private void parseFile() throws FileNotFoundException {
-        Scanner fastaScanner = new Scanner(new FileReader(fastaFileManager.getFasta()));
+        Scanner fastaScanner = new Scanner(new FileReader(fastaFileManager.getFile()));
         Sequence sequence = new Sequence();
         String transcript = "";
         while (fastaScanner.hasNextLine()) {
