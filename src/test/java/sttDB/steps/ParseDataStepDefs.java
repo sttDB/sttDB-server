@@ -31,7 +31,7 @@ public class ParseDataStepDefs {
         String message = stepDefs.mapper.writeValueAsString(fileWanted);
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/uploadFasta")
-                    .contentType(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
                     .content(message)
                     .accept(MediaType.APPLICATION_JSON))
                 .andDo(print());
