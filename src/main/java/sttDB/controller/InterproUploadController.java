@@ -8,9 +8,12 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.exception.InterproParsingException;
 import sttDB.service.FastaFileManager;
 import sttDB.service.InterproParser;
+import sttDB.service.InterproStorer;
+import sttDB.service.LineItems;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class InterproUploadController {
@@ -19,13 +22,16 @@ public class InterproUploadController {
 
     private InterproParser interproParser;
 
+    private InterproStorer storer;
+
     @PostMapping("/upload/interpro")
     @ResponseBody
     public void processRequest(MultipartHttpServletRequest request) {
         try {
             fileManager.setUsedFile(request);
             interproParser.setFileToParse(new File(fileManager.getFile()));
-            interproParser.parse();
+            List<LineItems> parsedItmes = interproParser.parse();
+            storer.storeItems(parsedItmes);
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("File error: " + e.getMessage());

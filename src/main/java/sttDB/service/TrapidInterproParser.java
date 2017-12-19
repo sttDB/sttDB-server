@@ -40,9 +40,9 @@ public class TrapidInterproParser implements InterproParser {
     public LineItems parseLine(String line) {
         List<String> parts = Arrays.asList(line.split("\\s+"));
         String trinityID = parts.get(1);
-        String family = parts.get(2);
+        String interproID = parts.get(2);
         String description = getDescription(parts);
-        return new LineItems(trinityID, family, description);
+        return new LineItems(trinityID, interproID, description);
     }
 
     private String getDescription(List<String> parts) {

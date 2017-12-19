@@ -70,6 +70,10 @@ public class Sequence {
         this.families = families;
     }
 
+    public boolean addFamily(Family family) {
+        return families.add(family);
+    }
+
     public String getExperiment() {
         return experiment;
     }
