@@ -3,6 +3,7 @@ package sttDB.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.exception.InterproParsingException;
 import sttDB.service.FastaFileManager;
@@ -19,6 +20,7 @@ public class InterproUploadController {
     private InterproParser interproParser;
 
     @PostMapping("/upload/interpro")
+    @ResponseBody
     public void processRequest(MultipartHttpServletRequest request) {
         try {
             fileManager.setUsedFile(request);

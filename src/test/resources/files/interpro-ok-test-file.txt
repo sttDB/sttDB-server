@@ -1,0 +1,2 @@
+#counter        transcript_id   interpro        description
+2	comp153003_c0_seq1	PF00859	CTF/NF-I family transcription modulation region
