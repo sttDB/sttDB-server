@@ -53,7 +53,7 @@ public class FastaDownloader {
         return new File("./searchedQuery.fasta");
     }
 
-    public Iterator<Sequence> getSequencesAsIterator(String sequenceId, String experiment) {
+    private Iterator<Sequence> getSequencesAsIterator(String sequenceId, String experiment) {
         return experiment.equals("") ? sequenceRepository.findByTrinityIdLike(sequenceId).iterator() :
                     sequenceRepository.findByTrinityIdAndExperiment(sequenceId, experiment).iterator();
     }
