@@ -50,4 +50,9 @@ public class InterproUploadController {
     public void setInterproParser(InterproParser interproParser) {
         this.interproParser = interproParser;
     }
+
+    @Autowired
+    public void setStorer(InterproStorer storer) {
+        this.storer = storer;
+    }
 }
