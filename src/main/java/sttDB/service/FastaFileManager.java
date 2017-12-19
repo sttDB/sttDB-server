@@ -17,11 +17,11 @@ public class FastaFileManager {
 
     public FastaFileManager(){
         StorageProperties storageProperties = new StorageProperties();
-        storageProperties.setLocation("C:/Users/Nector/modules/files");
+        storageProperties.setLocation("./files");
         storageService = new FileSystemStorageService(storageProperties);
     }
 
-    public String getFasta() {
+    public String getFile() {
         return storageService.getLastUsedPath().toString();
     }
 
