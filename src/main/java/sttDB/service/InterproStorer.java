@@ -1,6 +1,7 @@
 package sttDB.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import sttDB.domain.Family;
 import sttDB.domain.Sequence;
 import sttDB.repository.FamilyRepository;
@@ -8,6 +9,7 @@ import sttDB.repository.SequenceRepository;
 
 import java.util.List;
 
+@Service
 public class InterproStorer {
 
     @Autowired
