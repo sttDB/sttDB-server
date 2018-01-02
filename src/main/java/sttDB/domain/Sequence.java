@@ -3,6 +3,8 @@ package sttDB.domain;
 import org.springframework.data.annotation.Id;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Sequence {
 
@@ -17,7 +19,7 @@ public class Sequence {
 
     private int length;
 
-    private String familyId;
+    private List<Family> families = new ArrayList<>();
 
     private String experiment;
 
@@ -61,12 +63,16 @@ public class Sequence {
         this.length = length;
     }
 
-    public String getFamilyId() {
-        return familyId;
+    public List<Family> getFamilies() {
+        return families;
     }
 
-    public void setFamilyId(String familyId) {
-        this.familyId = familyId;
+    public void setFamilies(List<Family> families) {
+        this.families = families;
+    }
+
+    public boolean addFamily(Family family) {
+        return families.add(family);
     }
 
     public String getExperiment() {
