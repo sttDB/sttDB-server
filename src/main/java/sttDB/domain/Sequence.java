@@ -19,6 +19,8 @@ public class Sequence {
 
     private int length;
 
+    private String path;
+
     private List<Family> families = new ArrayList<>();
 
     private String experiment;
@@ -81,5 +83,13 @@ public class Sequence {
 
     public void setExperiment(String experiment) {
         this.experiment = experiment;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }
