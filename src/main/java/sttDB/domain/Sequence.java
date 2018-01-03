@@ -19,7 +19,7 @@ public class Sequence {
 
     private int length;
 
-    private String path;
+    private String dynamicFastaInfo;
 
     private List<Family> families = new ArrayList<>();
 
@@ -85,11 +85,11 @@ public class Sequence {
         this.experiment = experiment;
     }
 
-    public String getPath() {
-        return path;
+    public String getDynamicFastaInfo() {
+        return dynamicFastaInfo;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setDynamicFastaInfo(String dynamicFastaInfo) {
+        this.dynamicFastaInfo = dynamicFastaInfo;
     }
 }
