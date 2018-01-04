@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 @Controller
 public class FastaParser {
@@ -65,6 +66,7 @@ public class FastaParser {
         savedSequence.setTrinityId(sequence.getTrinityId());
         savedSequence.setTranscript(sequence.getTranscript());
         savedSequence.setExperiment(fastaFileManager.getUsedFile());
+        savedSequence.setDynamicFastaInfo(sequence.getDynamicFastaInfo());
         return savedSequence;
     }
 
@@ -73,6 +75,15 @@ public class FastaParser {
         sequence.setTrinityId(lineParts[0].split(">")[1]);
         String sequenceLength = lineParts[1].split("len=")[1];
         sequence.setLength(Integer.parseInt(sequenceLength));
+        sequence.setDynamicFastaInfo(getRestOfTheDynamicLine(lineParts));
+    }
+
+    private String getRestOfTheDynamicLine(String[] lineParts) {
+        StringBuilder dynamicLine = new StringBuilder();
+        for(int i = 2; i < lineParts.length; i++){
+            dynamicLine.append(lineParts[i]).append(" ");
+        }
+        return dynamicLine.toString();
     }
 
 }

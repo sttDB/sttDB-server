@@ -46,7 +46,9 @@ public class FastaDownloader {
         Iterator<Sequence> sequenceIterator = getSequencesAsIterator(sequenceId, experiment);
         while(sequenceIterator.hasNext()){
             Sequence resultSequence = sequenceIterator.next();
-            writer.println(">" + resultSequence.getTrinityId() + " len=" + resultSequence.getLength());
+            writer.println(">" + resultSequence.getTrinityId()
+                    + " len=" + resultSequence.getLength()
+                    + " " + resultSequence.getDynamicFastaInfo());
             writer.println(resultSequence.getTranscript());
         }
         writer.close();

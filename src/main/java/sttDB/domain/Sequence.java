@@ -19,6 +19,8 @@ public class Sequence {
 
     private int length;
 
+    private String dynamicFastaInfo;
+
     private List<Family> families = new ArrayList<>();
 
     private String experiment;
@@ -81,5 +83,13 @@ public class Sequence {
 
     public void setExperiment(String experiment) {
         this.experiment = experiment;
+    }
+
+    public String getDynamicFastaInfo() {
+        return dynamicFastaInfo;
+    }
+
+    public void setDynamicFastaInfo(String dynamicFastaInfo) {
+        this.dynamicFastaInfo = dynamicFastaInfo;
     }
 }
