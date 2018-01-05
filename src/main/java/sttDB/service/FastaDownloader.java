@@ -3,6 +3,7 @@ package sttDB.service;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -44,7 +45,7 @@ public class FastaDownloader {
     private File createFasta(String sequenceId, String experiment) throws IOException {
         PrintWriter writer = new PrintWriter("searchedQuery.fasta", "UTF-8");
         Iterator<Sequence> sequenceIterator = getSequencesAsIterator(sequenceId, experiment);
-        while(sequenceIterator.hasNext()){
+        while (sequenceIterator.hasNext()) {
             Sequence resultSequence = sequenceIterator.next();
             writer.println(">" + resultSequence.getTrinityId()
                     + " len=" + resultSequence.getLength()
@@ -56,7 +57,8 @@ public class FastaDownloader {
     }
 
     private Iterator<Sequence> getSequencesAsIterator(String sequenceId, String experiment) {
-        return experiment.equals("") ? sequenceRepository.findByTrinityIdLike(sequenceId).iterator() :
-                    sequenceRepository.findByTrinityIdAndExperiment(sequenceId, experiment).iterator();
+        return sequenceRepository.findByTrinityIdAndExperiment(sequenceId, experiment).iterator();
+//        return experiment.equals("") ? sequenceRepository.findByTrinityIdLike(sequenceId).iterator() :
+//                    sequenceRepository.findByTrinityIdAndExperiment(sequenceId, experiment).iterator();
     }
 }
