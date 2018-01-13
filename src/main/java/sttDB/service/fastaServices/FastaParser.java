@@ -1,10 +1,11 @@
-package sttDB.service;
+package sttDB.service.fastaServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.domain.Sequence;
 import sttDB.repository.SequenceRepository;
+import sttDB.service.FileManager;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

@@ -1,4 +1,4 @@
-package sttDB.service;
+package sttDB.service.fastaServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
