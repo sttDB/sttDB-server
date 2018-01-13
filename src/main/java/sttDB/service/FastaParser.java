@@ -62,7 +62,7 @@ public class FastaParser {
     //When spring tries to save the same object(the hash) with different attributes, it only saves the first time.
     private Sequence convertSequence(Sequence sequence) {
         Sequence savedSequence = new Sequence();
-        savedSequence.setLength(sequence.getLength());
+        savedSequence.setLength(sequence.getTranscript().length());//We calculate the length, the fasta may not have it.
         savedSequence.setTrinityId(sequence.getTrinityId());
         savedSequence.setTranscript(sequence.getTranscript());
         savedSequence.setExperiment(fastaFileManager.getUsedFile());
@@ -73,14 +73,12 @@ public class FastaParser {
     private void insertNewSequence(Sequence sequence, String line) {
         String[] lineParts = line.split(" ");
         sequence.setTrinityId(lineParts[0].split(">")[1]);
-        String sequenceLength = lineParts[1].split("len=")[1];
-        sequence.setLength(Integer.parseInt(sequenceLength));
         sequence.setDynamicFastaInfo(getRestOfTheDynamicLine(lineParts));
     }
 
     private String getRestOfTheDynamicLine(String[] lineParts) {
         StringBuilder dynamicLine = new StringBuilder();
-        for(int i = 2; i < lineParts.length; i++){
+        for(int i = 1; i < lineParts.length; i++){
             dynamicLine.append(lineParts[i]).append(" ");
         }
         return dynamicLine.toString();
