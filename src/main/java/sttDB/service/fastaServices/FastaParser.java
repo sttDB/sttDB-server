@@ -10,6 +10,7 @@ import sttDB.service.FileManager;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 @Component
@@ -23,7 +24,14 @@ public class FastaParser {
 
     public void treatFasta(MultipartHttpServletRequest request) throws IOException {
         fileManager.setUsedFile(request);
+        deleteOldSequences();
         parseFile();
+    }
+
+    private void deleteOldSequences() {
+        String experiment = fileManager.getUsedFile();
+        List<Sequence> oldSequences = sequenceRepository.findByExperiment(experiment);
+        sequenceRepository.delete(oldSequences);
     }
 
     private void parseFile() throws FileNotFoundException {
