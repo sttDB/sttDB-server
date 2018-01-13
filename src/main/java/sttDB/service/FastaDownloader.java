@@ -1,64 +1,52 @@
 package sttDB.service;
 
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.UrlResource;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Component;
 import sttDB.domain.Sequence;
 import sttDB.repository.SequenceRepository;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.ws.Response;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Iterator;
-import java.util.List;
 
-@Controller
+@Component
 public class FastaDownloader {
 
     @Autowired
     private SequenceRepository sequenceRepository;
 
-    @RequestMapping(value = "/downloadFasta", method = RequestMethod.GET)
-    public void download(@RequestParam("trinityId") String sequenceId, @RequestParam("experiment") String experiment,
-                         HttpServletResponse response) throws IOException {
-        File file = createFasta(sequenceId, experiment);
-
-        InputStream fileInputStream = new FileInputStream(file);
-        OutputStream output = response.getOutputStream();
-
-        response.setContentType("txt/plain");
-        response.setContentLength((int) (file.length()));
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
-
-        IOUtils.copyLarge(fileInputStream, output);
-        response.flushBuffer();
+    public File createFasta(String sequenceId, String experiment) throws IOException {
+        return experiment.equals("") ? createLargeFastaFile(sequenceId) : createSimpleFastaFile(sequenceId, experiment);
     }
 
-    private File createFasta(String sequenceId, String experiment) throws IOException {
+    private File createSimpleFastaFile(String sequenceId, String experiment) throws IOException {
         PrintWriter writer = new PrintWriter("searchedQuery.fasta", "UTF-8");
-        Iterator<Sequence> sequenceIterator = getSequencesAsIterator(sequenceId, experiment);
-        while (sequenceIterator.hasNext()) {
-            Sequence resultSequence = sequenceIterator.next();
-            writer.println(">" + resultSequence.getTrinityId()
-                    + " len=" + resultSequence.getLength()
-                    + " " + resultSequence.getDynamicFastaInfo());
-            writer.println(resultSequence.getTranscript());
-        }
+        insertSequences(writer, sequenceRepository.findByTrinityIdAndExperiment(sequenceId, experiment).iterator());
         writer.close();
         return new File("./searchedQuery.fasta");
     }
 
-    private Iterator<Sequence> getSequencesAsIterator(String sequenceId, String experiment) {
-        return sequenceRepository.findByTrinityIdAndExperiment(sequenceId, experiment).iterator();
-//        return experiment.equals("") ? sequenceRepository.findByTrinityIdLike(sequenceId).iterator() :
-//                    sequenceRepository.findByTrinityIdAndExperiment(sequenceId, experiment).iterator();
+    private void insertSequences(PrintWriter writer, Iterator<Sequence> sequenceIterator) {
+        while (sequenceIterator.hasNext()) {
+            Sequence resultSequence = sequenceIterator.next();
+            writer.println(">" + resultSequence.getTrinityId()
+                    + " " + resultSequence.getDynamicFastaInfo());
+            writer.println(resultSequence.getTranscript());
+        }
+    }
+
+    private File createLargeFastaFile(String sequenceId) throws IOException {
+        PrintWriter writer = new PrintWriter("searchedQuery.fasta", "UTF-8");
+        Page<Sequence> sequencePage = sequenceRepository.findByTrinityIdLike(sequenceId, new PageRequest(0,1000));
+        insertSequences(writer, sequencePage.iterator());
+        while(sequencePage.hasNext()){
+            sequencePage = sequenceRepository.findByTrinityIdLike(sequenceId, sequencePage.nextPageable());
+            insertSequences(writer, sequencePage.iterator());
+        }
+        writer.close();
+        return new File("./searchedQuery.fasta");
     }
 }
