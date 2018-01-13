@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.exception.InterproParsingException;
-import sttDB.service.FastaFileManager;
+import sttDB.service.FileManager;
 import sttDB.service.InterproParser;
 import sttDB.service.InterproStorer;
 import sttDB.service.LineItems;
@@ -18,7 +18,7 @@ import java.util.List;
 @Controller
 public class InterproUploadController {
 
-    private FastaFileManager fileManager;
+    private FileManager fileManager;
 
     private InterproParser interproParser;
 
@@ -42,7 +42,7 @@ public class InterproUploadController {
     }
 
     @Autowired
-    public void setFileManager(FastaFileManager fileManager) {
+    public void setFileManager(FileManager fileManager) {
         this.fileManager = fileManager;
     }
 
