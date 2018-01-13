@@ -1,9 +1,7 @@
 package sttDB.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.domain.Sequence;
 import sttDB.repository.SequenceRepository;
@@ -12,9 +10,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
-@Controller
+@Component
 public class FastaParser {
 
     @Autowired
@@ -23,8 +20,6 @@ public class FastaParser {
     @Autowired
     private FastaFileManager fastaFileManager;
 
-    @PostMapping("/uploadFasta")
-    @ResponseBody
     public void treatFasta(MultipartHttpServletRequest request) throws IOException {
         fastaFileManager.setUsedFile(request);
         parseFile();
