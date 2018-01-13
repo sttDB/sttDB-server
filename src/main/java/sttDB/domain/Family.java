@@ -7,17 +7,9 @@ import java.math.BigInteger;
 public class Family {
 
     @Id
-    private BigInteger id;
-
     private String interproId;
 
     private String description;
-
-
-
-    public BigInteger getId() {
-        return id;
-    }
 
     public String getInterproId() {
         return interproId;
