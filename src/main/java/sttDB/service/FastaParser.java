@@ -18,15 +18,15 @@ public class FastaParser {
     private SequenceRepository sequenceRepository;
 
     @Autowired
-    private FastaFileManager fastaFileManager;
+    private FileManager fileManager;
 
     public void treatFasta(MultipartHttpServletRequest request) throws IOException {
-        fastaFileManager.setUsedFile(request);
+        fileManager.setUsedFile(request);
         parseFile();
     }
 
     private void parseFile() throws FileNotFoundException {
-        Scanner fastaScanner = new Scanner(new FileReader(fastaFileManager.getFile()));
+        Scanner fastaScanner = new Scanner(new FileReader(fileManager.getFile()));
         Sequence sequence = new Sequence();
         String transcript = "";
         while (fastaScanner.hasNextLine()) {
@@ -60,7 +60,7 @@ public class FastaParser {
         savedSequence.setLength(sequence.getTranscript().length());//We calculate the length, the fasta may not have it.
         savedSequence.setTrinityId(sequence.getTrinityId());
         savedSequence.setTranscript(sequence.getTranscript());
-        savedSequence.setExperiment(fastaFileManager.getUsedFile());
+        savedSequence.setExperiment(fileManager.getUsedFile());
         savedSequence.setDynamicFastaInfo(sequence.getDynamicFastaInfo());
         return savedSequence;
     }
