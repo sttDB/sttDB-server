@@ -7,6 +7,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.math.BigInteger;
 
-public interface FamilyRepository extends MongoRepository<Family, BigInteger> {
+public interface FamilyRepository extends MongoRepository<Family, String> {
     Family findByInterproId(@Param("interproId") String interproId);
 }
