@@ -17,7 +17,7 @@ public class uploadController {
     @Autowired
     FastaParser fastaParser;
 
-    @PostMapping("/uploadFasta")
+    @PostMapping("/fasta")
     @ResponseBody
     public void recieveFasta(MultipartHttpServletRequest request) throws IOException{
         fastaParser.treatFasta(request);
