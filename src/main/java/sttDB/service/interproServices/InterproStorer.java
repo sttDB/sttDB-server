@@ -1,4 +1,4 @@
-package sttDB.service;
+package sttDB.service.interproServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

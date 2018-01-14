@@ -1,4 +1,4 @@
-package sttDB.service;
+package sttDB.service.interproServices;
 
 import sttDB.exception.InterproParsingException;
 

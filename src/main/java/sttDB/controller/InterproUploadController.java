@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.exception.InterproParsingException;
 import sttDB.service.FileManager;
-import sttDB.service.InterproParser;
-import sttDB.service.InterproStorer;
-import sttDB.service.LineItems;
+import sttDB.service.interproServices.InterproParser;
+import sttDB.service.interproServices.InterproStorer;
+import sttDB.service.interproServices.LineItems;
 
 import java.io.File;
 import java.io.IOException;
