@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @RequestMapping(value = "/upload")
 @Controller
-public class uploadController {
+public class UploadController {
 
     @Autowired
     FastaParser fastaParser;
