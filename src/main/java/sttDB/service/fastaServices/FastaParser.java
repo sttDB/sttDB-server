@@ -1,37 +1,41 @@
-package sttDB.service;
+package sttDB.service.fastaServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.domain.Sequence;
 import sttDB.repository.SequenceRepository;
+import sttDB.service.FileManager;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
-@Controller
+@Component
 public class FastaParser {
 
     @Autowired
     private SequenceRepository sequenceRepository;
 
     @Autowired
-    private FastaFileManager fastaFileManager;
+    private FileManager fileManager;
 
-    @PostMapping("/uploadFasta")
-    @ResponseBody
     public void treatFasta(MultipartHttpServletRequest request) throws IOException {
-        fastaFileManager.setUsedFile(request);
+        fileManager.setUsedFile(request);
+        deleteOldSequences();
         parseFile();
     }
 
+    private void deleteOldSequences() {
+        String experiment = fileManager.getUsedFile();
+        List<Sequence> oldSequences = sequenceRepository.findByExperiment(experiment);
+        sequenceRepository.delete(oldSequences);
+    }
+
     private void parseFile() throws FileNotFoundException {
-        Scanner fastaScanner = new Scanner(new FileReader(fastaFileManager.getFile()));
+        Scanner fastaScanner = new Scanner(new FileReader(fileManager.getFile()));
         Sequence sequence = new Sequence();
         String transcript = "";
         while (fastaScanner.hasNextLine()) {
@@ -62,10 +66,10 @@ public class FastaParser {
     //When spring tries to save the same object(the hash) with different attributes, it only saves the first time.
     private Sequence convertSequence(Sequence sequence) {
         Sequence savedSequence = new Sequence();
-        savedSequence.setLength(sequence.getLength());
+        savedSequence.setLength(sequence.getTranscript().length());//We calculate the length, the fasta may not have it.
         savedSequence.setTrinityId(sequence.getTrinityId());
         savedSequence.setTranscript(sequence.getTranscript());
-        savedSequence.setExperiment(fastaFileManager.getUsedFile());
+        savedSequence.setExperiment(fileManager.getUsedFile());
         savedSequence.setDynamicFastaInfo(sequence.getDynamicFastaInfo());
         return savedSequence;
     }
@@ -73,14 +77,12 @@ public class FastaParser {
     private void insertNewSequence(Sequence sequence, String line) {
         String[] lineParts = line.split(" ");
         sequence.setTrinityId(lineParts[0].split(">")[1]);
-        String sequenceLength = lineParts[1].split("len=")[1];
-        sequence.setLength(Integer.parseInt(sequenceLength));
         sequence.setDynamicFastaInfo(getRestOfTheDynamicLine(lineParts));
     }
 
     private String getRestOfTheDynamicLine(String[] lineParts) {
         StringBuilder dynamicLine = new StringBuilder();
-        for(int i = 2; i < lineParts.length; i++){
+        for(int i = 1; i < lineParts.length; i++){
             dynamicLine.append(lineParts[i]).append(" ");
         }
         return dynamicLine.toString();

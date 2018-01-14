@@ -1,17 +1,45 @@
 package sttDB.service;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import sttDB.service.storageService.FileSystemStorageService;
+import sttDB.service.storageService.StorageProperties;
+import sttDB.service.storageService.StorageService;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Path;
+import java.util.Iterator;
 
-public interface FileManager {
+@Component
+public class FileManager {
+    private StorageService storageService;
+    private MultipartFile usedFile;
 
-    Path saveFile(MultipartFile file) throws IOException;
+    public FileManager(){
+        StorageProperties storageProperties = new StorageProperties();
+        storageProperties.setLocation("./files");
+        storageService = new FileSystemStorageService(storageProperties);
+    }
 
-    Path getFile(Path path) throws FileNotFoundException;
+    public String getFile() {
+        return storageService.getLastUsedPath().toString();
+    }
 
-    boolean pathExists(Path path) throws FileNotFoundException;
+    public String getUsedFile(){
+        return usedFile.getOriginalFilename();
+    }
 
+    public void setUsedFile(MultipartHttpServletRequest request) throws IOException {
+        saveReceivedFile(getFile(request));
+    }
+
+    private MultipartFile getFile(MultipartHttpServletRequest request) {
+        Iterator<String> fileNames = request.getFileNames();
+        usedFile = request.getFile(fileNames.next());
+        return usedFile;
+    }
+
+    private void saveReceivedFile(MultipartFile multiFile) throws IOException {
+        storageService.store(multiFile);
+    }
 }
