@@ -27,6 +27,14 @@ public class TrapidInterproParserTest {
         assertThat(result, is(empty()));
     }
 
+    @Test(expected = InterproParsingException.class)
+    public void wrongFile_exception() throws InterproParsingException {
+        TrapidInterproParser sut = new TrapidInterproParser();
+        sut.setFileToParse(getResource("files/interpro-test-files/wrong-file.fasta"));
+
+        List<LineItems> result = sut.parse();
+    }
+
     private String getResource(String path) {
         try {
             return getClass().getClassLoader().getResource(path).getFile();

@@ -19,7 +19,15 @@ public class TrapidInterproParser implements InterproParser {
     public List<LineItems> parse() throws InterproParsingException {
         if (reader == null)
             throw new InterproParsingException("File to parse not set, call 'setFileToParse first'");
-        items = reader.lines().skip(1).map(this::parseLine).collect(Collectors.toList());
+
+        try {
+            items = reader.lines()
+                    .skip(1)
+                    .map(this::parseLine)
+                    .collect(Collectors.toList());
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new InterproParsingException("Wrong file format", e);
+        }
         return items;
     }
 
