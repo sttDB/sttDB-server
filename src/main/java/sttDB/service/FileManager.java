@@ -17,7 +17,7 @@ public class FileManager {
 
     public FileManager(){
         StorageProperties storageProperties = new StorageProperties();
-        storageProperties.setLocation("C:/Users/Nector/modules/work/University/TFG/server-dev-dir/user-files");
+        storageProperties.setLocation("./files");
         storageService = new FileSystemStorageService(storageProperties);
     }
 

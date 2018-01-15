@@ -20,14 +20,23 @@ public class InterproStorer {
 
     public void storeItems(List<LineItems> items) {
         for (LineItems item : items) {
-            Family family = new Family();
-            family.setInterproId(item.interproId);
-            family.setDescription(item.description);
-            familyRepository.save(family);
-
+            Family family = getFamilyOrNew(item);
             Sequence sequence = sequenceRepository.findByTrinityId(item.trinityID).get(0); // find by experiment too
             sequence.addFamily(family);
             sequenceRepository.save(sequence);
+        }
+    }
+
+    private Family getFamilyOrNew(LineItems item) {
+        Family family = familyRepository.findByInterproId(item.interproId);
+        if (family != null)
+            return family;
+        else {
+            family = new Family();
+            family.setInterproId(item.interproId);
+            family.setDescription(item.description);
+            familyRepository.save(family);
+            return family;
         }
     }
 }
