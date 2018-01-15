@@ -28,7 +28,11 @@ public class TrapidInterproParserTest {
     }
 
     private String getResource(String path) {
-        return getClass().getClassLoader().getResource(path).getFile();
+        try {
+            return getClass().getClassLoader().getResource(path).getFile();
+        } catch (NullPointerException e) {
+            throw new NullPointerException("Test resource <" + path + "> not found");
+        }
     }
 
 }
