@@ -42,6 +42,7 @@ public class FastaParser {
             String line = fastaScanner.nextLine();
             transcript = treatLine(sequence, transcript, line);
         }
+        closeLastSequence(sequence, transcript);
     }
 
     private String treatLine(Sequence sequence, String transcript, String line) {
