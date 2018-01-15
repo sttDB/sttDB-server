@@ -6,7 +6,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.exception.InterproParsingException;
 import sttDB.service.FileManager;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class InterproManager {
     public void treatInterpro(MultipartHttpServletRequest request) {
         try {
             fileManager.setUsedFile(request);
-            interproParser.setFileToParse(new File(fileManager.getFile()));
+            interproParser.setFileToParse(fileManager.getFile());
             List<LineItems> parsedItmes = interproParser.parse();
             storer.storeItems(parsedItmes);
         } catch (IOException e) {

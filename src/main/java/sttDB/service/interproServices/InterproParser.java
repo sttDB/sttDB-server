@@ -11,6 +11,6 @@ public interface InterproParser {
 
     File getFileToParse();
 
-    void setFileToParse(File path);
+    void setFileToParse(String path);
 
 }

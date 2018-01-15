@@ -56,7 +56,7 @@ public class TrapidInterproParser implements InterproParser {
         return fileToParse;
     }
 
-    public void setFileToParse(File fileToParse) {
+    public void setFileToParse(String path) {
         this.fileToParse = fileToParse;
     }
 
