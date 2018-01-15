@@ -62,10 +62,9 @@ public class FileSystemStorageService implements StorageService {
         try {
             Path file = load(filename);
             Resource resource = new UrlResource(file.toUri());
-            if(resource.exists() || resource.isReadable()) {
+            if (resource.exists() || resource.isReadable()) {
                 return resource;
-            }
-            else {
+            } else {
                 throw new StorageFileNotFoundException("Could not read file: " + filename);
 
             }
@@ -74,7 +73,7 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
-    public Path getLastUsedPath(){
+    public Path getLastUsedPath() {
         return lastUsed;
     }
 

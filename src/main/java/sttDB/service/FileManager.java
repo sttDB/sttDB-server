@@ -1,10 +1,9 @@
 package sttDB.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import sttDB.service.storageService.FileSystemStorageService;
-import sttDB.service.storageService.StorageProperties;
 import sttDB.service.storageService.StorageService;
 
 import java.io.IOException;
@@ -12,20 +11,20 @@ import java.util.Iterator;
 
 @Component
 public class FileManager {
+
     private StorageService storageService;
     private MultipartFile usedFile;
 
-    public FileManager(){
-        StorageProperties storageProperties = new StorageProperties();
-        storageProperties.setLocation("./files");
-        storageService = new FileSystemStorageService(storageProperties);
+    @Autowired
+    public FileManager(StorageService storageService) {
+        this.storageService = storageService;
     }
 
     public String getFile() {
         return storageService.getLastUsedPath().toString();
     }
 
-    public String getUsedFile(){
+    public String getUsedFile() {
         return usedFile.getOriginalFilename();
     }
 
