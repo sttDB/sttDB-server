@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-@Service
 public class _TrapidInterproParser implements InterproParser {
 
     private File fileToParse;

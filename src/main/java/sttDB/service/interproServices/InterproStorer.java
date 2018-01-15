@@ -25,7 +25,7 @@ public class InterproStorer {
             family.setDescription(item.description);
             familyRepository.save(family);
 
-            Sequence sequence = sequenceRepository.findByTrinityId(item.tirnityID).get(0); // find by experiment too
+            Sequence sequence = sequenceRepository.findByTrinityId(item.trinityID).get(0); // find by experiment too
             sequence.addFamily(family);
             sequenceRepository.save(sequence);
         }
