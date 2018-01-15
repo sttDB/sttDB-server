@@ -18,18 +18,14 @@ public class InterproManager {
 
     private InterproStorer storer;
 
-    public void treatInterpro(MultipartHttpServletRequest request) {
+    public void treatInterpro(MultipartHttpServletRequest request) throws InterproParsingException {
         try {
             fileManager.setUsedFile(request);
             interproParser.setFileToParse(fileManager.getFile());
             List<LineItems> parsedItmes = interproParser.parse();
             storer.storeItems(parsedItmes);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("File error: " + e.getMessage());
-        } catch (InterproParsingException e) {
-            e.printStackTrace();
-            System.err.println("Error parsing interpro: " + e.getMessage());
+        } catch (IOException | InterproParsingException e) {
+            throw new InterproParsingException(e);
         }
     }
 
