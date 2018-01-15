@@ -26,11 +26,6 @@ public class TrapidInterproParser implements InterproParser {
     }
 
     @Override
-    public File getFileToParse() {
-        return null;
-    }
-
-    @Override
     public void setFileToParse(String path) throws InterproParsingException {
         try {
             fileReader = factory.readerFromPath(path);

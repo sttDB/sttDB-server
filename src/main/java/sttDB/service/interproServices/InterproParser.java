@@ -9,8 +9,6 @@ public interface InterproParser {
 
     List<LineItems> parse() throws InterproParsingException;
 
-    File getFileToParse();
-
     void setFileToParse(String path) throws InterproParsingException;
 
 }

@@ -50,11 +50,6 @@ public class _TrapidInterproParser implements InterproParser {
                 .collect(Collectors.joining(" "));
     }
 
-    @Override
-    public File getFileToParse() {
-        return fileToParse;
-    }
-
     public void setFileToParse(String path) {
         this.fileToParse = fileToParse;
     }
