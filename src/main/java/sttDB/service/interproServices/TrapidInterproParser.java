@@ -3,24 +3,18 @@ package sttDB.service.interproServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sttDB.exception.InterproParsingException;
-import sttDB.utils.ReaderFactory;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.Reader;
-import java.util.ArrayList;
+import java.io.*;
 import java.util.List;
 
 @Service
 public class TrapidInterproParser implements InterproParser {
 
-    private Reader fileReader;
-
-    ReaderFactory factory;
+    private BufferedReader reader;
 
     @Override
     public List<LineItems> parse() throws InterproParsingException {
-        if (fileReader == null)
+        if (reader == null)
             throw new InterproParsingException("File to parse not set, call 'setFileToParse first'");
         return null;
     }
@@ -28,14 +22,11 @@ public class TrapidInterproParser implements InterproParser {
     @Override
     public void setFileToParse(String path) throws InterproParsingException {
         try {
-            fileReader = factory.readerFromPath(path);
+            File inputF = new File(path);
+            InputStream inputFS = new FileInputStream(inputF);
+            reader = new BufferedReader(new InputStreamReader(inputFS));
         } catch (FileNotFoundException e) {
             throw new InterproParsingException("File not found", e);
         }
-    }
-
-    @Autowired
-    public void setFactory(ReaderFactory factory) {
-        this.factory = factory;
     }
 }
