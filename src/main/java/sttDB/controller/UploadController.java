@@ -15,14 +15,13 @@ import java.io.IOException;
 @Controller
 public class UploadController {
 
-    @Autowired
-    FastaParser fastaParser;
+    private FastaParser fastaParser;
 
     private InterproManager interproManager;
 
     @PostMapping("/fasta")
     @ResponseBody
-    public void recieveFasta(MultipartHttpServletRequest request) throws IOException{
+    public void recieveFasta(MultipartHttpServletRequest request) throws IOException {
         fastaParser.treatFasta(request);
     }
 
@@ -30,6 +29,11 @@ public class UploadController {
     @ResponseBody
     public void processRequest(MultipartHttpServletRequest request) {
         interproManager.treatInterpro(request);
+    }
+
+    @Autowired
+    public void setFastaParser(FastaParser fastaParser) {
+        this.fastaParser = fastaParser;
     }
 
     @Autowired
