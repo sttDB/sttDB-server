@@ -13,7 +13,7 @@ import java.io.*;
 
 @RequestMapping(value = "/download")
 @Controller
-public class downloadController {
+public class DownloadController {
 
     @Autowired
     FastaDownloader fastaDownloader;

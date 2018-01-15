@@ -1,22 +1,16 @@
-package sttDB.controller;
+package sttDB.service.interproServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.exception.InterproParsingException;
 import sttDB.service.FileManager;
-import sttDB.service.InterproParser;
-import sttDB.service.InterproStorer;
-import sttDB.service.LineItems;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-@Controller
-public class InterproUploadController {
+@Service
+public class InterproManager {
 
     private FileManager fileManager;
 
@@ -24,12 +18,10 @@ public class InterproUploadController {
 
     private InterproStorer storer;
 
-    @PostMapping("/upload/interpro")
-    @ResponseBody
-    public void processRequest(MultipartHttpServletRequest request) {
+    public void treatInterpro(MultipartHttpServletRequest request) {
         try {
             fileManager.setUsedFile(request);
-            interproParser.setFileToParse(new File(fileManager.getFile()));
+            interproParser.setFileToParse(fileManager.getFile());
             List<LineItems> parsedItmes = interproParser.parse();
             storer.storeItems(parsedItmes);
         } catch (IOException e) {
@@ -55,4 +47,5 @@ public class InterproUploadController {
     public void setStorer(InterproStorer storer) {
         this.storer = storer;
     }
+
 }

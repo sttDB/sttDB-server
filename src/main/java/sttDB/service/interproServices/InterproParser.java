@@ -1,4 +1,4 @@
-package sttDB.service;
+package sttDB.service.interproServices;
 
 import sttDB.exception.InterproParsingException;
 
@@ -9,8 +9,6 @@ public interface InterproParser {
 
     List<LineItems> parse() throws InterproParsingException;
 
-    File getFileToParse();
-
-    void setFileToParse(File path);
+    void setFileToParse(String path) throws InterproParsingException;
 
 }
