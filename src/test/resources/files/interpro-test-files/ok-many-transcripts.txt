@@ -1,0 +1,4 @@
+#counter	transcript_id	interpro	description
+1	comp153003_c0_seq1	PF03165	MH1 domain
+2	comp153003_c0_seq1	PF00859	CTF/NF-I family transcription modulation region
+3	comp153003_c0_seq1	PF10524	Nuclear factor I protein pre-N-terminus
