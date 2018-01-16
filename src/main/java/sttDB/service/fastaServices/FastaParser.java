@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.domain.Sequence;
+import sttDB.exception.FastaParsingException;
 import sttDB.repository.SequenceRepository;
 import sttDB.service.FileManager;
 
@@ -57,9 +58,11 @@ public class FastaParser {
     }
 
     private void closeLastSequence(Sequence sequence, String transcript) {
-        if(sequence.getTrinityId()!=null){
+        if (sequence.getTrinityId() != null) {
             sequence.setTranscript(transcript);
             sequenceRepository.save(convertSequence(sequence));
+        } else {
+            throw new FastaParsingException("Wrong file format");
         }
     }
 

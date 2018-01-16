@@ -16,5 +16,12 @@ public class ExceptionControllerAdvice {
     public VndErrors interproParsingExceptionHandler(InterproParsingException ex) {
         return new VndErrors("error: ", ex.getMessage());
     }
+
+    @ResponseBody
+    @ExceptionHandler(FastaParsingException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public VndErrors fastaParsingExceptionHandler(FastaParsingException ex) {
+        return new VndErrors("error: ", ex.getMessage());
+    }
 }
 
