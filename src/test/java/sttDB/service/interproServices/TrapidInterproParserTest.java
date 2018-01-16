@@ -21,32 +21,26 @@ public class TrapidInterproParserTest {
         sut = new TrapidInterproParser();
     }
 
-    @Test(expected = InterproParsingException.class)
+    @Test(expected = NullPointerException.class)
     public void fileToParseNotSet_throwException() throws InterproParsingException {
-        sut.parse();
+        sut.parse(null);
     }
 
     @Test
     public void fileWithHeaderOnly_emptyList() throws InterproParsingException {
-        sut.setFileToParse(getResource("header-only.txt"));
-
-        List<LineItems> result = sut.parse();
+        List<LineItems> result = sut.parse(getResource("header-only.txt"));
 
         assertThat(result, is(empty()));
     }
 
     @Test(expected = InterproParsingException.class)
     public void wrongFile_exception() throws InterproParsingException {
-        sut.setFileToParse(getResource("wrong-file.fasta"));
-
-        List<LineItems> result = sut.parse();
+        List<LineItems> result = sut.parse(getResource("wrong-file.fasta"));
     }
 
     @Test
     public void fileWithHeaderAndOneLine_parsedItem() throws InterproParsingException {
-        sut.setFileToParse(getResource("ok-file.txt"));
-
-        List<LineItems> result = sut.parse();
+        List<LineItems> result = sut.parse(getResource("ok-file.txt"));
         LineItems parsed = result.get(0);
 
         assertThat(result.size(), is(1));
@@ -57,9 +51,7 @@ public class TrapidInterproParserTest {
 
     @Test
     public void fileWithManyLines_parsedItems() throws InterproParsingException {
-        sut.setFileToParse(getResource("ok-many-transcripts.txt"));
-
-        List<LineItems> result = sut.parse();
+        List<LineItems> result = sut.parse(getResource("ok-many-transcripts.txt"));
 
         assertThat(result, contains(
                 new LineItems("comp153003_c0_seq1",

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.domain.Sequence;
+import sttDB.exception.FastaParsingException;
 import sttDB.repository.SequenceRepository;
 import sttDB.service.FileManager;
 
@@ -22,10 +23,14 @@ public class FastaParser {
     @Autowired
     private FileManager fileManager;
 
-    public void treatFasta(MultipartHttpServletRequest request) throws IOException {
-        fileManager.setUsedFile(request);
-        deleteOldSequences();
-        parseFile();
+    public void treatFasta(MultipartHttpServletRequest request) {
+        try {
+            fileManager.setUsedFile(request);
+            deleteOldSequences();
+            parseFile();
+        } catch (IOException e) {
+            throw new FastaParsingException(e);
+        }
     }
 
     private void deleteOldSequences() {
@@ -34,15 +39,23 @@ public class FastaParser {
         sequenceRepository.delete(oldSequences);
     }
 
-    private void parseFile() throws FileNotFoundException {
-        Scanner fastaScanner = new Scanner(new FileReader(fileManager.getFile()));
-        Sequence sequence = new Sequence();
-        String transcript = "";
-        while (fastaScanner.hasNextLine()) {
-            String line = fastaScanner.nextLine();
-            transcript = treatLine(sequence, transcript, line);
+    private void parseFile() {
+        Scanner fastaScanner = null;
+        try {
+            fastaScanner = new Scanner(new FileReader(fileManager.getFile()));
+            Sequence sequence = new Sequence();
+            String transcript = "";
+            while (fastaScanner.hasNextLine()) {
+                String line = fastaScanner.nextLine();
+                transcript = treatLine(sequence, transcript, line);
+            }
+            closeLastSequence(sequence, transcript);
+        } catch (FileNotFoundException e) {
+            throw new FastaParsingException("File not found: " + fileManager.getFile(), e);
+        } finally {
+            if (fastaScanner != null)
+                fastaScanner.close();
         }
-        closeLastSequence(sequence, transcript);
     }
 
     private String treatLine(Sequence sequence, String transcript, String line) {
@@ -57,7 +70,7 @@ public class FastaParser {
     }
 
     private void closeLastSequence(Sequence sequence, String transcript) {
-        if(sequence.getTrinityId()!=null){
+        if (sequence.getTrinityId() != null) {
             sequence.setTranscript(transcript);
             sequenceRepository.save(convertSequence(sequence));
         }

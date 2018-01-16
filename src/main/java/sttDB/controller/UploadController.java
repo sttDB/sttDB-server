@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import sttDB.exception.InterproParsingException;
 import sttDB.service.fastaServices.FastaParser;
 import sttDB.service.interproServices.InterproManager;
 
@@ -21,7 +22,7 @@ public class UploadController {
 
     @PostMapping("/fasta")
     @ResponseBody
-    public void recieveFasta(MultipartHttpServletRequest request) throws IOException {
+    public void recieveFasta(MultipartHttpServletRequest request) {
         fastaParser.treatFasta(request);
     }
 

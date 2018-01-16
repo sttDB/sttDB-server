@@ -1,6 +1,6 @@
 package sttDB.exception;
 
-public class InterproParsingException extends Exception {
+public class InterproParsingException extends RuntimeException {
 
     public InterproParsingException() {
     }

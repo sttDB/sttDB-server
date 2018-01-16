@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface InterproParser {
 
-    List<LineItems> parse() throws InterproParsingException;
-
-    void setFileToParse(String path) throws InterproParsingException;
+    List<LineItems> parse(String path) throws InterproParsingException;
 
 }

@@ -21,15 +21,10 @@ public class InterproManager {
     public void treatInterpro(MultipartHttpServletRequest request) {
         try {
             fileManager.setUsedFile(request);
-            interproParser.setFileToParse(fileManager.getFile());
-            List<LineItems> parsedItmes = interproParser.parse();
+            List<LineItems> parsedItmes = interproParser.parse(fileManager.getFile());
             storer.storeItems(parsedItmes);
         } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("File error: " + e.getMessage());
-        } catch (InterproParsingException e) {
-            e.printStackTrace();
-            System.err.println("Error parsing interpro: " + e.getMessage());
+            throw new InterproParsingException(e);
         }
     }
 
