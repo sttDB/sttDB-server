@@ -18,11 +18,12 @@ public class TrapidInterproParser implements InterproParser {
     @Override
     public List<LineItems> parse(String path) throws InterproParsingException {
         setFileToParse(path);
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));) {
             items = reader.lines()
                     .skip(1)
                     .map(this::parseLine)
                     .collect(Collectors.toList());
+            reader.close();
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new InterproParsingException("Wrong file format", e);
         } catch (IOException e) {
