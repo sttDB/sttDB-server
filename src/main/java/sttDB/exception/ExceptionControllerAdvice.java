@@ -13,7 +13,7 @@ public class ExceptionControllerAdvice {
     @ResponseBody
     @ExceptionHandler(InterproParsingException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public VndErrors courtNotFoundExceptionHandler(InterproParsingException ex) {
+    public VndErrors interproParsingExceptionHandler(InterproParsingException ex) {
         return new VndErrors("error: ", ex.getMessage());
     }
 }
