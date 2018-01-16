@@ -35,15 +35,18 @@ public class FastaParser {
         sequenceRepository.delete(oldSequences);
     }
 
-    private void parseFile() throws FileNotFoundException {
-        Scanner fastaScanner = new Scanner(new FileReader(fileManager.getFile()));
-        Sequence sequence = new Sequence();
-        String transcript = "";
-        while (fastaScanner.hasNextLine()) {
-            String line = fastaScanner.nextLine();
-            transcript = treatLine(sequence, transcript, line);
+    private void parseFile() {
+        try (Scanner fastaScanner = new Scanner(new FileReader(fileManager.getFile()));) {
+            Sequence sequence = new Sequence();
+            String transcript = "";
+            while (fastaScanner.hasNextLine()) {
+                String line = fastaScanner.nextLine();
+                transcript = treatLine(sequence, transcript, line);
+            }
+            closeLastSequence(sequence, transcript);
+        } catch (FileNotFoundException e) {
+            throw new FastaParsingException("File not found: " + fileManager.getFile(), e);
         }
-        closeLastSequence(sequence, transcript);
     }
 
     private String treatLine(Sequence sequence, String transcript, String line) {
