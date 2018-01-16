@@ -28,7 +28,7 @@ public class UploadController {
 
     @PostMapping("/interpro")
     @ResponseBody
-    public void processRequest(MultipartHttpServletRequest request) throws InterproParsingException {
+    public void processRequest(MultipartHttpServletRequest request) {
         interproManager.treatInterpro(request);
     }
 
