@@ -22,7 +22,7 @@ public class UploadController {
 
     @PostMapping("/fasta")
     @ResponseBody
-    public void recieveFasta(MultipartHttpServletRequest request) throws IOException {
+    public void recieveFasta(MultipartHttpServletRequest request) {
         fastaParser.treatFasta(request);
     }
 

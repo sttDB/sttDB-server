@@ -23,10 +23,14 @@ public class FastaParser {
     @Autowired
     private FileManager fileManager;
 
-    public void treatFasta(MultipartHttpServletRequest request) throws IOException {
-        fileManager.setUsedFile(request);
-        deleteOldSequences();
-        parseFile();
+    public void treatFasta(MultipartHttpServletRequest request) {
+        try {
+            fileManager.setUsedFile(request);
+            deleteOldSequences();
+            parseFile();
+        } catch (IOException e) {
+            throw new FastaParsingException(e);
+        }
     }
 
     private void deleteOldSequences() {
