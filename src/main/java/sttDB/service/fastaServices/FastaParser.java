@@ -40,7 +40,9 @@ public class FastaParser {
     }
 
     private void parseFile() {
-        try (Scanner fastaScanner = new Scanner(new FileReader(fileManager.getFile()));) {
+        Scanner fastaScanner = null;
+        try {
+            fastaScanner = new Scanner(new FileReader(fileManager.getFile()));
             Sequence sequence = new Sequence();
             String transcript = "";
             while (fastaScanner.hasNextLine()) {
@@ -50,6 +52,9 @@ public class FastaParser {
             closeLastSequence(sequence, transcript);
         } catch (FileNotFoundException e) {
             throw new FastaParsingException("File not found: " + fileManager.getFile(), e);
+        } finally {
+            if (fastaScanner != null)
+                fastaScanner.close();
         }
     }
 
@@ -68,8 +73,6 @@ public class FastaParser {
         if (sequence.getTrinityId() != null) {
             sequence.setTranscript(transcript);
             sequenceRepository.save(convertSequence(sequence));
-        } else {
-            throw new FastaParsingException("Wrong file format");
         }
     }
 
