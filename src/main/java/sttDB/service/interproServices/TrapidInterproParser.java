@@ -11,24 +11,28 @@ import java.util.stream.Collectors;
 @Service
 public class TrapidInterproParser implements InterproParser {
 
-    private BufferedReader reader;
+    private File inputFile;
 
-    List<LineItems> items;
+    private List<LineItems> items;
 
     @Override
-    public List<LineItems> parse() throws InterproParsingException {
-        if (reader == null)
-            throw new InterproParsingException("File to parse not set, call 'setFileToParse first'");
-
-        try {
+    public List<LineItems> parse(String path) throws InterproParsingException {
+        setFileToParse(path);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)))) {
             items = reader.lines()
                     .skip(1)
                     .map(this::parseLine)
                     .collect(Collectors.toList());
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new InterproParsingException("Wrong file format", e);
+        } catch (IOException e) {
+            throw new InterproParsingException(e);
         }
         return items;
+    }
+
+    private void setFileToParse(String path) throws InterproParsingException {
+        inputFile = new File(path);
     }
 
     private LineItems parseLine(String line) {
@@ -43,16 +47,5 @@ public class TrapidInterproParser implements InterproParser {
         return parts.stream()
                 .skip(3)
                 .collect(Collectors.joining(" "));
-    }
-
-    @Override
-    public void setFileToParse(String path) throws InterproParsingException {
-        try {
-            File inputF = new File(path);
-            InputStream inputFS = new FileInputStream(inputF);
-            reader = new BufferedReader(new InputStreamReader(inputFS));
-        } catch (FileNotFoundException e) {
-            throw new InterproParsingException("File not found", e);
-        }
     }
 }

@@ -21,8 +21,7 @@ public class InterproManager {
     public void treatInterpro(MultipartHttpServletRequest request) {
         try {
             fileManager.setUsedFile(request);
-            interproParser.setFileToParse(fileManager.getFile());
-            List<LineItems> parsedItmes = interproParser.parse();
+            List<LineItems> parsedItmes = interproParser.parse(fileManager.getFile());
             storer.storeItems(parsedItmes);
         } catch (IOException e) {
             throw new InterproParsingException(e);
