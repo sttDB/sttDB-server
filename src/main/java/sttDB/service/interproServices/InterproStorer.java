@@ -35,6 +35,7 @@ public class InterproStorer {
             family = new Family();
             family.setInterproId(item.interproId);
             family.setDescription(item.description);
+            family.addSequence(sequenceRepository.findByTrinityId(item.trinityID).get(0));
             familyRepository.save(family);
             return family;
         }

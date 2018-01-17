@@ -1,6 +1,7 @@
 package sttDB.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class Sequence {
 
     private String dynamicFastaInfo;
 
+    @DBRef
     private List<Family> families = new ArrayList<>();
 
     private String experiment;
