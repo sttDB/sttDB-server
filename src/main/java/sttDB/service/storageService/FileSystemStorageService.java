@@ -1,5 +1,6 @@
 package sttDB.service.storageService;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,10 +22,23 @@ public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
     private Path lastUsed;
+    private Logger logger = Logger.getLogger(FileSystemStorageService.class);
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());
+        init();
+    }
+
+    @Override
+    public void init() {
+        try {
+            Files.createDirectory(rootLocation);
+        } catch (FileAlreadyExistsException ex) {
+            logger.info("Root directory already created, proceeding.");
+        } catch (IOException e) {
+            throw new StorageException("Could not initialize storage", e);
+        }
     }
 
     @Override
@@ -80,14 +95,5 @@ public class FileSystemStorageService implements StorageService {
     @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
-    }
-
-    @Override
-    public void init() {
-        try {
-            Files.createDirectory(rootLocation);
-        } catch (IOException e) {
-            throw new StorageException("Could not initialize storage", e);
-        }
     }
 }
