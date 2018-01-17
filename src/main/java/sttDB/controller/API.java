@@ -5,19 +5,22 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import sttDB.domain.Family;
 import sttDB.domain.Sequence;
 import sttDB.repository.FamilyRepository;
+import sttDB.repository.SequenceRepository;
+
+import java.util.List;
 
 @Controller
 public class API {
 
     @Autowired
     private FamilyRepository familyRepository;
+
+    @Autowired
+    private SequenceRepository sequenceRepository;
 
     @GetMapping("/families/{id}/sequences")
     @ResponseBody
@@ -26,5 +29,43 @@ public class API {
         return new PageImpl<>(searchedFamily.getSequences(),
                 new PageRequest(page, 20),
                 searchedFamily.getSequences().size());
+    }
+
+    @RequestMapping(value = "/sequences/")
+    @ResponseBody
+    public Page<Sequence> getSequences() {
+        return sequenceRepository.findAll(new PageRequest(0, 20));
+    }
+
+    @RequestMapping(value = "/sequences", params = "page")
+    @ResponseBody
+    public Page<Sequence> getSequences(@RequestParam int page) {
+        return sequenceRepository.findAll(new PageRequest(page, 20));
+    }
+
+    @RequestMapping(value = "/sequences", params = {"trinityId", "page"})
+    @ResponseBody
+    public Page<Sequence> getSequencesByTrinityId(@RequestParam String trinityId,
+                                                  @RequestParam int page) {
+        return sequenceRepository.findByTrinityIdLike(trinityId, new PageRequest(page, 20));
+    }
+
+    @RequestMapping(value = "/sequences", params = "experiment")
+    @ResponseBody
+    public List<Sequence> getSequencesByExperiment(@RequestParam("experiment") String experiment) {
+        return sequenceRepository.findByExperiment(experiment);
+    }
+
+    @RequestMapping(value = "/sequences", params = {"trinityId", "experiment"})
+    @ResponseBody
+    public List<Sequence> getSequenceWithExperiment(@RequestParam String trinityId,
+                                                    @RequestParam String experiment) {
+        return sequenceRepository.findByTrinityIdAndExperiment(trinityId, experiment);
+    }
+
+    @GetMapping("/families")
+    @ResponseBody
+    public Page<Family> getFamilyByKeyWord(@RequestParam("descriptionKeyword") String keyword, @RequestParam("page") int page){
+        return familyRepository.findByDescriptionContaining(keyword, new PageRequest(page, 20));
     }
 }
