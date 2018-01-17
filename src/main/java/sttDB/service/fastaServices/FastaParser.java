@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.domain.Sequence;
 import sttDB.exception.FastaParsingException;
 import sttDB.repository.SequenceRepository;
-import sttDB.service.FileManager;
+import sttDB.service.TEMP_FileManager;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -21,11 +21,11 @@ public class FastaParser {
     private SequenceRepository sequenceRepository;
 
     @Autowired
-    private FileManager fileManager;
+    private TEMP_FileManager TEMPFileManager;
 
     public void treatFasta(MultipartHttpServletRequest request) {
         try {
-            fileManager.setUsedFile(request);
+            TEMPFileManager.setUsedFile(request);
             deleteOldSequences();
             parseFile();
         } catch (IOException e) {
@@ -34,7 +34,7 @@ public class FastaParser {
     }
 
     private void deleteOldSequences() {
-        String experiment = fileManager.getUsedFile();
+        String experiment = TEMPFileManager.getUsedFile();
         List<Sequence> oldSequences = sequenceRepository.findByExperiment(experiment);
         sequenceRepository.delete(oldSequences);
     }
@@ -42,7 +42,7 @@ public class FastaParser {
     private void parseFile() {
         Scanner fastaScanner = null;
         try {
-            fastaScanner = new Scanner(new FileReader(fileManager.getFile()));
+            fastaScanner = new Scanner(new FileReader(TEMPFileManager.getFile()));
             Sequence sequence = new Sequence();
             String transcript = "";
             while (fastaScanner.hasNextLine()) {
@@ -51,7 +51,7 @@ public class FastaParser {
             }
             closeLastSequence(sequence, transcript);
         } catch (FileNotFoundException e) {
-            throw new FastaParsingException("File not found: " + fileManager.getFile(), e);
+            throw new FastaParsingException("File not found: " + TEMPFileManager.getFile(), e);
         } finally {
             if (fastaScanner != null)
                 fastaScanner.close();
@@ -83,7 +83,7 @@ public class FastaParser {
         savedSequence.setLength(sequence.getTranscript().length());//We calculate the length, the fasta may not have it.
         savedSequence.setTrinityId(sequence.getTrinityId());
         savedSequence.setTranscript(sequence.getTranscript());
-        savedSequence.setExperiment(fileManager.getUsedFile());
+        savedSequence.setExperiment(TEMPFileManager.getUsedFile());
         savedSequence.setDynamicFastaInfo(sequence.getDynamicFastaInfo());
         return savedSequence;
     }

@@ -10,13 +10,13 @@ import java.io.IOException;
 import java.util.Iterator;
 
 @Component
-public class FileManager {
+public class TEMP_FileManager { // TODO: Delete this class when new file manager is done
 
     private StorageService storageService;
     private MultipartFile usedFile;
 
     @Autowired
-    public FileManager(StorageService storageService) {
+    public TEMP_FileManager(StorageService storageService) {
         this.storageService = storageService;
     }
 

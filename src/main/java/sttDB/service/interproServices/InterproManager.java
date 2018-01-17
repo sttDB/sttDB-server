@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.exception.InterproParsingException;
-import sttDB.service.FileManager;
+import sttDB.service.TEMP_FileManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class InterproManager {
 
-    private FileManager fileManager;
+    private TEMP_FileManager TEMPFileManager;
 
     private InterproParser interproParser;
 
@@ -20,8 +20,8 @@ public class InterproManager {
 
     public void treatInterpro(MultipartHttpServletRequest request) {
         try {
-            fileManager.setUsedFile(request);
-            List<LineItems> parsedItmes = interproParser.parse(fileManager.getFile());
+            TEMPFileManager.setUsedFile(request);
+            List<LineItems> parsedItmes = interproParser.parse(TEMPFileManager.getFile());
             storer.storeItems(parsedItmes);
         } catch (IOException e) {
             throw new InterproParsingException(e);
@@ -29,8 +29,8 @@ public class InterproManager {
     }
 
     @Autowired
-    public void setFileManager(FileManager fileManager) {
-        this.fileManager = fileManager;
+    public void setTEMPFileManager(TEMP_FileManager TEMPFileManager) {
+        this.TEMPFileManager = TEMPFileManager;
     }
 
     @Autowired
