@@ -31,15 +31,9 @@ public class API {
                 searchedFamily.getSequences().size());
     }
 
-    @RequestMapping(value = "/sequences/")
-    @ResponseBody
-    public Page<Sequence> getSequences() {
-        return sequenceRepository.findAll(new PageRequest(0, 20));
-    }
-
     @RequestMapping(value = "/sequences", params = "page")
     @ResponseBody
-    public Page<Sequence> getSequences(@RequestParam int page) {
+    public Page<Sequence> getSequences(@RequestParam(defaultValue = "0") int page) {
         return sequenceRepository.findAll(new PageRequest(page, 20));
     }
 
