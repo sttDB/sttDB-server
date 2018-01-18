@@ -5,36 +5,38 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import sttDB.exception.InterproParsingException;
-import sttDB.service.fastaServices.FastaParser;
+import sttDB.service.experimentManager.ExperimentManager;
 import sttDB.service.interproServices.InterproManager;
 
-import java.io.IOException;
+import java.util.Iterator;
 
 @RequestMapping(value = "/upload")
 @Controller
 public class UploadController {
 
-    private FastaParser fastaParser;
+    private ExperimentManager manager;
 
     private InterproManager interproManager;
+
+    @Autowired
+    public UploadController(ExperimentManager manager) {
+        this.manager = manager;
+    }
 
     @PostMapping("/fasta")
     @ResponseBody
     public void recieveFasta(MultipartHttpServletRequest request) {
-        fastaParser.treatFasta(request);
+        Iterator<String> fileNames = request.getFileNames();
+        MultipartFile fastaFile = request.getFile(fileNames.next());
+        manager.processNewExperiment(fastaFile);
     }
 
     @PostMapping("/interpro")
     @ResponseBody
     public void processRequest(MultipartHttpServletRequest request) {
         interproManager.treatInterpro(request);
-    }
-
-    @Autowired
-    public void setFastaParser(FastaParser fastaParser) {
-        this.fastaParser = fastaParser;
     }
 
     @Autowired

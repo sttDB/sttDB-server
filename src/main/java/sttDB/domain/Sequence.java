@@ -26,7 +26,7 @@ public class Sequence {
     private List<Family> families = new ArrayList<>();
 
     @DBRef
-    private Experiment parentExperiment;
+    private Experiment experiment;
 
     public BigInteger getId() {
         return id;
@@ -80,12 +80,12 @@ public class Sequence {
         return families.add(family);
     }
 
-    public Experiment getParentExperiment() {
-        return parentExperiment;
+    public Experiment getExperiment() {
+        return experiment;
     }
 
-    public void setParentExperiment(Experiment parentExperiment) {
-        this.parentExperiment = parentExperiment;
+    public void setExperiment(Experiment experiment) {
+        this.experiment = experiment;
     }
 
     public String getDynamicFastaInfo() {

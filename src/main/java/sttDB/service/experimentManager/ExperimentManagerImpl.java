@@ -28,14 +28,11 @@ public class ExperimentManagerImpl implements ExperimentManager {
 
     @Override
     public void processNewExperiment(MultipartFile fastaFile) {
-        // TODO: Check if experiment exists and create it -> ExperimentRepository
-        Experiment experiment = new Experiment(fastaFile.getName());
+        Experiment experiment = new Experiment(fastaFile.getOriginalFilename());
         experimentRepository.save(experiment);
 
-        // TODO: Store fasta file -> StorageService.storeFileInExperiment(...)
         Path path = storageService.storeFileInExperiment(fastaFile, fastaFile.getName());
 
-        // TODO: Process fasta file -> FastaParser
         fastaParser.treatFasta(path);
     }
 
