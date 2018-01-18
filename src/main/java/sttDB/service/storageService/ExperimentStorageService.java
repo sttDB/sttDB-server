@@ -34,8 +34,8 @@ public class ExperimentStorageService implements StorageService {
     }
 
     @Override
-    public Path storeFileInExperiment(MultipartFile file, String experimentName) {
-        return null;
+    public Path storeFileInExperiment(MultipartFile file, String experimentName) throws IOException {
+        return Files.createDirectory(rootLocation.resolve(experimentName));
     }
 
     @Override
