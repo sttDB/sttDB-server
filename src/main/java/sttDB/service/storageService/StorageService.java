@@ -11,6 +11,6 @@ public interface StorageService {
 
     Path storeFileInExperiment(MultipartFile file, String experimentName) throws StorageException;
 
-    Path loadFileFromExperiment(String filename, String experimentName);
+    Path loadFileFromExperiment(String filename, String experimentName) throws StorageException;
 
 }

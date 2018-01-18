@@ -56,7 +56,7 @@ public class ExperimentStorageService implements StorageService {
 
     @Override
     public Path loadFileFromExperiment(String filename, String experimentName) {
-        return null;
+        return rootLocation.resolve(experimentName).resolve(filename);
     }
 
     public Path getRootLocation() {

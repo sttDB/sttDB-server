@@ -85,4 +85,13 @@ public class ExperimentStorageServiceTest {
         assertThat(notFastaPath, is(rootFolder.toPath().resolve(EXPERIMENT).resolve(FAMILIES_TXT)));
     }
 
+    @Test
+    public void experimentExists_loadFile() {
+        Path path = sut.storeFileInExperiment(file, EXPERIMENT);
+
+        Path retrieved = sut.loadFileFromExperiment(file.getName(), EXPERIMENT);
+
+        assertThat(retrieved, is(path));
+    }
+
 }
