@@ -55,4 +55,14 @@ public class ExperimentStorageServiceTest {
         assertThat(Files.readAllLines(path).get(0).equals(TEST_CONTENT), is(true));
     }
 
+    @Test
+    public void storeNotFastaFileInExistingExperiment() throws IOException {
+        MockMultipartFile notFasta = new MockMultipartFile("families.txt",
+                new ByteArrayInputStream("interpro".getBytes()));
+
+        Path path = sut.storeFileInExperiment(notFasta, EXPERIMENT);
+
+        assertThat(path, is(rootFolder.toPath().resolve(EXPERIMENT).resolve("families.txt")));
+    }
+
 }
