@@ -9,6 +9,7 @@ import sttDB.domain.Experiment;
 import sttDB.exception.ExperimentNotFoundException;
 import sttDB.repository.ExperimentRepository;
 import sttDB.service.fastaServices.FastaParser;
+import sttDB.service.interproServices.InterproManager;
 import sttDB.service.interproServices.InterproParser;
 import sttDB.service.storageService.StorageService;
 
@@ -36,7 +37,7 @@ public class ExperimentManagerImplTest {
     private ExperimentRepository repository;
     private StorageService storage;
     private FastaParser fastaParser;
-    private InterproParser interproParser;
+    private InterproManager interprinterproManagerarser;
     private MockMultipartFile fastaFileMock;
     private MockMultipartFile familyFileMock;
 
@@ -45,8 +46,8 @@ public class ExperimentManagerImplTest {
         repository = mock(ExperimentRepository.class);
         storage = mock(StorageService.class);
         fastaParser = mock(FastaParser.class);
-        interproParser = mock(InterproParser.class);
-        sut = new ExperimentManagerImpl(repository, storage, fastaParser, interproParser);
+        interprinterproManagerarser = mock(InterproManager.class);
+        sut = new ExperimentManagerImpl(repository, storage, fastaParser, interprinterproManagerarser);
         fastaFileMock = new MockMultipartFile("file", EXPERIMENT_FASTA, "multipart/form-data",
                 new ByteArrayInputStream(FASTA_CONTENT.getBytes()));
         familyFileMock = new MockMultipartFile("file", INTERPRO, "multipart/form-data",
@@ -96,6 +97,19 @@ public class ExperimentManagerImplTest {
         when(repository.findOne("notFoundExperiment")).thenReturn(null);
 
         sut.addFamilyFileToExperiment(familyFileMock, "notFoundExperiment");
+    }
+
+    @Test
+    public void storeFamilyFileInExperiment() {
+        ArgumentCaptor<String> experimentName = forClass(String.class);
+        ArgumentCaptor<MultipartFile> file = forClass(MultipartFile.class);
+        when(repository.findOne(EXPERIMENT_FASTA)).thenReturn(new Experiment(EXPERIMENT_FASTA));
+
+        sut.addFamilyFileToExperiment(familyFileMock, EXPERIMENT_FASTA);
+
+        verify(storage).storeFileInExperiment(file.capture(), experimentName.capture());
+        assertThat(file.getValue(), is(familyFileMock));
+        assertThat(experimentName.getValue(), is(EXPERIMENT_FASTA));
     }
 
 }

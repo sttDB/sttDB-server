@@ -7,6 +7,7 @@ import sttDB.domain.Experiment;
 import sttDB.exception.ExperimentNotFoundException;
 import sttDB.repository.ExperimentRepository;
 import sttDB.service.fastaServices.FastaParser;
+import sttDB.service.interproServices.InterproManager;
 import sttDB.service.interproServices.InterproParser;
 import sttDB.service.storageService.StorageService;
 
@@ -18,16 +19,17 @@ public class ExperimentManagerImpl implements ExperimentManager {
     private ExperimentRepository experimentRepository;
     private StorageService storageService;
     private FastaParser fastaParser;
-    private InterproParser interproParser;
+    private InterproManager interproManager;
 
     @Autowired
     public ExperimentManagerImpl(ExperimentRepository experimentRepository,
                                  StorageService storageService,
                                  FastaParser fastaParser,
-                                 InterproParser interproParser) {
+                                 InterproManager interproManager) {
         this.experimentRepository = experimentRepository;
         this.storageService = storageService;
         this.fastaParser = fastaParser;
+        this.interproManager = interproManager;
     }
 
     @Override
@@ -45,8 +47,10 @@ public class ExperimentManagerImpl implements ExperimentManager {
         Experiment experiment = experimentRepository.findOne(experimentName);
         if (experiment == null)
             throw new ExperimentNotFoundException("Experiment " + experimentName + " not found");
-        // TODO: Store file in experiment folder
-        // TODO: parse file with InterproParser
+
+        Path path = storageService.storeFileInExperiment(familyFile, experimentName);
+
+        interproManager.treatInterpro(path);
     }
 
     @Override

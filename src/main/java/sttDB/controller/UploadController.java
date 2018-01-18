@@ -1,7 +1,9 @@
 package sttDB.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,7 +38,10 @@ public class UploadController {
     @PostMapping("/interpro")
     @ResponseBody
     public void processRequest(MultipartHttpServletRequest request) {
-        interproManager.treatInterpro(request);
+        Iterator<String> fileNames = request.getFileNames();
+        MultipartFile familyFamily = request.getFile(fileNames.next());
+        String experiment = request.getRequestHeaders().get("experiment").get(0);
+        manager.addFamilyFileToExperiment(familyFamily, experiment);
     }
 
     @Autowired
