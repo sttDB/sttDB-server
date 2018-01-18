@@ -96,7 +96,7 @@ public class ExperimentStorageServiceTest {
     }
 
     @Test(expected = StorageException.class)
-    public void getFileFromExperimentThatNotExists() {
+    public void getFileThatDoesntExist() {
         Path retrieved = sut.loadFileFromExperiment(file.getName(), EXPERIMENT);
     }
 
