@@ -1,5 +1,6 @@
 package sttDB.service.storageService;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -21,18 +22,19 @@ public class ExperimentStorageServiceTest {
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
 
-    @Test
-    public void rootLocationIsInitiated() {
+    @Before
+    public void setUp() {
         StorageProperties properties = new StorageProperties(folder.getRoot().toString());
         sut = new ExperimentStorageService(properties);
+    }
 
+    @Test
+    public void rootLocationIsInitiated() {
         assertThat(sut.getRootLocation().toString(), is(folder.getRoot().toString()));
     }
 
     @Test
     public void experimentFolderIsCreated() throws IOException {
-        StorageProperties properties = new StorageProperties(folder.getRoot().toString());
-        sut = new ExperimentStorageService(properties);
         MultipartFile file = mock(MultipartFile.class);
         when(file.getName()).thenReturn("fasta.fasta");
 
