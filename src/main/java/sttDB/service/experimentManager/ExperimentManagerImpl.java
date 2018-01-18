@@ -8,6 +8,8 @@ import sttDB.repository.ExperimentRepository;
 import sttDB.service.fastaServices.FastaParser;
 import sttDB.service.storageService.StorageService;
 
+import java.nio.file.Path;
+
 @Service
 public class ExperimentManagerImpl implements ExperimentManager {
 
@@ -31,9 +33,10 @@ public class ExperimentManagerImpl implements ExperimentManager {
         experimentRepository.save(experiment);
 
         // TODO: Store fasta file -> StorageService.storeFileInExperiment(...)
-        storageService.storeFileInExperiment(fastaFile, fastaFile.getName());
+        Path path = storageService.storeFileInExperiment(fastaFile, fastaFile.getName());
 
         // TODO: Process fasta file -> FastaParser
+        fastaParser.treatFasta(path);
     }
 
     @Override

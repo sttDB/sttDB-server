@@ -12,19 +12,23 @@ import sttDB.service.storageService.StorageService;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 public class ExperimentManagerImplTest {
 
     public static final String EXPERIMENT_FASTA = "experiment.fasta";
     public static final String FASTA_CONTENT = "fasta text";
-    ExperimentManagerImpl sut;
+
+    private ExperimentManagerImpl sut;
     private ExperimentRepository repository;
     private StorageService storage;
     private FastaParser fastaParser;
@@ -59,6 +63,19 @@ public class ExperimentManagerImplTest {
         verify(storage).storeFileInExperiment(file.capture(), fileName.capture());
         assertThat(file.getValue(), is(fastaFileMock));
         assertThat(fileName.getValue(), is(fastaFileMock.getName()));
+    }
+
+    @Test
+    public void fastaParserIsCalledWithFastaFilePath() {
+        ArgumentCaptor<Path> pathArgument = forClass(Path.class);
+        Path path = Paths.get("/myPath");
+        when(storage.storeFileInExperiment(fastaFileMock, fastaFileMock.getName()))
+                .thenReturn(path);
+
+        sut.processNewExperiment(fastaFileMock);
+
+        verify(fastaParser).treatFasta(pathArgument.capture());
+        assertThat(pathArgument.getValue(), is(path));
     }
 
 }

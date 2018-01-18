@@ -2,6 +2,7 @@ package sttDB.service.fastaServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.domain.Experiment;
 import sttDB.domain.Sequence;
@@ -12,6 +13,7 @@ import sttDB.service.TEMP_FileManager;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,6 +26,7 @@ public class FastaParser {
     @Autowired
     private TEMP_FileManager TEMPFileManager;
 
+    @Deprecated
     public void treatFasta(MultipartHttpServletRequest request) {
         try {
             TEMPFileManager.setUsedFile(request);
@@ -32,6 +35,10 @@ public class FastaParser {
         } catch (IOException e) {
             throw new FastaParsingException(e);
         }
+    }
+
+    public void treatFasta(Path fastaFile) {
+
     }
 
     private void deleteOldSequences() {
