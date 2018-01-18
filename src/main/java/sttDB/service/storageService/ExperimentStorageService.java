@@ -38,6 +38,8 @@ public class ExperimentStorageService implements StorageService {
         try {
             Path folder = getFolder(experimentName);
             Path fileToCopy = folder.resolve(file.getName());
+            if (Files.exists(fileToCopy))
+                Files.delete(fileToCopy);
             Files.copy(file.getInputStream(), fileToCopy);
             return fileToCopy;
         } catch (IOException e) {

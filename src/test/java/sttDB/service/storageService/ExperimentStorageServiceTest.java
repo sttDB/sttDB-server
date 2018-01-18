@@ -100,4 +100,13 @@ public class ExperimentStorageServiceTest {
         Path retrieved = sut.loadFileFromExperiment(file.getName(), EXPERIMENT);
     }
 
+    @Test
+    public void overwriteFile() throws IOException {
+        sut.storeFileInExperiment(file, EXPERIMENT);
+        sut.storeFileInExperiment(file, EXPERIMENT);
+
+        Path path = sut.loadFileFromExperiment(file.getName(), EXPERIMENT);
+        assertThat(TEST_CONTENT, is(Files.readAllLines(path).get(0)));
+    }
+
 }
