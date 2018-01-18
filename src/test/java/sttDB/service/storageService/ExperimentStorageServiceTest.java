@@ -56,8 +56,8 @@ public class ExperimentStorageServiceTest {
     public void experimentFileIsStored() throws IOException {
         Path path = sut.storeFileInExperiment(file, EXPERIMENT);
 
-        assertThat(Files.exists(rootFolder.toPath().resolve(EXPERIMENT).resolve(FASTA_FILE)), is(true));
-        assertThat(Files.readAllLines(path).get(0).equals(TEST_CONTENT), is(true));
+        assertThat(path, is(rootFolder.toPath().resolve(EXPERIMENT).resolve(FASTA_FILE)));
+        assertThat(TEST_CONTENT, is(Files.readAllLines(path).get(0)));
     }
 
     @Test
