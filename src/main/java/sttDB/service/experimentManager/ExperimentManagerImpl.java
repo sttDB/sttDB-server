@@ -29,7 +29,10 @@ public class ExperimentManagerImpl implements ExperimentManager {
         // TODO: Check if experiment exists and create it -> ExperimentRepository
         Experiment experiment = new Experiment(fastaFile.getName());
         experimentRepository.save(experiment);
+
         // TODO: Store fasta file -> StorageService.storeFileInExperiment(...)
+        storageService.storeFileInExperiment(fastaFile, fastaFile.getName());
+
         // TODO: Process fasta file -> FastaParser
     }
 
