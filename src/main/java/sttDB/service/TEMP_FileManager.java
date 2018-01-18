@@ -21,7 +21,8 @@ public class TEMP_FileManager { // TODO: Delete this class when new file manager
     }
 
     public String getFile() {
-        return storageService.getLastUsedPath().toString();
+//        return storageService.getLastUsedPath().toString();
+        return null;
     }
 
     public String getUsedFile() {
@@ -39,6 +40,6 @@ public class TEMP_FileManager { // TODO: Delete this class when new file manager
     }
 
     private void saveReceivedFile(MultipartFile multiFile) throws IOException {
-        storageService.store(multiFile);
+//        storageService.store(multiFile);
     }
 }
