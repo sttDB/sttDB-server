@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sttDB.domain.Family;
 import sttDB.domain.Sequence;
+import sttDB.repository.ExperimentRepository;
 import sttDB.repository.FamilyRepository;
 import sttDB.repository.SequenceRepository;
 
@@ -18,6 +19,9 @@ public class API {
 
     @Autowired
     private FamilyRepository familyRepository;
+
+    @Autowired
+    private ExperimentRepository experimentRepository;
 
     @Autowired
     private SequenceRepository sequenceRepository;
@@ -45,17 +49,21 @@ public class API {
         return sequenceRepository.findByTrinityIdLike(trinityId, new PageRequest(page, 20));
     }
 
-    @GetMapping(value = "/sequences", params = "experiment")
+    @GetMapping(value = "/sequences", params = {"experiment", "page"})
     @ResponseBody
-    public List<Sequence> getSequencesByExperiment(@RequestParam("experiment") String experiment) {
-        return sequenceRepository.findByExperiment(experiment);
+    public Page<Sequence> getSequencesByExperiment(@RequestParam String experiment,
+                                                   @RequestParam(defaultValue = "0") int page) {
+        List<Sequence> experimentSequences = sequenceRepository.findByExperiment(experimentRepository.findOne(experiment));
+        return new PageImpl<>(experimentSequences,
+                new PageRequest(page, 20),
+                experimentSequences.size());
     }
 
     @GetMapping(value = "/sequences", params = {"trinityId", "experiment"})
     @ResponseBody
     public List<Sequence> getSequenceWithExperiment(@RequestParam String trinityId,
                                                     @RequestParam String experiment) {
-        return sequenceRepository.findByTrinityIdAndExperiment(trinityId, experiment);
+        return sequenceRepository.findByTrinityIdAndExperiment(trinityId, experimentRepository.findOne(experiment));
     }
 
     @GetMapping("/families")

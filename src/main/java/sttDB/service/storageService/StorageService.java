@@ -1,25 +1,16 @@
 package sttDB.service.storageService;
 
-import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.Path;
-import java.util.stream.Stream;
 
 public interface StorageService {
 
     void init();
 
-    void store(MultipartFile file);
+    Path storeFileInExperiment(MultipartFile file, String experimentName) throws StorageException;
 
-    Stream<Path> loadAll();
-
-    Path load(String filename);
-
-    Resource loadAsResource(String filename);
-
-    void deleteAll();
-
-    Path getLastUsedPath();
+    Path loadFileFromExperiment(String filename, String experimentName) throws StorageFileNotFoundException;
 
 }

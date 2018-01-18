@@ -25,7 +25,8 @@ public class Sequence {
     @DBRef
     private List<Family> families = new ArrayList<>();
 
-    private String experiment;
+    @DBRef
+    private Experiment experiment;
 
     public BigInteger getId() {
         return id;
@@ -79,11 +80,11 @@ public class Sequence {
         return families.add(family);
     }
 
-    public String getExperiment() {
+    public Experiment getExperiment() {
         return experiment;
     }
 
-    public void setExperiment(String experiment) {
+    public void setExperiment(Experiment experiment) {
         this.experiment = experiment;
     }
 
