@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 public class ExperimentStorageService implements StorageService {
 
     private final Path rootLocation;
-    private Logger logger = Logger.getLogger(BaselineFileSystemStorageService.class);
+    private Logger logger = Logger.getLogger(ExperimentStorageService.class);
 
     @Autowired
     public ExperimentStorageService(StorageProperties properties) {
