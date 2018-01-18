@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import sttDB.domain.Experiment;
 import sttDB.repository.ExperimentRepository;
 import sttDB.service.fastaServices.FastaParser;
+import sttDB.service.interproServices.InterproParser;
 import sttDB.service.storageService.StorageService;
 
 import java.io.ByteArrayInputStream;
@@ -32,6 +33,7 @@ public class ExperimentManagerImplTest {
     private ExperimentRepository repository;
     private StorageService storage;
     private FastaParser fastaParser;
+    private InterproParser interproParser;
     private MockMultipartFile fastaFileMock;
 
     @Before
@@ -39,7 +41,8 @@ public class ExperimentManagerImplTest {
         repository = mock(ExperimentRepository.class);
         storage = mock(StorageService.class);
         fastaParser = mock(FastaParser.class);
-        sut = new ExperimentManagerImpl(repository, storage, fastaParser);
+        interproParser = mock(InterproParser.class);
+        sut = new ExperimentManagerImpl(repository, storage, fastaParser, interproParser);
         fastaFileMock = new MockMultipartFile("file", EXPERIMENT_FASTA, "multipart/form-data",
                 new ByteArrayInputStream(FASTA_CONTENT.getBytes()));
     }
