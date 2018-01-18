@@ -13,19 +13,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
-public class FileSystemStorageService implements StorageService {
+public class BaselineFileSystemStorageService { // TODO: Delete after PR
 
     private final Path rootLocation;
     private Path lastUsed;
-    private Logger logger = Logger.getLogger(FileSystemStorageService.class);
+    private Logger logger = Logger.getLogger(BaselineFileSystemStorageService.class);
 
     @Autowired
-    public FileSystemStorageService(StorageProperties properties) {
+    public BaselineFileSystemStorageService(StorageProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());
         init();
     }
 
-    @Override
     public void init() {
         try {
             Files.createDirectory(rootLocation);
@@ -36,7 +35,6 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
-    @Override
     public void store(MultipartFile file) {
         try {
             if (file.isEmpty()) {
@@ -50,7 +48,6 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
-    @Override
     public Path load(String filename) {
         return rootLocation.resolve(filename);
     }

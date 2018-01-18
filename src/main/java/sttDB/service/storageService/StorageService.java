@@ -8,10 +8,8 @@ public interface StorageService {
 
     void init();
 
-    void store(MultipartFile file);
+    Path storeFileInExperiment(MultipartFile file, String experimentName);
 
-    Path load(String filename);
-
-    Path getLastUsedPath();
+    Path loadFileFromExperiment(String filename, String experimentName);
 
 }
