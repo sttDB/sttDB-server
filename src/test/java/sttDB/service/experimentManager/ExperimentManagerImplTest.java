@@ -63,20 +63,23 @@ public class ExperimentManagerImplTest {
 
         verify(storage).storeFileInExperiment(file.capture(), fileName.capture());
         assertThat(file.getValue(), is(fastaFileMock));
-        assertThat(fileName.getValue(), is(fastaFileMock.getName()));
+        assertThat(fileName.getValue(), is(fastaFileMock.getOriginalFilename()));
     }
 
     @Test
     public void fastaParserIsCalledWithFastaFilePath() {
         ArgumentCaptor<Path> pathArgument = forClass(Path.class);
+        ArgumentCaptor<Experiment> experimentArgument = forClass(Experiment.class);
         Path path = Paths.get("/myPath");
-        when(storage.storeFileInExperiment(fastaFileMock, fastaFileMock.getName()))
+        Experiment mockExperiment = new Experiment(EXPERIMENT_FASTA);
+        when(storage.storeFileInExperiment(fastaFileMock, mockExperiment.getName()))
                 .thenReturn(path);
 
         sut.processNewExperiment(fastaFileMock);
 
-        verify(fastaParser).treatFasta(pathArgument.capture());
+        verify(fastaParser).treatFasta(pathArgument.capture(), experimentArgument.capture());
         assertThat(pathArgument.getValue(), is(path));
+        assertThat(experimentArgument.getValue().getName(), is(fastaFileMock.getOriginalFilename()));
     }
 
 }

@@ -24,14 +24,14 @@ public class FastaParser {
     @Autowired
     private ExperimentRepository experimentRepository;
 
-    @Autowired
-    private TEMP_FileManager TEMPFileManager;
-
     private Path filePath;
 
-    public void treatFasta(Path fastaFile) {
+    private Experiment experiment;
+
+    public void treatFasta(Path fastaFile, Experiment experiment) {
         try {
             filePath = fastaFile;
+            this.experiment = experiment;
             deleteOldSequences();
             parseFile();
         } catch (Exception e) {
@@ -40,8 +40,6 @@ public class FastaParser {
     }
 
     private void deleteOldSequences() {
-        String experimentName = filePath.getFileName().toString();
-        Experiment experiment = experimentRepository.findOne(experimentName);
         List<Sequence> oldSequences = sequenceRepository.findByExperiment(experiment);
         sequenceRepository.delete(oldSequences);
     }
@@ -49,7 +47,7 @@ public class FastaParser {
     private void parseFile() {
         Scanner fastaScanner = null;
         try {
-            fastaScanner = new Scanner(new FileReader(TEMPFileManager.getFile()));
+            fastaScanner = new Scanner(new FileReader(filePath.toFile()));
             Sequence sequence = new Sequence();
             String transcript = "";
             while (fastaScanner.hasNextLine()) {
@@ -58,7 +56,7 @@ public class FastaParser {
             }
             closeLastSequence(sequence, transcript);
         } catch (FileNotFoundException e) {
-            throw new FastaParsingException("File not found: " + TEMPFileManager.getFile(), e);
+            throw new FastaParsingException("File not found: " + filePath, e);
         } finally {
             if (fastaScanner != null)
                 fastaScanner.close();
@@ -90,7 +88,7 @@ public class FastaParser {
         savedSequence.setLength(sequence.getTranscript().length());//We calculate the length, the fasta may not have it.
         savedSequence.setTrinityId(sequence.getTrinityId());
         savedSequence.setTranscript(sequence.getTranscript());
-        savedSequence.setExperiment(new Experiment(TEMPFileManager.getUsedFile()));
+        savedSequence.setExperiment(experiment);
         savedSequence.setDynamicFastaInfo(sequence.getDynamicFastaInfo());
         return savedSequence;
     }

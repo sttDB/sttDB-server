@@ -33,7 +33,7 @@ public class ExperimentManagerImpl implements ExperimentManager {
 
         Path path = storageService.storeFileInExperiment(fastaFile, fastaFile.getOriginalFilename());
 
-        fastaParser.treatFasta(path);
+        fastaParser.treatFasta(path, experiment);
     }
 
     @Override
