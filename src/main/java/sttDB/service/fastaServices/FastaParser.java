@@ -3,6 +3,7 @@ package sttDB.service.fastaServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import sttDB.domain.Experiment;
 import sttDB.domain.Sequence;
 import sttDB.exception.FastaParsingException;
 import sttDB.repository.SequenceRepository;
@@ -83,7 +84,7 @@ public class FastaParser {
         savedSequence.setLength(sequence.getTranscript().length());//We calculate the length, the fasta may not have it.
         savedSequence.setTrinityId(sequence.getTrinityId());
         savedSequence.setTranscript(sequence.getTranscript());
-        savedSequence.setExperiment(TEMPFileManager.getUsedFile());
+        savedSequence.setParentExperiment(new Experiment(TEMPFileManager.getUsedFile()));
         savedSequence.setDynamicFastaInfo(sequence.getDynamicFastaInfo());
         return savedSequence;
     }
