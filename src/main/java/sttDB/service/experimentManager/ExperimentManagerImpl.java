@@ -31,7 +31,7 @@ public class ExperimentManagerImpl implements ExperimentManager {
         Experiment experiment = new Experiment(fastaFile.getOriginalFilename());
         experimentRepository.save(experiment);
 
-        Path path = storageService.storeFileInExperiment(fastaFile, fastaFile.getName());
+        Path path = storageService.storeFileInExperiment(fastaFile, fastaFile.getOriginalFilename());
 
         fastaParser.treatFasta(path);
     }
