@@ -7,6 +7,7 @@ import org.junit.rules.TemporaryFolder;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,25 +24,27 @@ public class ExperimentStorageServiceTest {
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
+    public File rootFolder;
     private MockMultipartFile file;
 
     @Before
     public void setUp() throws IOException {
-        StorageProperties properties = new StorageProperties(folder.getRoot().toString());
+        rootFolder = folder.newFolder("root");
+        StorageProperties properties = new StorageProperties(rootFolder.toString());
         sut = new ExperimentStorageService(properties);
         file = new MockMultipartFile(FASTA_FILE, new ByteArrayInputStream(TEST_CONTENT.getBytes()));
     }
 
     @Test
     public void rootLocationIsInitiated() {
-        assertThat(sut.getRootLocation().toString(), is(folder.getRoot().toString()));
+        assertThat(sut.getRootLocation(), is(rootFolder.toPath()));
     }
 
     @Test
     public void experimentFolderIsCreated() throws IOException {
         Path path = sut.storeFileInExperiment(file, EXPERIMENT);
 
-        assertThat(Files.exists(folder.getRoot().toPath().resolve(EXPERIMENT)), is(true));
+        assertThat(Files.exists(rootFolder.toPath().resolve(EXPERIMENT)), is(true));
     }
 
     @Test
@@ -51,6 +54,5 @@ public class ExperimentStorageServiceTest {
         assertThat(Files.exists(folder.getRoot().toPath().resolve(EXPERIMENT).resolve(FASTA_FILE)), is(true));
         assertThat(Files.readAllLines(path).get(0).equals(TEST_CONTENT), is(true));
     }
-
 
 }
