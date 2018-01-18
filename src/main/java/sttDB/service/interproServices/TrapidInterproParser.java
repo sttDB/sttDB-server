@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import sttDB.exception.InterproParsingException;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,9 +17,9 @@ public class TrapidInterproParser implements InterproParser {
     private List<LineItems> items;
 
     @Override
-    public List<LineItems> parse(String path) throws InterproParsingException {
+    public List<LineItems> parse(Path path) throws InterproParsingException {
         setFileToParse(path);
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)))) {
             items = reader.lines()
                     .skip(1)
                     .map(this::parseLine)
@@ -32,8 +33,8 @@ public class TrapidInterproParser implements InterproParser {
         return items;
     }
 
-    private void setFileToParse(String path) throws InterproParsingException {
-        inputFile = new File(path);
+    private void setFileToParse(Path path) throws InterproParsingException {
+        inputFile = path.toFile();
     }
 
     private LineItems parseLine(String line) {

@@ -2,39 +2,44 @@ package sttDB.service.fastaServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
+import sttDB.domain.Experiment;
 import sttDB.domain.Sequence;
 import sttDB.exception.FastaParsingException;
+import sttDB.repository.ExperimentRepository;
 import sttDB.repository.SequenceRepository;
-import sttDB.service.FileManager;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Scanner;
 
 @Component
 public class FastaParser {
 
-    @Autowired
     private SequenceRepository sequenceRepository;
+    private ExperimentRepository experimentRepository;
+    private Path filePath;
+    private Experiment experiment;
 
     @Autowired
-    private FileManager fileManager;
+    public FastaParser(SequenceRepository sequenceRepository, ExperimentRepository experimentRepository) {
+        this.sequenceRepository = sequenceRepository;
+        this.experimentRepository = experimentRepository;
+    }
 
-    public void treatFasta(MultipartHttpServletRequest request) {
+    public void treatFasta(Path fastaFile, Experiment experiment) {
         try {
-            fileManager.setUsedFile(request);
+            filePath = fastaFile;
+            this.experiment = experiment;
             deleteOldSequences();
             parseFile();
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new FastaParsingException(e);
         }
     }
 
     private void deleteOldSequences() {
-        String experiment = fileManager.getUsedFile();
         List<Sequence> oldSequences = sequenceRepository.findByExperiment(experiment);
         sequenceRepository.delete(oldSequences);
     }
@@ -42,7 +47,7 @@ public class FastaParser {
     private void parseFile() {
         Scanner fastaScanner = null;
         try {
-            fastaScanner = new Scanner(new FileReader(fileManager.getFile()));
+            fastaScanner = new Scanner(new FileReader(filePath.toFile()));
             Sequence sequence = new Sequence();
             String transcript = "";
             while (fastaScanner.hasNextLine()) {
@@ -51,7 +56,7 @@ public class FastaParser {
             }
             closeLastSequence(sequence, transcript);
         } catch (FileNotFoundException e) {
-            throw new FastaParsingException("File not found: " + fileManager.getFile(), e);
+            throw new FastaParsingException("File not found: " + filePath, e);
         } finally {
             if (fastaScanner != null)
                 fastaScanner.close();
@@ -62,9 +67,9 @@ public class FastaParser {
         if (line.startsWith(">")) {
             closeLastSequence(sequence, transcript);
             insertNewSequence(sequence, line);
-            transcript="";
+            transcript = "";
         } else {
-            transcript+=line;
+            transcript += line;
         }
         return transcript;
     }
@@ -83,7 +88,7 @@ public class FastaParser {
         savedSequence.setLength(sequence.getTranscript().length());//We calculate the length, the fasta may not have it.
         savedSequence.setTrinityId(sequence.getTrinityId());
         savedSequence.setTranscript(sequence.getTranscript());
-        savedSequence.setExperiment(fileManager.getUsedFile());
+        savedSequence.setExperiment(experiment);
         savedSequence.setDynamicFastaInfo(sequence.getDynamicFastaInfo());
         return savedSequence;
     }
@@ -96,7 +101,7 @@ public class FastaParser {
 
     private String getRestOfTheDynamicLine(String[] lineParts) {
         StringBuilder dynamicLine = new StringBuilder();
-        for(int i = 1; i < lineParts.length; i++){
+        for (int i = 1; i < lineParts.length; i++) {
             dynamicLine.append(lineParts[i]).append(" ");
         }
         return dynamicLine.toString();

@@ -4,6 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import sttDB.exception.InterproParsingException;
 
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -63,12 +67,14 @@ public class TrapidInterproParserTest {
         ));
     }
 
-    private String getResource(String path) {
+    private Path getResource(String path) {
         try {
-            return getClass().getClassLoader()
-                    .getResource(BASE_INTERPRO_DIR + path).getFile();
+            URL url = getClass().getClassLoader().getResource(BASE_INTERPRO_DIR + path);
+            return Paths.get(url.toURI());
         } catch (NullPointerException e) {
             throw new NullPointerException("Test resource <" + path + "> not found");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
     }
 
