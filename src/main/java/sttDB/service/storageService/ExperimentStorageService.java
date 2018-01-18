@@ -36,10 +36,17 @@ public class ExperimentStorageService implements StorageService {
 
     @Override
     public Path storeFileInExperiment(MultipartFile file, String experimentName) throws IOException {
-        Path folder = Files.createDirectory(rootLocation.resolve(experimentName));
+        Path folder = getFolder(experimentName);
         Path fileToCopy = folder.resolve(file.getName());
         Files.copy(file.getInputStream(), fileToCopy);
         return fileToCopy;
+    }
+
+    private Path getFolder(String experimentName) throws IOException {
+        if (Files.exists(rootLocation.resolve(experimentName)))
+            return rootLocation.resolve(experimentName);
+        else
+            return Files.createDirectory(rootLocation.resolve(experimentName));
     }
 
     @Override

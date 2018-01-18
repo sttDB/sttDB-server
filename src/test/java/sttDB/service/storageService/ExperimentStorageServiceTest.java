@@ -20,12 +20,15 @@ public class ExperimentStorageServiceTest {
     public static final String TEST_CONTENT = "test-content";
     public static final String FASTA_FILE = "fasta.fasta";
     public static final String EXPERIMENT = "fasta.fasta";
+    public static final String FAMILIES_TXT = "families.txt";
+    public static final String INTERPRO = "interpro";
     ExperimentStorageService sut;
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
     public File rootFolder;
     private MockMultipartFile file;
+    private MockMultipartFile notFasta;
 
     @Before
     public void setUp() throws IOException {
@@ -33,6 +36,8 @@ public class ExperimentStorageServiceTest {
         StorageProperties properties = new StorageProperties(rootFolder.toString());
         sut = new ExperimentStorageService(properties);
         file = new MockMultipartFile(FASTA_FILE, new ByteArrayInputStream(TEST_CONTENT.getBytes()));
+        notFasta = new MockMultipartFile(FAMILIES_TXT,
+                new ByteArrayInputStream(INTERPRO.getBytes()));
     }
 
     @Test
@@ -57,12 +62,18 @@ public class ExperimentStorageServiceTest {
 
     @Test
     public void storeNotFastaFileInExistingExperiment() throws IOException {
-        MockMultipartFile notFasta = new MockMultipartFile("families.txt",
-                new ByteArrayInputStream("interpro".getBytes()));
-
         Path path = sut.storeFileInExperiment(notFasta, EXPERIMENT);
 
-        assertThat(path, is(rootFolder.toPath().resolve(EXPERIMENT).resolve("families.txt")));
+        assertThat(path, is(rootFolder.toPath().resolve(EXPERIMENT).resolve(FAMILIES_TXT)));
+    }
+
+    @Test
+    public void storeFastaAndNotFasta() throws IOException {
+        Path notFastaPath = sut.storeFileInExperiment(notFasta, EXPERIMENT);
+        Path fastaPath = sut.storeFileInExperiment(file, EXPERIMENT);
+
+        assertThat(fastaPath, is(is(rootFolder.toPath().resolve(EXPERIMENT).resolve(FASTA_FILE))));
+        assertThat(notFastaPath, is(rootFolder.toPath().resolve(EXPERIMENT).resolve(FAMILIES_TXT)));
     }
 
 }
