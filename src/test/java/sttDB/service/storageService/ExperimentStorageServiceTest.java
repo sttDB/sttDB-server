@@ -68,7 +68,16 @@ public class ExperimentStorageServiceTest {
     }
 
     @Test
-    public void storeFastaAndNotFasta() throws IOException {
+    public void storeFastaFirstAndNotFastaSecond() throws IOException {
+        Path fastaPath = sut.storeFileInExperiment(file, EXPERIMENT);
+        Path notFastaPath = sut.storeFileInExperiment(notFasta, EXPERIMENT);
+
+        assertThat(fastaPath, is(is(rootFolder.toPath().resolve(EXPERIMENT).resolve(FASTA_FILE))));
+        assertThat(notFastaPath, is(rootFolder.toPath().resolve(EXPERIMENT).resolve(FAMILIES_TXT)));
+    }
+
+    @Test
+    public void storeFilesNotOrdered() throws IOException {
         Path notFastaPath = sut.storeFileInExperiment(notFasta, EXPERIMENT);
         Path fastaPath = sut.storeFileInExperiment(file, EXPERIMENT);
 
