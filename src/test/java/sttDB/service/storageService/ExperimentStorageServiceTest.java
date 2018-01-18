@@ -95,4 +95,9 @@ public class ExperimentStorageServiceTest {
         assertThat(TEST_CONTENT, is(Files.readAllLines(path).get(0)));
     }
 
+    @Test(expected = StorageException.class)
+    public void getFileFromExperimentThatNotExists() {
+        Path retrieved = sut.loadFileFromExperiment(file.getName(), EXPERIMENT);
+    }
+
 }
