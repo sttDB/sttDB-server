@@ -50,7 +50,7 @@ public class ExperimentManagerImpl implements ExperimentManager {
 
         Path path = storageService.storeFileInExperiment(familyFile, experimentName);
 
-        interproManager.treatInterpro(path);
+        interproManager.treatInterpro(path, experiment);
     }
 
     @Override
