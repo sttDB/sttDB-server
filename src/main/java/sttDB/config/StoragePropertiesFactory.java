@@ -13,7 +13,7 @@ public class StoragePropertiesFactory {
         if (location == null)
             throw new IllegalStateException("Environment variable <FILES_DIR> not set");
         else
-            return new StorageProperties(location);
+            return new StorageProperties("./files");
     }
 
 }
