@@ -54,12 +54,12 @@ public class ExperimentStorageService implements StorageService {
     }
 
     @Override
-    public Path loadFileFromExperiment(String filename, String experimentName) {
+    public Path loadFileFromExperiment(String filename, String experimentName) throws StorageFileNotFoundException {
         Path path = rootLocation.resolve(experimentName).resolve(filename);
         if (Files.exists(path))
             return path;
         else
-            throw new StorageException(String.format("File with name {0} in experiment {1} not found",
+            throw new StorageFileNotFoundException(String.format("File with name {0} in experiment {1} not found",
                     filename, experimentName));
     }
 
