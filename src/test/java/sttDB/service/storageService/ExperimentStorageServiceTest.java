@@ -19,7 +19,7 @@ public class ExperimentStorageServiceTest {
 
     public static final String TEST_CONTENT = "test-content";
     public static final String FASTA_FILE = "fasta.fasta";
-    public static final String EXPERIMENT = "experiment-A";
+    public static final String EXPERIMENT = "fasta.fasta";
     ExperimentStorageService sut;
 
     @Rule
@@ -51,7 +51,7 @@ public class ExperimentStorageServiceTest {
     public void experimentFileIsStored() throws IOException {
         Path path = sut.storeFileInExperiment(file, EXPERIMENT);
 
-        assertThat(Files.exists(folder.getRoot().toPath().resolve(EXPERIMENT).resolve(FASTA_FILE)), is(true));
+        assertThat(Files.exists(rootFolder.toPath().resolve(EXPERIMENT).resolve(FASTA_FILE)), is(true));
         assertThat(Files.readAllLines(path).get(0).equals(TEST_CONTENT), is(true));
     }
 
