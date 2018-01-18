@@ -40,7 +40,8 @@ public class ExperimentManagerImplTest {
         storage = mock(StorageService.class);
         fastaParser = mock(FastaParser.class);
         sut = new ExperimentManagerImpl(repository, storage, fastaParser);
-        fastaFileMock = new MockMultipartFile(EXPERIMENT_FASTA, new ByteArrayInputStream(FASTA_CONTENT.getBytes()));
+        fastaFileMock = new MockMultipartFile("file", EXPERIMENT_FASTA, "multipart/form-data",
+                new ByteArrayInputStream(FASTA_CONTENT.getBytes()));
     }
 
     @Test
