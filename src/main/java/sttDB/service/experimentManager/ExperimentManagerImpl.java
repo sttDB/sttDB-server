@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import sttDB.domain.Experiment;
+import sttDB.exception.ExperimentNotFoundException;
 import sttDB.repository.ExperimentRepository;
 import sttDB.service.fastaServices.FastaParser;
 import sttDB.service.interproServices.InterproParser;
@@ -41,7 +42,9 @@ public class ExperimentManagerImpl implements ExperimentManager {
 
     @Override
     public void addFamilyFileToExperiment(MultipartFile familyFile, String experimentName) {
-        // TODO: Check if experiment exists -> if not exception
+        Experiment experiment = experimentRepository.findOne(experimentName);
+        if (experiment == null)
+            throw new ExperimentNotFoundException("Experiment " + experimentName + " not found");
         // TODO: Store file in experiment folder
         // TODO: parse file with InterproParser
     }

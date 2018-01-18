@@ -6,6 +6,7 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import sttDB.domain.Experiment;
+import sttDB.exception.ExperimentNotFoundException;
 import sttDB.repository.ExperimentRepository;
 import sttDB.service.fastaServices.FastaParser;
 import sttDB.service.interproServices.InterproParser;
@@ -28,6 +29,8 @@ public class ExperimentManagerImplTest {
 
     public static final String EXPERIMENT_FASTA = "experiment.fasta";
     public static final String FASTA_CONTENT = "fasta text";
+    public static final String SOME_FAMILIES = "some families";
+    public static final String INTERPRO = "interpro";
 
     private ExperimentManagerImpl sut;
     private ExperimentRepository repository;
@@ -35,6 +38,7 @@ public class ExperimentManagerImplTest {
     private FastaParser fastaParser;
     private InterproParser interproParser;
     private MockMultipartFile fastaFileMock;
+    private MockMultipartFile familyFileMock;
 
     @Before
     public void setUp() throws IOException {
@@ -45,6 +49,8 @@ public class ExperimentManagerImplTest {
         sut = new ExperimentManagerImpl(repository, storage, fastaParser, interproParser);
         fastaFileMock = new MockMultipartFile("file", EXPERIMENT_FASTA, "multipart/form-data",
                 new ByteArrayInputStream(FASTA_CONTENT.getBytes()));
+        familyFileMock = new MockMultipartFile("file", INTERPRO, "multipart/form-data",
+                new ByteArrayInputStream(SOME_FAMILIES.getBytes()));
     }
 
     @Test
@@ -83,6 +89,13 @@ public class ExperimentManagerImplTest {
         verify(fastaParser).treatFasta(pathArgument.capture(), experimentArgument.capture());
         assertThat(pathArgument.getValue(), is(path));
         assertThat(experimentArgument.getValue().getName(), is(fastaFileMock.getOriginalFilename()));
+    }
+
+    @Test(expected = ExperimentNotFoundException.class)
+    public void uploadFamilyFile_ExperimentNotExists() {
+        when(repository.findOne("notFoundExperiment")).thenReturn(null);
+
+        sut.addFamilyFileToExperiment(familyFileMock, "notFoundExperiment");
     }
 
 }
