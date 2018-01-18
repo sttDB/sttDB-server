@@ -24,33 +24,34 @@ public class API {
 
     @GetMapping("/families/{id}/sequences")
     @ResponseBody
-    public Page<Sequence> getFamilySequences(@PathVariable("id") String id, @RequestParam("page") int page) {
+    public Page<Sequence> getFamilySequences(@PathVariable("id") String id,
+                                             @RequestParam(value = "page", defaultValue = "0") int page) {
         Family searchedFamily = familyRepository.findByInterproId(id);
         return new PageImpl<>(searchedFamily.getSequences(),
                 new PageRequest(page, 20),
                 searchedFamily.getSequences().size());
     }
 
-    @RequestMapping(value = "/sequences", params = "page")
+    @GetMapping(value = "/sequences", params = "page")
     @ResponseBody
-    public Page<Sequence> getSequences(@RequestParam(defaultValue = "0") int page) {
+    public Page<Sequence> getSequences(@RequestParam(required=false, defaultValue = "0") int page) {
         return sequenceRepository.findAll(new PageRequest(page, 20));
     }
 
-    @RequestMapping(value = "/sequences", params = {"trinityId", "page"})
+    @GetMapping(value = "/sequences", params = {"trinityId", "page"})
     @ResponseBody
     public Page<Sequence> getSequencesByTrinityId(@RequestParam String trinityId,
-                                                  @RequestParam int page) {
+                                                  @RequestParam(defaultValue = "0") int page) {
         return sequenceRepository.findByTrinityIdLike(trinityId, new PageRequest(page, 20));
     }
 
-    @RequestMapping(value = "/sequences", params = "experiment")
+    @GetMapping(value = "/sequences", params = "experiment")
     @ResponseBody
     public List<Sequence> getSequencesByExperiment(@RequestParam("experiment") String experiment) {
         return sequenceRepository.findByExperiment(experiment);
     }
 
-    @RequestMapping(value = "/sequences", params = {"trinityId", "experiment"})
+    @GetMapping(value = "/sequences", params = {"trinityId", "experiment"})
     @ResponseBody
     public List<Sequence> getSequenceWithExperiment(@RequestParam String trinityId,
                                                     @RequestParam String experiment) {
