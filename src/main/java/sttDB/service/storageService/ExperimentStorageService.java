@@ -35,11 +35,16 @@ public class ExperimentStorageService implements StorageService {
     }
 
     @Override
-    public Path storeFileInExperiment(MultipartFile file, String experimentName) throws IOException {
-        Path folder = getFolder(experimentName);
-        Path fileToCopy = folder.resolve(file.getName());
-        Files.copy(file.getInputStream(), fileToCopy);
-        return fileToCopy;
+    public Path storeFileInExperiment(MultipartFile file, String experimentName) throws StorageException {
+        try {
+            Path folder = getFolder(experimentName);
+            Path fileToCopy = folder.resolve(file.getName());
+            Files.copy(file.getInputStream(), fileToCopy);
+            return fileToCopy;
+        } catch (IOException e) {
+            throw new StorageException("Failed to store file " + file.getOriginalFilename(), e);
+        }
+
     }
 
     private Path getFolder(String experimentName) throws IOException {

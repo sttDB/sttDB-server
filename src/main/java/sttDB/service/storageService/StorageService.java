@@ -9,7 +9,7 @@ public interface StorageService {
 
     void init();
 
-    Path storeFileInExperiment(MultipartFile file, String experimentName) throws IOException;
+    Path storeFileInExperiment(MultipartFile file, String experimentName) throws StorageException;
 
     Path loadFileFromExperiment(String filename, String experimentName);
 
