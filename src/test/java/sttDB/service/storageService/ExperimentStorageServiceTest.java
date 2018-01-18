@@ -86,12 +86,13 @@ public class ExperimentStorageServiceTest {
     }
 
     @Test
-    public void experimentExists_loadFile() {
+    public void experimentExists_loadFile() throws IOException {
         Path path = sut.storeFileInExperiment(file, EXPERIMENT);
 
         Path retrieved = sut.loadFileFromExperiment(file.getName(), EXPERIMENT);
 
         assertThat(retrieved, is(path));
+        assertThat(TEST_CONTENT, is(Files.readAllLines(path).get(0)));
     }
 
 }
