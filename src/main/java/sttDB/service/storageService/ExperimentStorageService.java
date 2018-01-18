@@ -37,7 +37,7 @@ public class ExperimentStorageService implements StorageService {
     public Path storeFileInExperiment(MultipartFile file, String experimentName) throws StorageException {
         try {
             Path folder = getFolder(experimentName);
-            Path fileToCopy = folder.resolve(file.getName());
+            Path fileToCopy = folder.resolve(file.getOriginalFilename());
             if (Files.exists(fileToCopy))
                 Files.delete(fileToCopy);
             Files.copy(file.getInputStream(), fileToCopy);

@@ -35,8 +35,9 @@ public class ExperimentStorageServiceTest {
         rootFolder = folder.newFolder("root");
         StorageProperties properties = new StorageProperties(rootFolder.toString());
         sut = new ExperimentStorageService(properties);
-        file = new MockMultipartFile(FASTA_FILE, new ByteArrayInputStream(TEST_CONTENT.getBytes()));
-        notFasta = new MockMultipartFile(FAMILIES_TXT,
+        file = new MockMultipartFile("file", FASTA_FILE, "multipart/form-data",
+                new ByteArrayInputStream(TEST_CONTENT.getBytes()));
+        notFasta = new MockMultipartFile("file", FAMILIES_TXT, "multipart/form-data",
                 new ByteArrayInputStream(INTERPRO.getBytes()));
     }
 
@@ -89,7 +90,7 @@ public class ExperimentStorageServiceTest {
     public void experimentExists_loadFile() throws IOException {
         Path path = sut.storeFileInExperiment(file, EXPERIMENT);
 
-        Path retrieved = sut.loadFileFromExperiment(file.getName(), EXPERIMENT);
+        Path retrieved = sut.loadFileFromExperiment(file.getOriginalFilename(), EXPERIMENT);
 
         assertThat(retrieved, is(path));
         assertThat(TEST_CONTENT, is(Files.readAllLines(path).get(0)));
@@ -97,7 +98,7 @@ public class ExperimentStorageServiceTest {
 
     @Test(expected = StorageFileNotFoundException.class)
     public void getFileThatDoesntExist() {
-        Path retrieved = sut.loadFileFromExperiment(file.getName(), EXPERIMENT);
+        Path retrieved = sut.loadFileFromExperiment(file.getOriginalFilename(), EXPERIMENT);
     }
 
     @Test
@@ -105,7 +106,7 @@ public class ExperimentStorageServiceTest {
         sut.storeFileInExperiment(file, EXPERIMENT);
         sut.storeFileInExperiment(file, EXPERIMENT);
 
-        Path path = sut.loadFileFromExperiment(file.getName(), EXPERIMENT);
+        Path path = sut.loadFileFromExperiment(file.getOriginalFilename(), EXPERIMENT);
         assertThat(TEST_CONTENT, is(Files.readAllLines(path).get(0)));
     }
 
