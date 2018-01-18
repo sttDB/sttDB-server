@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,7 +36,10 @@ public class ExperimentStorageService implements StorageService {
 
     @Override
     public Path storeFileInExperiment(MultipartFile file, String experimentName) throws IOException {
-        return Files.createDirectory(rootLocation.resolve(experimentName));
+        Path folder = Files.createDirectory(rootLocation.resolve(experimentName));
+        Path fileToCopy = folder.resolve(file.getName());
+        Files.copy(file.getInputStream(), fileToCopy);
+        return fileToCopy;
     }
 
     @Override
