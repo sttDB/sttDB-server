@@ -7,7 +7,6 @@ import sttDB.domain.Sequence;
 import sttDB.exception.FastaParsingException;
 import sttDB.repository.ExperimentRepository;
 import sttDB.repository.SequenceRepository;
-import sttDB.service.TEMP_FileManager;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -18,15 +17,16 @@ import java.util.Scanner;
 @Component
 public class FastaParser {
 
-    @Autowired
     private SequenceRepository sequenceRepository;
+    private ExperimentRepository experimentRepository;
+    private Path filePath;
+    private Experiment experiment;
 
     @Autowired
-    private ExperimentRepository experimentRepository;
-
-    private Path filePath;
-
-    private Experiment experiment;
+    public FastaParser(SequenceRepository sequenceRepository, ExperimentRepository experimentRepository) {
+        this.sequenceRepository = sequenceRepository;
+        this.experimentRepository = experimentRepository;
+    }
 
     public void treatFasta(Path fastaFile, Experiment experiment) {
         try {
@@ -67,9 +67,9 @@ public class FastaParser {
         if (line.startsWith(">")) {
             closeLastSequence(sequence, transcript);
             insertNewSequence(sequence, line);
-            transcript="";
+            transcript = "";
         } else {
-            transcript+=line;
+            transcript += line;
         }
         return transcript;
     }
@@ -101,7 +101,7 @@ public class FastaParser {
 
     private String getRestOfTheDynamicLine(String[] lineParts) {
         StringBuilder dynamicLine = new StringBuilder();
-        for(int i = 1; i < lineParts.length; i++){
+        for (int i = 1; i < lineParts.length; i++) {
             dynamicLine.append(lineParts[i]).append(" ");
         }
         return dynamicLine.toString();
