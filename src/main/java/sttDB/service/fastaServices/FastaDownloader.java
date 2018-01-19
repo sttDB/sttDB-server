@@ -34,7 +34,8 @@ public class FastaDownloader {
     private File createSimpleFastaFile(String sequenceId, String experimentName) throws IOException {
         PrintWriter writer = new PrintWriter("searchedQuery.fasta", "UTF-8");
         Experiment experiment = experimentRepository.findOne(experimentName);
-        insertSequences(writer, sequenceRepository.findByTrinityIdAndExperiment(sequenceId, experiment).iterator());
+        insertSequences(writer, sequenceRepository
+                .findByTrinityIdAndExperiment(sequenceId, experiment.getName()).iterator());
         writer.close();
         return new File("./searchedQuery.fasta");
     }
@@ -50,9 +51,9 @@ public class FastaDownloader {
 
     private File createLargeFastaFile(String sequenceId) throws IOException {
         PrintWriter writer = new PrintWriter("searchedQuery.fasta", "UTF-8");
-        Page<Sequence> sequencePage = sequenceRepository.findByTrinityIdLike(sequenceId, new PageRequest(0,1000));
+        Page<Sequence> sequencePage = sequenceRepository.findByTrinityIdLike(sequenceId, new PageRequest(0, 1000));
         insertSequences(writer, sequencePage.iterator());
-        while(sequencePage.hasNext()){
+        while (sequencePage.hasNext()) {
             sequencePage = sequenceRepository.findByTrinityIdLike(sequenceId, sequencePage.nextPageable());
             insertSequences(writer, sequencePage.iterator());
         }
