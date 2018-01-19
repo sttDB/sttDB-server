@@ -42,7 +42,7 @@ public class SequencesRoutes {
     @ResponseBody
     public Page<Sequence> getSequencesByExperiment(@RequestParam String experiment,
                                                    @RequestParam(defaultValue = "0") int page) {
-        List<Sequence> experimentSequences = sequenceRepository.findByExperiment(experimentRepository.findOne(experiment));
+        List<Sequence> experimentSequences = sequenceRepository.findByExperiment(experiment);
         return new PageImpl<>(experimentSequences,
                 new PageRequest(page, 20),
                 experimentSequences.size());
@@ -52,6 +52,6 @@ public class SequencesRoutes {
     @ResponseBody
     public List<Sequence> getSequenceWithExperiment(@RequestParam String trinityId,
                                                     @RequestParam String experiment) {
-        return sequenceRepository.findByTrinityIdAndExperiment(trinityId, experimentRepository.findOne(experiment));
+        return sequenceRepository.findByTrinityIdAndExperiment(trinityId, experiment);
     }
 }

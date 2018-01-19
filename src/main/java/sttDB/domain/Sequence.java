@@ -27,7 +27,7 @@ public class Sequence {
     private List<Family> families = new ArrayList<>();
 
     @Indexed
-    private Experiment experiment;
+    private String experiment;
 
     public BigInteger getId() {
         return id;
@@ -81,11 +81,11 @@ public class Sequence {
         return families.add(family);
     }
 
-    public Experiment getExperiment() {
+    public String getExperiment() {
         return experiment;
     }
 
-    public void setExperiment(Experiment experiment) {
+    public void setExperiment(String experiment) {
         this.experiment = experiment;
     }
 

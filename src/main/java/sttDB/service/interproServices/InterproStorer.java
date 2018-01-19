@@ -22,7 +22,7 @@ public class InterproStorer {
     public void storeItems(List<LineItems> items, Experiment experiment) {
         for (LineItems item : items) {
             Family family = getFamilyOrNew(item, experiment);
-            Sequence sequence = sequenceRepository.findByTrinityIdAndExperiment(item.trinityID, experiment).get(0);
+            Sequence sequence = sequenceRepository.findByTrinityIdAndExperiment(item.trinityID, experiment.getName()).get(0);
             sequence.addFamily(family);
             sequenceRepository.save(sequence);
         }
@@ -31,14 +31,14 @@ public class InterproStorer {
     private Family getFamilyOrNew(LineItems item, Experiment experiment) {
         Family family = familyRepository.findByInterproId(item.interproId);
         if (family != null) {
-            family.addSequence(sequenceRepository.findByTrinityIdAndExperiment(item.trinityID, experiment).get(0));
+            family.addSequence(sequenceRepository.findByTrinityIdAndExperiment(item.trinityID, experiment.getName()).get(0));
             familyRepository.save(family);
             return family;
         } else {
             family = new Family();
             family.setInterproId(item.interproId);
             family.setDescription(item.description);
-            family.addSequence(sequenceRepository.findByTrinityIdAndExperiment(item.trinityID, experiment).get(0));
+            family.addSequence(sequenceRepository.findByTrinityIdAndExperiment(item.trinityID, experiment.getName()).get(0));
             familyRepository.save(family);
             return family;
         }
