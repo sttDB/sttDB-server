@@ -35,7 +35,7 @@ public class FastaDownloader {
         PrintWriter writer = new PrintWriter("searchedQuery.fasta", "UTF-8");
         Experiment experiment = experimentRepository.findOne(experimentName);
         insertSequences(writer, sequenceRepository
-                .findByTrinityIdAndExperiment(sequenceId, experiment.getName()).iterator());
+                .findByTrinityIdAndExperiment(sequenceId, experiment).iterator());
         writer.close();
         return new File("./searchedQuery.fasta");
     }

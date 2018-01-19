@@ -23,7 +23,7 @@ public class ParseDataStepDefs {
 
     @Given("^I have a file named \"([^\"]*)\"$")
     public void iHaveAFileNamed(String fileName) throws Throwable {
-        fileWanted = new File("./src/test/resources/files/"+fileName);
+        fileWanted = new File("./files/"+fileName);
     }
 
     @When("^I send the file$")
@@ -40,12 +40,12 @@ public class ParseDataStepDefs {
     @Then("^The database has information about DNA$")
     public void theDatabaseHasInformationAboutDNA() throws Throwable {
         stepDefs.result = stepDefs.mockMvc.perform(
-                get("/sequences/{id}", 1)
+                get("/sequences?trinityId={comp6_c0_seq1}")
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(jsonPath("$.length", is(4)))
                 .andExpect(jsonPath("$.trinityId", is("comp6_c0_seq1")))
                 .andExpect(jsonPath("$.transcript", is("GGTT")))
-                .andExpect(jsonPath("$.experiment", is("tests.fasta")));
+                .andExpect(jsonPath("$.experiment.name", is("tests.fasta")));
     }
 }

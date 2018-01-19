@@ -87,7 +87,7 @@ public class FastaParser {
         savedSequence.setLength(sequence.getTranscript().length());//We calculate the length, the fasta may not have it.
         savedSequence.setTrinityId(sequence.getTrinityId());
         savedSequence.setTranscript(sequence.getTranscript());
-        savedSequence.setExperiment(experiment.getName());
+        savedSequence.setExperiment(experiment);
         savedSequence.setDynamicFastaInfo(sequence.getDynamicFastaInfo());
         return savedSequence;
     }
