@@ -6,7 +6,9 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Sequence {
 
@@ -28,6 +30,8 @@ public class Sequence {
 
     @Indexed
     private String experiment;
+
+    private Map<String, Object> otherData = new HashMap<>();
 
     public BigInteger getId() {
         return id;
@@ -95,5 +99,21 @@ public class Sequence {
 
     public void setDynamicFastaInfo(String dynamicFastaInfo) {
         this.dynamicFastaInfo = dynamicFastaInfo;
+    }
+
+    public Map<String, Object> getOtherData() {
+        return otherData;
+    }
+
+    public void setOtherData(Map<String, Object> otherData) {
+        this.otherData = otherData;
+    }
+
+    public Object setOtherDataProperty(String key, Object value) {
+        return otherData.put(key, value);
+    }
+
+    public Object getOtherDataProperty(String key) {
+        return otherData.get(key);
     }
 }
