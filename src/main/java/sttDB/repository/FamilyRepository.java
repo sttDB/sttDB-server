@@ -13,5 +13,5 @@ import sttDB.repository.excerptProjections.FamilyProjection;
 public interface FamilyRepository extends MongoRepository<Family, String> {
     Family findByInterproId(@Param("interproId") String interproId);
 
-    Page<Family> findByDescriptionContaining(String keyword, Pageable pageable);
+    Page<Family> findByDescriptionLike(String keyword, Pageable pageable);
 }

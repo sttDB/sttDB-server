@@ -26,7 +26,7 @@ public class FamilyRoutes {
     @GetMapping(value = "", params = {"descriptionKeyword", "page"})
     @ResponseBody
     public Page<Family> getFamilyByKeyWord(@RequestParam String descriptionKeyword, @RequestParam(defaultValue = "0") int page){
-        return familyRepository.findByDescriptionContaining(descriptionKeyword, new PageRequest(page, 20));
+        return familyRepository.findByDescriptionLike(descriptionKeyword, new PageRequest(page, 20));
     }
 
     @GetMapping("/{id}/sequences")
