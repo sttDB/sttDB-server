@@ -40,8 +40,7 @@ public class FastaParser {
     }
 
     private void deleteOldSequences() {
-        List<Sequence> oldSequences = sequenceRepository.findByExperiment(experiment);
-        sequenceRepository.delete(oldSequences);
+        sequenceRepository.deleteByExperiment(experiment.getName());
     }
 
     private void parseFile() {
@@ -88,7 +87,7 @@ public class FastaParser {
         savedSequence.setLength(sequence.getTranscript().length());//We calculate the length, the fasta may not have it.
         savedSequence.setTrinityId(sequence.getTrinityId());
         savedSequence.setTranscript(sequence.getTranscript());
-        savedSequence.setExperiment(experiment);
+        savedSequence.setExperiment(experiment.getName());
         savedSequence.setDynamicFastaInfo(sequence.getDynamicFastaInfo());
         return savedSequence;
     }
