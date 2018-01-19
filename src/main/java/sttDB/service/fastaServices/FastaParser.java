@@ -40,7 +40,7 @@ public class FastaParser {
     }
 
     private void deleteOldSequences() {
-        List<Sequence> oldSequences = sequenceRepository.findByExperiment(experiment);
+        List<Sequence> oldSequences = sequenceRepository.findByExperiment(experiment.getName());
         sequenceRepository.delete(oldSequences);
     }
 

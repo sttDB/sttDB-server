@@ -17,7 +17,7 @@ public interface SequenceRepository extends MongoRepository<Sequence, BigInteger
 
     Page<Sequence> findByTrinityIdLike(@Param("trinityId") String trinityId, Pageable pageable);
 
-    List<Sequence> findByTrinityIdAndExperiment(@Param("trinityId") String trinityId, @Param("experiment") Experiment experiment);
+    List<Sequence> findByTrinityIdAndExperiment(@Param("trinityId") String trinityId, @Param("experiment") String experiment);
 
-    List<Sequence> findByExperiment(@Param("experiment") Experiment experiment);
+    List<Sequence> findByExperiment(@Param("experiment") String experiment);
 }
