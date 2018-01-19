@@ -30,7 +30,7 @@ public class ParseDataStepDefs {
     public void aUserSendsAFile() throws Throwable {
         String message = stepDefs.mapper.writeValueAsString(fileWanted);
         stepDefs.result = stepDefs.mockMvc.perform(
-                post("/uploadFasta")
+                post("/upload/fasta")
                     .contentType(MediaType.MULTIPART_FORM_DATA)
                     .content(message)
                     .accept(MediaType.APPLICATION_JSON))
