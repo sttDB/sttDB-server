@@ -2,6 +2,7 @@ package sttDB.service.interproServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sttDB.domain.Experiment;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -15,10 +16,10 @@ public class InterproManager {
 
     private Path fileToParse;
 
-    public void treatInterpro(Path path) {
+    public void treatInterpro(Path path, Experiment experiment) {
         fileToParse = path;
         List<LineItems> parsedItems = interproParser.parse(path);
-        storer.storeItems(parsedItems);
+        storer.storeItems(parsedItems, experiment);
     }
 
     @Autowired

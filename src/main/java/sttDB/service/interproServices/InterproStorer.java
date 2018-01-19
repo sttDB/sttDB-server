@@ -2,6 +2,7 @@ package sttDB.service.interproServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sttDB.domain.Experiment;
 import sttDB.domain.Family;
 import sttDB.domain.Sequence;
 import sttDB.repository.FamilyRepository;
@@ -18,10 +19,10 @@ public class InterproStorer {
     @Autowired
     private FamilyRepository familyRepository;
 
-    public void storeItems(List<LineItems> items) {
+    public void storeItems(List<LineItems> items, Experiment experiment) {
         for (LineItems item : items) {
             Family family = getFamilyOrNew(item);
-            Sequence sequence = sequenceRepository.findByTrinityId(item.trinityID).get(0); // find by experiment too
+            Sequence sequence = sequenceRepository.findByTrinityIdAndExperiment(item.trinityID, experiment).get(0);
             sequence.addFamily(family);
             sequenceRepository.save(sequence);
         }

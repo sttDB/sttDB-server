@@ -66,9 +66,9 @@ public class API {
         return sequenceRepository.findByTrinityIdAndExperiment(trinityId, experimentRepository.findOne(experiment));
     }
 
-    @GetMapping("/families")
+    @GetMapping(value = "/families", params = {"descriptionKeyword", "page"})
     @ResponseBody
-    public Page<Family> getFamilyByKeyWord(@RequestParam("descriptionKeyword") String keyword, @RequestParam("page") int page){
+    public Page<Family> getFamilyByKeyWord(@RequestParam String keyword, @RequestParam(defaultValue = "0") int page){
         return familyRepository.findByDescriptionContaining(keyword, new PageRequest(page, 20));
     }
 }
