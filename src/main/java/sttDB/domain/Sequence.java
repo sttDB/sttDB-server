@@ -1,6 +1,7 @@
 package sttDB.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.math.BigInteger;
@@ -25,8 +26,8 @@ public class Sequence {
     @DBRef
     private List<Family> families = new ArrayList<>();
 
-    @DBRef
-    private Experiment experiment;
+    @Indexed
+    private String experiment;
 
     public BigInteger getId() {
         return id;
@@ -80,11 +81,11 @@ public class Sequence {
         return families.add(family);
     }
 
-    public Experiment getExperiment() {
+    public String getExperiment() {
         return experiment;
     }
 
-    public void setExperiment(Experiment experiment) {
+    public void setExperiment(String experiment) {
         this.experiment = experiment;
     }
 
