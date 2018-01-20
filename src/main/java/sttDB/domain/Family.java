@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Family {
 
@@ -38,7 +39,13 @@ public class Family {
         this.sequences = sequences;
     }
 
-    public boolean addSequence(PartialSequence sequence){
+    public boolean addSequence(PartialSequence sequence) {
         return this.sequences.add(sequence);
+    }
+
+    public void deleteSequence(String experiment) {
+        sequences = sequences.stream()
+                .filter(sequence -> !sequence.getExperiment().equals(experiment))
+                .collect(Collectors.toList());
     }
 }
