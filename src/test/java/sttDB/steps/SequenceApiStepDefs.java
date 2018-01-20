@@ -36,7 +36,7 @@ public class SequenceApiStepDefs {
         sequenceRepository.save(sequence2);
     }
 
-    @When("^I use route \"([^\"]*)\"$")
+    @When("^I use sequence route \"([^\"]*)\"$")
     public void iUseRoute(String url) throws Throwable {
         stepDefs.result = stepDefs.mockMvc.perform(
                 get(url)
