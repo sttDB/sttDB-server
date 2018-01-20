@@ -18,6 +18,12 @@ public class FamilyRoutes {
     @Autowired
     private FamilyRepository familyRepository;
 
+    @GetMapping(value = "")
+    @ResponseBody
+    public Page<Family> getSequences() {
+        return familyRepository.findAll(new PageRequest(0, 20));
+    }
+
     @GetMapping(value = "", params = "page")
     @ResponseBody
     public Page<Family> getSequences(@RequestParam(required=false, defaultValue = "0") int page) {
