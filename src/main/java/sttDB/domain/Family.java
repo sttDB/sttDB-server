@@ -3,6 +3,7 @@ package sttDB.domain;
 import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,8 +45,6 @@ public class Family {
     }
 
     public void deleteSequence(String experiment) {
-        sequences = sequences.stream()
-                .filter(sequence -> !sequence.getExperiment().equals(experiment))
-                .collect(Collectors.toList());
+        sequences.removeIf(sequence -> sequence.getExperiment().equals(experiment));
     }
 }
