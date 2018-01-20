@@ -17,5 +17,5 @@ public interface FamilyRepository extends MongoRepository<Family, String>{
     Page<Family> findByDescriptionLike(String keyword, Pageable pageable);
 
     @Query(value = "{'sequences.experiment' : ?0}")
-    Page<Family> findFamilySequencesBySequencesExperimentName(@Param("experiment") String experiment);
+    Page<Family> findFamilySequencesBySequencesExperimentName(@Param("experiment") String experiment, Pageable pageable);
 }
