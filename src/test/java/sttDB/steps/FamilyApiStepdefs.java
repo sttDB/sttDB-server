@@ -7,6 +7,7 @@ import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import sttDB.domain.Family;
+import sttDB.domain.PartialSequence;
 import sttDB.repository.FamilyRepository;
 
 import static org.hamcrest.Matchers.is;
@@ -27,6 +28,8 @@ public class FamilyApiStepdefs {
         Family families = new Family();
         families.setInterproId("asd");
         families.setDescription("protein");
+        PartialSequence partialSequence = new PartialSequence("asd", "test");
+        families.addSequence(partialSequence);
         familyRepository.save(families);
     }
 
@@ -43,5 +46,11 @@ public class FamilyApiStepdefs {
         stepDefs.result.andExpect(jsonPath("$.content[0].interproId", is("asd")))
                 .andExpect(jsonPath("$.content[0].description", is("protein")))
                 .andExpect(jsonPath("$.totalElements", is(1)));
+    }
+
+    @And("^The partial proteins are correct$")
+    public void thePartialProteinsAreCorrect() throws Throwable {
+        stepDefs.result.andExpect(jsonPath("$.content[0].trinityId", is("asd")))
+                .andExpect(jsonPath("$.content[0].experiment", is("test")));
     }
 }
