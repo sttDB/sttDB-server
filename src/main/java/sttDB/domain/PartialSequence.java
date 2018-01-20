@@ -5,8 +5,6 @@ import org.springframework.data.annotation.Id;
 import java.math.BigInteger;
 
 public class PartialSequence {
-    @Id
-    private BigInteger id;
 
     private String trinityId;
 
@@ -15,14 +13,6 @@ public class PartialSequence {
     public PartialSequence(String trinityId, String experiment) {
         this.trinityId = trinityId;
         this.experiment = experiment;
-    }
-
-    public BigInteger getId() {
-        return id;
-    }
-
-    public String getTrinityId() {
-        return trinityId;
     }
 
     public void setTrinityId(String trinityId) {
