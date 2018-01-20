@@ -11,11 +11,11 @@ import sttDB.repository.excerptProjections.FamilyProjection;
 
 
 @RepositoryRestResource(excerptProjection = FamilyProjection.class)
-public interface FamilyRepository extends MongoRepository<Family, String> {
+public interface FamilyRepository extends MongoRepository<Family, String>{
     Family findByInterproId(@Param("interproId") String interproId);
 
     Page<Family> findByDescriptionLike(String keyword, Pageable pageable);
 
-    @Query(value = "{'sequences.experiment' : ?0}", delete = true)
-    void deleteFamilySequencesBySequencesExperimentName(@Param("experiment") String experiment);
+    @Query(value = "{'sequences.experiment' : ?0}")
+    Page<Family> findFamilySequencesBySequencesExperimentName(@Param("experiment") String experiment);
 }
