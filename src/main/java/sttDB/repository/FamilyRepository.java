@@ -3,9 +3,10 @@ package sttDB.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
-import sttDB.domain.Family;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import sttDB.domain.Family;
 import sttDB.repository.excerptProjections.FamilyProjection;
 
 
@@ -14,4 +15,7 @@ public interface FamilyRepository extends MongoRepository<Family, String> {
     Family findByInterproId(@Param("interproId") String interproId);
 
     Page<Family> findByDescriptionLike(String keyword, Pageable pageable);
+
+    @Query(value = "{'sequences.experiment' : ?0}", delete = true)
+    void deleteFamilySequencesBySequencesExperimentName(@Param("experiment") String experiment);
 }
