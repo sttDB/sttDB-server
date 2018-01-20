@@ -33,8 +33,14 @@ public class SequencesRoutes {
 
     @GetMapping(value = "", params = "page")
     @ResponseBody
-    public Page<Sequence> getSequences(@RequestParam(required=false, defaultValue = "0") int page) {
+    public Page<Sequence> getSequences(@RequestParam(defaultValue = "0") int page) {
         return sequenceRepository.findAll(new PageRequest(page, 20));
+    }
+
+    @GetMapping(value = "", params = "trinityId")
+    @ResponseBody
+    public Page<Sequence> getSequencesByTrinityId(@RequestParam String trinityId) {
+        return sequenceRepository.findByTrinityIdLike(trinityId, new PageRequest(0, 20));
     }
 
     @GetMapping(value = "", params = {"trinityId", "page"})
@@ -44,14 +50,17 @@ public class SequencesRoutes {
         return sequenceRepository.findByTrinityIdLike(trinityId, new PageRequest(page, 20));
     }
 
+    @GetMapping(value = "", params = "experiment")
+    @ResponseBody
+    public Page<Sequence> getSequencesByExperiment(@RequestParam String experiment) {
+        return sequenceRepository.findByExperiment(experiment, new PageRequest(0, 20));
+    }
+
     @GetMapping(value = "", params = {"experiment", "page"})
     @ResponseBody
     public Page<Sequence> getSequencesByExperiment(@RequestParam String experiment,
                                                    @RequestParam(defaultValue = "0") int page) {
-        List<Sequence> experimentSequences = sequenceRepository.findByExperiment(experiment);
-        return new PageImpl<>(experimentSequences,
-                new PageRequest(page, 20),
-                experimentSequences.size());
+         return sequenceRepository.findByExperiment(experiment, new PageRequest(page, 20));
     }
 
     @GetMapping(value = "", params = {"trinityId", "experiment"})
