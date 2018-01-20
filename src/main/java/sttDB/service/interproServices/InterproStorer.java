@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sttDB.domain.Experiment;
 import sttDB.domain.Family;
+import sttDB.domain.PartialSequence;
 import sttDB.domain.Sequence;
 import sttDB.repository.FamilyRepository;
 import sttDB.repository.SequenceRepository;
@@ -30,17 +31,14 @@ public class InterproStorer {
 
     private Family getFamilyOrNew(LineItems item, Experiment experiment) {
         Family family = familyRepository.findByInterproId(item.interproId);
-        if (family != null) {
-            family.addSequence(sequenceRepository.findByTrinityIdAndExperiment(item.trinityID, experiment.getName()).get(0));
-            familyRepository.save(family);
-            return family;
-        } else {
+        PartialSequence familySpecialSequence = new PartialSequence(item.trinityID, experiment.getName());
+        if(family == null) {
             family = new Family();
             family.setInterproId(item.interproId);
             family.setDescription(item.description);
-            family.addSequence(sequenceRepository.findByTrinityIdAndExperiment(item.trinityID, experiment.getName()).get(0));
-            familyRepository.save(family);
-            return family;
         }
+        family.addSequence(familySpecialSequence);
+        familyRepository.save(family);
+        return family;
     }
 }
