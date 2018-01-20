@@ -30,6 +30,12 @@ public class FamilyRoutes {
         return familyRepository.findAll(new PageRequest(page, 20));
     }
 
+    @GetMapping(value = "", params = {"descriptionKeyword"})
+    @ResponseBody
+    public Page<Family> getFamilyByKeyWord(@RequestParam String descriptionKeyword){
+        return familyRepository.findByDescriptionLike(descriptionKeyword, new PageRequest(0, 20));
+    }
+
     @GetMapping(value = "", params = {"descriptionKeyword", "page"})
     @ResponseBody
     public Page<Family> getFamilyByKeyWord(@RequestParam String descriptionKeyword, @RequestParam(defaultValue = "0") int page){
