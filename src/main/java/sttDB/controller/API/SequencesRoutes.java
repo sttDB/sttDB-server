@@ -25,6 +25,12 @@ public class SequencesRoutes {
     @Autowired
     private SequenceRepository sequenceRepository;
 
+    @GetMapping(value = "")
+    @ResponseBody
+    public Page<Sequence> getSequences() {
+        return sequenceRepository.findAll(new PageRequest(0, 20));
+    }
+
     @GetMapping(value = "", params = "page")
     @ResponseBody
     public Page<Sequence> getSequences(@RequestParam(required=false, defaultValue = "0") int page) {
