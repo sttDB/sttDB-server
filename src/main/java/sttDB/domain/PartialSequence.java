@@ -36,4 +36,9 @@ public class PartialSequence {
     public void setExperiment(String experiment) {
         this.experiment = experiment;
     }
+
+    public boolean representsSequence(Sequence sequence) {
+        return sequence.getTrinityId().equals(this.trinityId)
+                && sequence.getExperiment().equals(this.experiment);
+    }
 }
