@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import sttDB.domain.Experiment;
 import sttDB.repository.ExperimentRepository;
 
@@ -26,6 +23,12 @@ public class ExperimentRoutes {
     @ResponseBody
     public Page<Experiment> getExperiments() {
         return repository.findAll(new PageRequest(0, 20));
+    }
+
+    @GetMapping(value = "", params = "page")
+    @ResponseBody
+    public Page<Experiment> getExperiments(@RequestParam int page) {
+        return repository.findAll(new PageRequest(page, 20));
     }
 
     @GetMapping("/{name}")
