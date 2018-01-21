@@ -13,7 +13,7 @@ import java.util.Map;
 public class Sequence {
 
     @Id
-    private BigInteger id;
+    private String id;
 
     private String trinityId;
 
@@ -33,11 +33,11 @@ public class Sequence {
 
     private Map<String, Object> otherData = new HashMap<>();
 
-    public BigInteger getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(String id) {
         this.id = id;
     }
 

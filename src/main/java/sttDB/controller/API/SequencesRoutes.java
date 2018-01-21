@@ -5,10 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import sttDB.domain.Sequence;
 import sttDB.repository.ExperimentRepository;
 import sttDB.repository.SequenceRepository;
@@ -68,5 +65,11 @@ public class SequencesRoutes {
     public List<Sequence> getSequenceWithExperiment(@RequestParam String trinityId,
                                                     @RequestParam String experiment) {
         return sequenceRepository.findByTrinityIdAndExperiment(trinityId, experiment);
+    }
+
+    @GetMapping("/{id}")
+    @ResponseBody
+    public Sequence getSequenceById(@PathVariable("id") String id) {
+        return sequenceRepository.findOne(id);
     }
 }

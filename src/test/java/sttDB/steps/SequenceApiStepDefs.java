@@ -1,6 +1,5 @@
 package sttDB.steps;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
@@ -10,8 +9,7 @@ import sttDB.domain.Sequence;
 import sttDB.repository.SequenceRepository;
 
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -79,9 +77,18 @@ public class SequenceApiStepDefs {
         String sequenceJson = stepDefs.mapper.writeValueAsString(sequence);
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/sequences")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(sequenceJson)
-                .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(sequenceJson)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+    }
+
+    @When("^I DELETE a sequence with trinityId \"([^\"]*)\" and experiment \"([^\"]*)\"$")
+    public void iDELETEASequenceWithTrinityIdAndExperiment(String trinityId, String experiment) throws Throwable {
+        Sequence toDelete = sequenceRepository.findByTrinityIdAndExperiment(trinityId, experiment).get(0);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                delete("/sequences/" + toDelete.getId())
+                        .accept(MediaType.APPLICATION_JSON)
         );
     }
 }

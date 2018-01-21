@@ -31,3 +31,8 @@ Feature: Use the sequence api part
     Given I create a sequence with trinirtyId "comp_1234" and transcript "ACTG" in experiment "exp-A"
     When I POST the sequence
     Then The response code is 405
+
+  Scenario: Can't DELETE a Sequence
+    Given I have two sequences in the DataBase
+    When I DELETE a sequence with trinityId "asd" and experiment "test"
+    Then The response code is 405
