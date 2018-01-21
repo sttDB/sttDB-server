@@ -1,5 +1,6 @@
 package sttDB.steps;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -65,5 +66,17 @@ public class ExperimentApiStepDefs {
         stepDefs.result = stepDefs.mockMvc.perform(
                 delete("/experiments/" + expID)
                         .accept(MediaType.APPLICATION_JSON));
+    }
+
+    @When("^I modify the experiment with new name \"([^\"]*)\"$")
+    public void iModifyTheExperimentWithNewName(String newExpName) throws Throwable {
+        Experiment modifiedExperiment = new Experiment(newExpName);
+        String experiment = stepDefs.mapper.writeValueAsString(modifiedExperiment);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                put("/experiments/Experiment-1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(experiment)
+                        .accept(MediaType.APPLICATION_JSON));
+
     }
 }
