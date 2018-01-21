@@ -112,7 +112,7 @@ public class FastaParser {
         for (int i = 1; i < lineParts.length; i++) {
             dynamicLine.append(lineParts[i]).append(" ");
         }
-        return dynamicLine.toString();
+        return dynamicLine.toString().trim();
     }
 
 }

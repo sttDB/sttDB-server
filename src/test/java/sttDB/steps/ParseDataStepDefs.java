@@ -4,23 +4,30 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import sttDB.domain.Sequence;
+import sttDB.repository.SequenceRepository;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Iterator;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 public class ParseDataStepDefs {
 
     @Autowired
     private StepDefs stepDefs;
+
+    @Autowired
+    private SequenceRepository sequenceRepository;
 
     private String fileName;
     private File testFile;
@@ -50,13 +57,14 @@ public class ParseDataStepDefs {
 
     @Then("^The database has information about DNA$")
     public void theDatabaseHasInformationAboutDNA() throws Throwable {
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/sequences?trinityId={comp6_c0_seq1}")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(jsonPath("$.length", is(4)))
-                .andExpect(jsonPath("$.trinityId", is("comp6_c0_seq1")))
-                .andExpect(jsonPath("$.transcript", is("GGTT")))
-                .andExpect(jsonPath("$.experiment.name", is("tests.fasta")));
+        Page<Sequence> result = sequenceRepository.findByExperiment("tests",
+                new PageRequest(0, 20));
+        Iterator<Sequence> it = result.iterator();
+        Sequence sequence = it.next();
+
+        assertThat(sequence.getTrinityId(), is("comp6_c0_seq1"));
+        assertThat(sequence.getTranscript(), is("GGTT"));
+        assertThat(sequence.getLength(), is(4));
+        assertThat(sequence.getDynamicFastaInfo(), is("len=4 path=[1:0-144 306:145-298]"));
     }
 }
