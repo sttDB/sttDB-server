@@ -1,0 +1,44 @@
+package sttDB.steps;
+
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import sttDB.domain.Experiment;
+import sttDB.repository.ExperimentRepository;
+
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
+public class ExperimentApiStepDefs {
+
+    @Autowired
+    private StepDefs stepDefs;
+
+    @Autowired
+    private ExperimentRepository experimentRepository;
+
+    @Given("^There are (\\d+) experiments in the Database$")
+    public void thereAreExperimentsInTheDatabase(int nExperiments) throws Throwable {
+        for (int i = 1; i <= nExperiments; i++) {
+            Experiment experiment = new Experiment("Experiment-" + i);
+            experimentRepository.save(experiment);
+        }
+    }
+
+    @When("^I get all experiments$")
+    public void iGetAllExperiments() throws Throwable {
+        String url = "/experiments";
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get(url).accept(MediaType.APPLICATION_JSON));
+    }
+
+    @Then("^I see the experiments \"([^\"]*)\" and \"([^\"]*)\"$")
+    public void iSeeTheExperimentsAnd(String expName1, String expName2) throws Throwable {
+        stepDefs.result
+                .andExpect(jsonPath("$.content[0].name", is(expName1)))
+                .andExpect(jsonPath("$.content[1].name", is(expName2)));
+    }
+}
