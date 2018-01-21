@@ -15,6 +15,10 @@ public class PartialSequence {
         this.experiment = experiment;
     }
 
+    public String getTrinityId() {
+        return this.trinityId;
+    }
+
     public void setTrinityId(String trinityId) {
         this.trinityId = trinityId;
     }

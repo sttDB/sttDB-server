@@ -3,7 +3,9 @@ package sttDB.domain;
 import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Family {
 
@@ -38,7 +40,11 @@ public class Family {
         this.sequences = sequences;
     }
 
-    public boolean addSequence(PartialSequence sequence){
+    public boolean addSequence(PartialSequence sequence) {
         return this.sequences.add(sequence);
+    }
+
+    public void deleteSequence(String experiment) {
+        sequences.removeIf(sequence -> sequence.getExperiment().equals(experiment));
     }
 }

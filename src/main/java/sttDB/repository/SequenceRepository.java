@@ -20,7 +20,7 @@ public interface SequenceRepository extends MongoRepository<Sequence, BigInteger
 
     List<Sequence> findByTrinityIdAndExperiment(String trinityId, String experiment);
 
-    List<Sequence> findByExperiment( String experiment);
+    Page<Sequence> findByExperiment( String experiment, Pageable pageable);
 
     void deleteByExperiment(String experiment);
 }

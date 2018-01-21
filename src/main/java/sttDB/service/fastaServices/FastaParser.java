@@ -1,16 +1,20 @@
 package sttDB.service.fastaServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import sttDB.domain.Experiment;
+import sttDB.domain.Family;
 import sttDB.domain.Sequence;
 import sttDB.exception.FastaParsingException;
 import sttDB.repository.ExperimentRepository;
+import sttDB.repository.FamilyRepository;
 import sttDB.repository.SequenceRepository;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.nio.file.Path;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -18,14 +22,14 @@ import java.util.Scanner;
 public class FastaParser {
 
     private SequenceRepository sequenceRepository;
-    private ExperimentRepository experimentRepository;
+    private FamilyRepository familyRepository;
     private Path filePath;
     private Experiment experiment;
 
     @Autowired
-    public FastaParser(SequenceRepository sequenceRepository, ExperimentRepository experimentRepository) {
+    public FastaParser(SequenceRepository sequenceRepository, FamilyRepository familyRepository) {
         this.sequenceRepository = sequenceRepository;
-        this.experimentRepository = experimentRepository;
+        this.familyRepository = familyRepository;
     }
 
     public void treatFasta(Path fastaFile, Experiment experiment) {
@@ -41,6 +45,11 @@ public class FastaParser {
 
     private void deleteOldSequences() {
         sequenceRepository.deleteByExperiment(experiment.getName());
+        for (Family family : familyRepository.findFamilySequencesBySequencesExperimentName(experiment.getName(),
+                new PageRequest(0, Integer.MAX_VALUE))) {
+            family.deleteSequence(experiment.getName());
+            familyRepository.save(family);
+        }
     }
 
     private void parseFile() {

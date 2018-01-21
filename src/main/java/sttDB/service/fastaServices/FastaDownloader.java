@@ -51,7 +51,7 @@ public class FastaDownloader {
 
     private File createLargeFastaFile(String sequenceId) throws IOException {
         PrintWriter writer = new PrintWriter("searchedQuery.fasta", "UTF-8");
-        Page<Sequence> sequencePage = sequenceRepository.findByTrinityIdLike(sequenceId, new PageRequest(0, 1000));
+        Page<Sequence> sequencePage = sequenceRepository.findByTrinityIdLike(sequenceId, new PageRequest(0, Integer.MAX_VALUE));
         insertSequences(writer, sequencePage.iterator());
         while (sequencePage.hasNext()) {
             sequencePage = sequenceRepository.findByTrinityIdLike(sequenceId, sequencePage.nextPageable());
