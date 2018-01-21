@@ -1,6 +1,9 @@
 language: java
 
 jdk:
-- oraclejdk8
+  - oraclejdk8
 
 sudo: false
+
+env:
+  - FILES_DIR: "./files"
