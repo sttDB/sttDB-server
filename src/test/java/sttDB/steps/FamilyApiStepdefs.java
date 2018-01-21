@@ -1,5 +1,6 @@
 package sttDB.steps;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
@@ -78,5 +79,18 @@ public class FamilyApiStepdefs {
                 delete("/families/" + interproId)
                         .accept(MediaType.APPLICATION_JSON)
         ).andDo(print());
+    }
+
+    @When("^I modify the family with new interproId \"([^\"]*)\"$")
+    public void iModifyTheFamilyWithNewInterproId(String newInterproId) throws Throwable {
+        Family family = familyRepository.findOne("asd");
+        family.setInterproId(newInterproId);
+        String familyJson = stepDefs.mapper.writeValueAsString(family);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                put("/families/asd")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(familyJson)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
     }
 }
