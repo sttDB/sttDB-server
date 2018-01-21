@@ -43,7 +43,7 @@ public class FamilyRoutes {
 
     @GetMapping("/{interproId}")
     @ResponseBody
-    public Family getFamilyByInterproId(@RequestParam("interproId") String interproId) {
+    public Family getFamilyByInterproId(@PathVariable("interproId") String interproId) {
         return familyRepository.findByInterproId(interproId);
     }
 
