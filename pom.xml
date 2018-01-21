@@ -185,6 +185,7 @@
                     <forkCount>4</forkCount>
                     <reuseForks>true</reuseForks>
                     <argLine>-Xmx2048m</argLine>
+                    <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
             </plugin>
         </plugins>
