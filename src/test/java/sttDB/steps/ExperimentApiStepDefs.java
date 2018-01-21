@@ -1,6 +1,5 @@
 package sttDB.steps;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -10,8 +9,7 @@ import sttDB.domain.Experiment;
 import sttDB.repository.ExperimentRepository;
 
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 public class ExperimentApiStepDefs {
@@ -56,9 +54,16 @@ public class ExperimentApiStepDefs {
         String experimentJson = stepDefs.mapper.writeValueAsString(experiment);
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/experiments")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(experimentJson)
-                .accept(MediaType.APPLICATION_JSON));
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(experimentJson)
+                        .accept(MediaType.APPLICATION_JSON));
 
+    }
+
+    @When("^I DELETE the experiment with ID \"([^\"]*)\"$")
+    public void iDELETETheExperimentWithID(String expID) throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                delete("/experiments/" + expID)
+                        .accept(MediaType.APPLICATION_JSON));
     }
 }

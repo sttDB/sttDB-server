@@ -12,3 +12,8 @@ Feature: Submit petitions to the experiment API
     Given I create a experiment with name "MyExperiment"
     When I POST the experiment
     Then The response code is 405
+
+  Scenario: Can't DELETE a experiment
+    Given There are 1 experiments in the Database
+    When I DELETE the experiment with ID "Experiment-1"
+    Then The response code is 405
