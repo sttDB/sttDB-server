@@ -11,6 +11,7 @@ import sttDB.repository.SequenceRepository;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -21,6 +22,7 @@ public class SequenceApiStepDefs {
 
     @Autowired
     private SequenceRepository sequenceRepository;
+    private Sequence sequence;
 
     @Given("^I have two sequences in the DataBase$")
     public void iHaveTwoSequencesInTheDataBase() {
@@ -60,5 +62,26 @@ public class SequenceApiStepDefs {
         stepDefs.result.andExpect(jsonPath("$[0].trinityId", is("asd")))
                 .andExpect(jsonPath("$[0].transcript", is("BBC")))
                 .andExpect(jsonPath("$[0].experiment", is("test")));
+    }
+
+    @Given("^I create a sequence with trinirtyId \"([^\"]*)\" and transcript \"([^\"]*)\" in experiment \"([^\"]*)\"$")
+    public void iCreateASequenceWithTrinirtyIdAndTranscriptInExperiment(String trinityId,
+                                                                        String transcript,
+                                                                        String experiment) throws Throwable {
+        sequence = new Sequence();
+        sequence.setTrinityId(trinityId);
+        sequence.setTranscript(transcript);
+        sequence.setExperiment(experiment);
+    }
+
+    @When("^I POST the sequence$")
+    public void iPOSTTheSequence() throws Throwable {
+        String sequenceJson = stepDefs.mapper.writeValueAsString(sequence);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/sequences")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(sequenceJson)
+                .accept(MediaType.APPLICATION_JSON)
+        );
     }
 }

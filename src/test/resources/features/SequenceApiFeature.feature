@@ -26,3 +26,8 @@ Feature: Use the sequence api part
     When I use sequence route "/sequences?trinityId=asd&experiment=test"
     Then The response code is 200
     And The sequence is correct
+
+  Scenario: Can't POST a new Sequence
+    Given I create a sequence with trinirtyId "comp_1234" and transcript "ACTG" in experiment "exp-A"
+    When I POST the sequence
+    Then The response code is 405
