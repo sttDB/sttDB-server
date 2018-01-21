@@ -5,11 +5,14 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -19,23 +22,30 @@ public class ParseDataStepDefs {
     @Autowired
     private StepDefs stepDefs;
 
-    private File fileWanted;
+    private String fileName;
+    private File testFile;
 
     @Given("^I have a file named \"([^\"]*)\"$")
     public void iHaveAFileNamed(String fileName) throws Throwable {
+        this.fileName = fileName;
         ClassLoader classLoader = getClass().getClassLoader();
-        fileWanted = new File(classLoader.getResource("files/" + fileName).getFile());
+        testFile = new File(classLoader.getResource("files/" + fileName).getFile());
     }
 
-    @When("^I send the file$")
+    @When("^I send the file as Multipart file$")
     public void aUserSendsAFile() throws Throwable {
-        String message = stepDefs.mapper.writeValueAsString(fileWanted);
+        MockMultipartFile file = createMockMultiPartFile();
         stepDefs.result = stepDefs.mockMvc.perform(
-                post("/upload/fasta")
-                    .contentType(MediaType.MULTIPART_FORM_DATA)
-                    .content(message)
-                    .accept(MediaType.APPLICATION_JSON))
+                fileUpload("/upload/fasta")
+                        .file(file)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(print());
+    }
+
+    private MockMultipartFile createMockMultiPartFile() throws IOException {
+        return new MockMultipartFile("file", fileName,
+                MediaType.MULTIPART_FORM_DATA_VALUE, new FileInputStream(testFile));
     }
 
     @Then("^The database has information about DNA$")
