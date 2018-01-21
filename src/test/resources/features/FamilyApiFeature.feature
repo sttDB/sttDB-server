@@ -25,3 +25,8 @@ Feature: Use the family api part
     Given I create a family with interpro ID "AB1234" and description "Sample family"
     When I POST the family
     Then The response code is 405
+
+  Scenario: Can't DELETE a family
+    Given I have one families in the DataBase
+    When I DELETE the family with interproID "asd"
+    Then The response code is 405

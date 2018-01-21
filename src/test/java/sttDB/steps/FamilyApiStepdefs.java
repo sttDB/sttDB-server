@@ -10,8 +10,7 @@ import sttDB.domain.PartialSequence;
 import sttDB.repository.FamilyRepository;
 
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -67,9 +66,17 @@ public class FamilyApiStepdefs {
         String familyJson = stepDefs.mapper.writeValueAsString(family);
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/families")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(familyJson)
-                .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(familyJson)
+                        .accept(MediaType.APPLICATION_JSON)
         );
+    }
+
+    @When("^I DELETE the family with interproID \"([^\"]*)\"$")
+    public void iDELETETheFamilyWithInterproID(String interproId) throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                delete("/families/" + interproId)
+                        .accept(MediaType.APPLICATION_JSON)
+        ).andDo(print());
     }
 }
