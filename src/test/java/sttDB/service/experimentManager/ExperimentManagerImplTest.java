@@ -61,7 +61,7 @@ public class ExperimentManagerImplTest {
         sut.processNewExperiment(fastaFileMock);
 
         verify(repository).save(argument.capture());
-        assertThat(EXPERIMENT_FASTA, is(argument.getValue().getName()));
+        assertThat("experiment", is(argument.getValue().getName()));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class ExperimentManagerImplTest {
 
         verify(storage).storeFileInExperiment(file.capture(), fileName.capture());
         assertThat(file.getValue(), is(fastaFileMock));
-        assertThat(fileName.getValue(), is(fastaFileMock.getOriginalFilename()));
+        assertThat(fileName.getValue(), is(getFileWithoutExtension()));
     }
 
     @Test
@@ -82,14 +82,19 @@ public class ExperimentManagerImplTest {
         ArgumentCaptor<Experiment> experimentArgument = forClass(Experiment.class);
         Path path = Paths.get("/myPath");
         Experiment mockExperiment = new Experiment(EXPERIMENT_FASTA);
-        when(storage.storeFileInExperiment(fastaFileMock, mockExperiment.getName()))
+        when(storage.storeFileInExperiment(fastaFileMock, "experiment"))
                 .thenReturn(path);
 
         sut.processNewExperiment(fastaFileMock);
 
         verify(fastaParser).treatFasta(pathArgument.capture(), experimentArgument.capture());
         assertThat(pathArgument.getValue(), is(path));
-        assertThat(experimentArgument.getValue().getName(), is(fastaFileMock.getOriginalFilename()));
+        assertThat(experimentArgument.getValue().getName(), is(getFileWithoutExtension()));
+    }
+
+    private String getFileWithoutExtension() {
+        String fileName = fastaFileMock.getOriginalFilename().split("\\.")[0];
+        return fileName;
     }
 
     @Test(expected = ExperimentNotFoundException.class)

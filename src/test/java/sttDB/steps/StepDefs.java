@@ -5,6 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootContextLoader;
@@ -62,5 +63,10 @@ public class StepDefs {
             result.andExpect(status().reason(is(message)));
         else
             result.andExpect(jsonPath("$..message", hasItem(containsString(message))));
+    }
+
+    @Test
+    public void contextLoads() {
+
     }
 }
