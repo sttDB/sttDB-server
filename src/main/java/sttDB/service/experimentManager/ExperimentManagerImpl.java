@@ -1,5 +1,6 @@
 package sttDB.service.experimentManager;
 
+import com.sun.org.apache.xpath.internal.operations.Mult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,12 +35,16 @@ public class ExperimentManagerImpl implements ExperimentManager {
 
     @Override
     public void processNewExperiment(MultipartFile fastaFile) {
-        Experiment experiment = new Experiment(fastaFile.getOriginalFilename());
+        Experiment experiment = new Experiment(getNameNoExtension(fastaFile));
         experimentRepository.save(experiment);
 
         Path path = storageService.storeFileInExperiment(fastaFile, experiment.getName());
 
         fastaParser.treatFasta(path, experiment);
+    }
+
+    private String getNameNoExtension(MultipartFile file) {
+        return file.getOriginalFilename().split("\\.")[0];
     }
 
     @Override

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sttDB.domain.Experiment;
@@ -25,6 +26,12 @@ public class ExperimentRoutes {
     @ResponseBody
     public Page<Experiment> getExperiments() {
         return repository.findAll(new PageRequest(0, 20));
+    }
+
+    @GetMapping("/{name}")
+    @ResponseBody
+    public Experiment getExperimentByName(@PathVariable("name") String name) {
+        return repository.findOne(name);
     }
 
 }
