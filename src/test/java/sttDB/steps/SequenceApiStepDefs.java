@@ -1,5 +1,6 @@
 package sttDB.steps;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
@@ -88,6 +89,16 @@ public class SequenceApiStepDefs {
         Sequence toDelete = sequenceRepository.findByTrinityIdAndExperiment(trinityId, experiment).get(0);
         stepDefs.result = stepDefs.mockMvc.perform(
                 delete("/sequences/" + toDelete.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+    }
+
+    @When("^I modify the sequence with new trinityId \"([^\"]*)\"$")
+    public void iModifyTheSequenceWithNewTrinityId(String newTrinityId) throws Throwable {
+        Sequence toUpdate = sequenceRepository.findByTrinityIdAndExperiment("asd", "test").get(0);
+        toUpdate.setTrinityId(newTrinityId);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                put("/sequences/" + toUpdate.getId())
                         .accept(MediaType.APPLICATION_JSON)
         );
     }

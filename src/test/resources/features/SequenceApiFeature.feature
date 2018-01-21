@@ -36,3 +36,8 @@ Feature: Use the sequence api part
     Given I have two sequences in the DataBase
     When I DELETE a sequence with trinityId "asd" and experiment "test"
     Then The response code is 405
+
+  Scenario: Can't PUT a Sequence
+    Given I have two sequences in the DataBase
+    When I modify the sequence with new trinityId "<>"
+    Then The response code is 405
