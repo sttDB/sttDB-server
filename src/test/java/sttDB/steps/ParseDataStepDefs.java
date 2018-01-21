@@ -23,7 +23,8 @@ public class ParseDataStepDefs {
 
     @Given("^I have a file named \"([^\"]*)\"$")
     public void iHaveAFileNamed(String fileName) throws Throwable {
-        fileWanted = new File("./files/"+fileName);
+        ClassLoader classLoader = getClass().getClassLoader();
+        fileWanted = new File(classLoader.getResource("files/" + fileName).getFile());
     }
 
     @When("^I send the file$")
