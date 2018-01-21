@@ -1,5 +1,6 @@
 package sttDB.steps;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -10,6 +11,7 @@ import sttDB.repository.ExperimentRepository;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 public class ExperimentApiStepDefs {
@@ -19,6 +21,8 @@ public class ExperimentApiStepDefs {
 
     @Autowired
     private ExperimentRepository experimentRepository;
+
+    private Experiment experiment;
 
     @Given("^There are (\\d+) experiments in the Database$")
     public void thereAreExperimentsInTheDatabase(int nExperiments) throws Throwable {
@@ -40,5 +44,21 @@ public class ExperimentApiStepDefs {
         stepDefs.result
                 .andExpect(jsonPath("$.content[0].name", is(expName1)))
                 .andExpect(jsonPath("$.content[1].name", is(expName2)));
+    }
+
+    @Given("^I create a experiment with name \"([^\"]*)\"$")
+    public void iCreateAExperimentWithName(String expName) throws Throwable {
+        this.experiment = new Experiment(expName);
+    }
+
+    @When("^I POST the experiment$")
+    public void iPOSTTheExperiment() throws Throwable {
+        String experimentJson = stepDefs.mapper.writeValueAsString(experiment);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/experiments")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(experimentJson)
+                .accept(MediaType.APPLICATION_JSON));
+
     }
 }
