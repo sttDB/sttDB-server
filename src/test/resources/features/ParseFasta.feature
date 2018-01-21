@@ -9,7 +9,7 @@ Feature: Parse the incoming fasta files
     Then The response code is 200
     And The database has information about DNA
 
-#  Scenario: A user sends a file that is not a fasta
-#    Given I have a file named "tests.txt"
-#    When I send the file
-#    Then The response code is 415
+  Scenario: A user sends a file that is not a fasta
+    Given I have a file named "tests.txt"
+    When I send the file as Multipart file
+    Then The response code is 400

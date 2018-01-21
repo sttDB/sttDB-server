@@ -23,5 +23,13 @@ public class ExceptionControllerAdvice {
     public VndErrors fastaParsingExceptionHandler(FastaParsingException ex) {
         return new VndErrors("error: ", ex.getMessage());
     }
+
+    @ResponseBody
+    @ExceptionHandler(WrongFileFormatException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public VndErrors wrongFileFormatExceptionHandler(WrongFileFormatException ex) {
+        return new VndErrors("Error: ", ex.getMessage());
+    }
+
 }
 
