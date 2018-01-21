@@ -5,5 +5,9 @@ jdk:
 
 sudo: false
 
+branches:
+  only:
+    - master
+
 env:
   - FILES_DIR: "./files"
