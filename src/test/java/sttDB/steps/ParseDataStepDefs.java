@@ -1,5 +1,6 @@
 package sttDB.steps;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -43,7 +44,7 @@ public class ParseDataStepDefs {
     public void iSendTheFileAsMultipartFileTo(String url) throws Throwable {
         MockMultipartFile file = createMockMultiPartFile();
         stepDefs.result = stepDefs.mockMvc.perform(
-                fileUpload("/upload/fasta")
+                fileUpload(url)
                         .file(file)
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .accept(MediaType.APPLICATION_JSON))
@@ -66,5 +67,18 @@ public class ParseDataStepDefs {
         assertThat(sequence.getTranscript(), is("GGTT"));
         assertThat(sequence.getLength(), is(4));
         assertThat(sequence.getDynamicFastaInfo(), is("len=4 path=[1:0-144 306:145-298]"));
+    }
+
+    @When("^I upload the file to experiment \"([^\"]*)\"$")
+    public void iUploadTheFileToExperiment(String experiment) throws Throwable {
+        MockMultipartFile file = createMockMultiPartFile();
+        stepDefs.result = stepDefs.mockMvc.perform(
+                fileUpload("/upload/interpro")
+                        .file(file)
+                        .header("experiment", experiment)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
     }
 }
