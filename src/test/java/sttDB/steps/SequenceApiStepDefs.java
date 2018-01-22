@@ -10,7 +10,7 @@ import sttDB.domain.Sequence;
 import sttDB.repository.SequenceRepository;
 
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -21,6 +21,7 @@ public class SequenceApiStepDefs {
 
     @Autowired
     private SequenceRepository sequenceRepository;
+    private Sequence sequence;
 
     @Given("^I have two sequences in the DataBase$")
     public void iHaveTwoSequencesInTheDataBase() {
@@ -60,5 +61,45 @@ public class SequenceApiStepDefs {
         stepDefs.result.andExpect(jsonPath("$[0].trinityId", is("asd")))
                 .andExpect(jsonPath("$[0].transcript", is("BBC")))
                 .andExpect(jsonPath("$[0].experiment", is("test")));
+    }
+
+    @Given("^I create a sequence with trinirtyId \"([^\"]*)\" and transcript \"([^\"]*)\" in experiment \"([^\"]*)\"$")
+    public void iCreateASequenceWithTrinirtyIdAndTranscriptInExperiment(String trinityId,
+                                                                        String transcript,
+                                                                        String experiment) throws Throwable {
+        sequence = new Sequence();
+        sequence.setTrinityId(trinityId);
+        sequence.setTranscript(transcript);
+        sequence.setExperiment(experiment);
+    }
+
+    @When("^I POST the sequence$")
+    public void iPOSTTheSequence() throws Throwable {
+        String sequenceJson = stepDefs.mapper.writeValueAsString(sequence);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/sequences")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(sequenceJson)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+    }
+
+    @When("^I DELETE a sequence with trinityId \"([^\"]*)\" and experiment \"([^\"]*)\"$")
+    public void iDELETEASequenceWithTrinityIdAndExperiment(String trinityId, String experiment) throws Throwable {
+        Sequence toDelete = sequenceRepository.findByTrinityIdAndExperiment(trinityId, experiment).get(0);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                delete("/sequences/" + toDelete.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+    }
+
+    @When("^I modify the sequence with new trinityId \"([^\"]*)\"$")
+    public void iModifyTheSequenceWithNewTrinityId(String newTrinityId) throws Throwable {
+        Sequence toUpdate = sequenceRepository.findByTrinityIdAndExperiment("asd", "test").get(0);
+        toUpdate.setTrinityId(newTrinityId);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                put("/sequences/" + toUpdate.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+        );
     }
 }

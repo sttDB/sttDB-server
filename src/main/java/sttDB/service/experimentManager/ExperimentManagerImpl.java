@@ -1,10 +1,12 @@
 package sttDB.service.experimentManager;
 
+import com.sun.org.apache.xpath.internal.operations.Mult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import sttDB.domain.Experiment;
 import sttDB.exception.ExperimentNotFoundException;
+import sttDB.exception.WrongFileFormatException;
 import sttDB.repository.ExperimentRepository;
 import sttDB.service.fastaServices.FastaParser;
 import sttDB.service.interproServices.InterproManager;
@@ -34,12 +36,23 @@ public class ExperimentManagerImpl implements ExperimentManager {
 
     @Override
     public void processNewExperiment(MultipartFile fastaFile) {
-        Experiment experiment = new Experiment(fastaFile.getOriginalFilename());
+        checkFastaFormat(fastaFile);
+        Experiment experiment = new Experiment(getNameNoExtension(fastaFile));
         experimentRepository.save(experiment);
 
         Path path = storageService.storeFileInExperiment(fastaFile, experiment.getName());
 
         fastaParser.treatFasta(path, experiment);
+    }
+
+    private void checkFastaFormat(MultipartFile fastaFile) {
+        String fileExtension = fastaFile.getOriginalFilename().split("\\.")[1];
+        if (!fileExtension.equals("fasta"))
+            throw new WrongFileFormatException("File with 'fasta' extension expected, but was found " + fileExtension + " extension");
+    }
+
+    private String getNameNoExtension(MultipartFile file) {
+        return file.getOriginalFilename().split("\\.")[0];
     }
 
     @Override

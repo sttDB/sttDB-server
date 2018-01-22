@@ -26,3 +26,18 @@ Feature: Use the sequence api part
     When I use sequence route "/sequences?trinityId=asd&experiment=test"
     Then The response code is 200
     And The sequence is correct
+
+  Scenario: Can't POST a new Sequence
+    Given I create a sequence with trinirtyId "comp_1234" and transcript "ACTG" in experiment "exp-A"
+    When I POST the sequence
+    Then The response code is 405
+
+  Scenario: Can't DELETE a Sequence
+    Given I have two sequences in the DataBase
+    When I DELETE a sequence with trinityId "asd" and experiment "test"
+    Then The response code is 405
+
+  Scenario: Can't PUT a Sequence
+    Given I have two sequences in the DataBase
+    When I modify the sequence with new trinityId "<>"
+    Then The response code is 405

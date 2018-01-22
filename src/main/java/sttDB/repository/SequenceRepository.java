@@ -13,7 +13,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 @RepositoryRestResource
-public interface SequenceRepository extends MongoRepository<Sequence, BigInteger> {
+public interface SequenceRepository extends MongoRepository<Sequence, String> {
     List<Sequence> findByTrinityId(String trinityId);
 
     Page<Sequence> findByTrinityIdLike(String trinityId, Pageable pageable);

@@ -11,7 +11,7 @@ import sttDB.domain.PartialSequence;
 import sttDB.repository.FamilyRepository;
 
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -22,6 +22,7 @@ public class FamilyApiStepdefs {
 
     @Autowired
     private FamilyRepository familyRepository;
+    private Family family;
 
     @Given("^I have one families in the DataBase$")
     public void iHaveTwoFamiliesInTheDataBase() {
@@ -52,5 +53,44 @@ public class FamilyApiStepdefs {
     public void thePartialProteinsAreCorrect() throws Throwable {
         stepDefs.result.andExpect(jsonPath("$.content[0].trinityId", is("asd")))
                 .andExpect(jsonPath("$.content[0].experiment", is("test")));
+    }
+
+    @Given("^I create a family with interpro ID \"([^\"]*)\" and description \"([^\"]*)\"$")
+    public void iCreateAFamilyWithNameAndDescription(String interproId, String description) throws Throwable {
+        family = new Family();
+        family.setInterproId(interproId);
+        family.setDescription(description);
+    }
+
+    @When("^I POST the family$")
+    public void iPOSTTheFamily() throws Throwable {
+        String familyJson = stepDefs.mapper.writeValueAsString(family);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/families")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(familyJson)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+    }
+
+    @When("^I DELETE the family with interproID \"([^\"]*)\"$")
+    public void iDELETETheFamilyWithInterproID(String interproId) throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                delete("/families/" + interproId)
+                        .accept(MediaType.APPLICATION_JSON)
+        ).andDo(print());
+    }
+
+    @When("^I modify the family with new interproId \"([^\"]*)\"$")
+    public void iModifyTheFamilyWithNewInterproId(String newInterproId) throws Throwable {
+        Family family = familyRepository.findOne("asd");
+        family.setInterproId(newInterproId);
+        String familyJson = stepDefs.mapper.writeValueAsString(family);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                put("/families/asd")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(familyJson)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
     }
 }
