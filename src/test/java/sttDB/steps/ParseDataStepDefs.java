@@ -39,8 +39,8 @@ public class ParseDataStepDefs {
         testFile = new File(classLoader.getResource("files/" + fileName).getFile());
     }
 
-    @When("^I send the file as Multipart file$")
-    public void aUserSendsAFile() throws Throwable {
+    @When("^I send the file as Multipart file to \"([^\"]*)\"$")
+    public void iSendTheFileAsMultipartFileTo(String url) throws Throwable {
         MockMultipartFile file = createMockMultiPartFile();
         stepDefs.result = stepDefs.mockMvc.perform(
                 fileUpload("/upload/fasta")
