@@ -14,7 +14,6 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.core.Is.is;
 
@@ -122,6 +121,11 @@ public class ExperimentStorageServiceTest {
         List<String> fileNames = sut.getExperimentFileNames(EXPERIMENT);
 
         assertThat(fileNames, containsInAnyOrder(FASTA_FILE, FAMILIES_TXT));
+    }
+
+    @Test(expected = StorageException.class)
+    public void getFilesOfExeperimentThatDoesntExist() {
+        List<String> fileNames = sut.getExperimentFileNames("missing-experiment");
     }
 
 }

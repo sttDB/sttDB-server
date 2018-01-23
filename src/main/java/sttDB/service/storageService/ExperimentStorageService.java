@@ -77,8 +77,7 @@ public class ExperimentStorageService implements StorageService {
                     .collect(toList());
             return fileNames;
         } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            throw new StorageException("Experiment '" + experimentName + "' not found", e);
         }
     }
 
