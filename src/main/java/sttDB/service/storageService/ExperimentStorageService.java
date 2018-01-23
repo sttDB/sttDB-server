@@ -10,6 +10,9 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Component
 public class ExperimentStorageService implements StorageService {
@@ -63,6 +66,20 @@ public class ExperimentStorageService implements StorageService {
         else
             throw new StorageFileNotFoundException(String.format("File with name {0} in experiment {1} not found",
                     filename, experimentName));
+    }
+
+    @Override
+    public List<String> getExperimentFileNames(String experimentName) throws StorageException {
+        try {
+            Path path = rootLocation.resolve(experimentName);
+            List<String> fileNames = Files.list(path)
+                    .map(p -> p.toFile().getName())
+                    .collect(toList());
+            return fileNames;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public Path getRootLocation() {

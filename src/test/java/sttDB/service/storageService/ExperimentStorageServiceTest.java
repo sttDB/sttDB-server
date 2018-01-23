@@ -11,8 +11,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.core.Is.is;
 
 public class ExperimentStorageServiceTest {
@@ -108,6 +111,17 @@ public class ExperimentStorageServiceTest {
 
         Path path = sut.loadFileFromExperiment(file.getOriginalFilename(), EXPERIMENT);
         assertThat(TEST_CONTENT, is(Files.readAllLines(path).get(0)));
+    }
+
+    @Test
+    public void getFileNamesOfExperiment() {
+        MockMultipartFile familiyFile = notFasta;
+        sut.storeFileInExperiment(file, EXPERIMENT);
+        sut.storeFileInExperiment(familiyFile, EXPERIMENT);
+
+        List<String> fileNames = sut.getExperimentFileNames(EXPERIMENT);
+
+        assertThat(fileNames, containsInAnyOrder(FASTA_FILE, FAMILIES_TXT));
     }
 
 }
