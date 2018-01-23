@@ -1,6 +1,5 @@
 package sttDB.service.experimentManager;
 
-import com.sun.org.apache.xpath.internal.operations.Mult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,10 +9,11 @@ import sttDB.exception.WrongFileFormatException;
 import sttDB.repository.ExperimentRepository;
 import sttDB.service.fastaServices.FastaParser;
 import sttDB.service.interproServices.InterproManager;
-import sttDB.service.interproServices.InterproParser;
+import sttDB.service.storageService.StorageException;
 import sttDB.service.storageService.StorageService;
 
 import java.nio.file.Path;
+import java.util.List;
 
 @Service
 public class ExperimentManagerImpl implements ExperimentManager {
@@ -69,5 +69,14 @@ public class ExperimentManagerImpl implements ExperimentManager {
     @Override
     public void addOtherDataToExperiment(MultipartFile file, String experimentName) {
         throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public List<String> getFilesOfExperiment(String experiment) {
+        try {
+            return storageService.getExperimentFileNames(experiment);
+        } catch (StorageException e) {
+            throw new ExperimentNotFoundException(e);
+        }
     }
 }
