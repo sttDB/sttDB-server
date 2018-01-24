@@ -1,4 +1,4 @@
-package sttDB.service.downloadFileServices;
+package sttDB.service.downloadFileService;
 
 import java.io.PrintWriter;
 
