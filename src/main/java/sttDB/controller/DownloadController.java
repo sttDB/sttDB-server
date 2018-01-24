@@ -29,8 +29,8 @@ public class DownloadController {
     }
 
     @GetMapping(value = "/fasta", params = {"trinityId", "experiment"})
-    public void download(@RequestParam String sequenceId, @RequestParam String experiment,
-                         HttpServletResponse response) throws IOException {
+    public void downloadFasta(@RequestParam String sequenceId, @RequestParam String experiment,
+                              HttpServletResponse response) throws IOException {
         FileCreator<Sequence> fileCreator = new FileCreator<>("fasta");
         File file = fileCreator.createFile(selectLikeOrOne(sequenceId, experiment), new FastaFileWriter());
         returnResponseWithFile(response, file);
@@ -40,6 +40,15 @@ public class DownloadController {
         return experiment.equals("") ?
                 sequenceRepository.findByTrinityIdLike(sequenceId, new PageRequest(0, Integer.MAX_VALUE))
                 : sequenceRepository.findByTrinityIdAndExperiment(sequenceId, experiment);
+    }
+
+
+    @GetMapping(value = "/fasta", params = "interproId")
+    public void downloadFastaFromFamily(@RequestParam String interproId, HttpServletResponse response)
+            throws IOException {
+        FileCreator<Sequence> fileCreator = new FileCreator<>("fasta");
+        File file = fileCreator.createFile(sequenceRepository.findByFamilyInterproId(interproId), new FastaFileWriter());
+        returnResponseWithFile(response, file);
     }
 
     @GetMapping(value = "/{experiment}", params = "file")
