@@ -28,8 +28,8 @@ public class DownloadController {
         this.sequenceRepository = sequenceRepository;
     }
 
-    @RequestMapping(value = "/fasta", method = RequestMethod.GET)
-    public void download(@RequestParam("trinityId") String sequenceId, @RequestParam("experiment") String experiment,
+    @GetMapping(value = "/fasta", params = {"trinityId", "experiment"})
+    public void download(@RequestParam String sequenceId, @RequestParam String experiment,
                          HttpServletResponse response) throws IOException {
         FileCreator<Sequence> fileCreator = new FileCreator<>("fasta");
         File file = fileCreator.createFile(selectLikeOrOne(sequenceId, experiment), new FastaFileWriter());
