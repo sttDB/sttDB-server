@@ -2,9 +2,13 @@ package sttDB.controller;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import sttDB.service.fastaServices.FastaDownloader;
+import sttDB.domain.Sequence;
+import sttDB.repository.SequenceRepository;
+import sttDB.service.downloadFileService.FastaFileWriter;
+import sttDB.service.downloadFileService.FileCreator;
 import sttDB.service.storageService.StorageService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -14,29 +18,34 @@ import java.io.*;
 @Controller
 public class DownloadController {
 
-    private FastaDownloader fastaDownloader;
-
     private StorageService storage;
 
+    private SequenceRepository sequenceRepository;
+
     @Autowired
-    public DownloadController(FastaDownloader fastaDownloader, StorageService storage) {
-        this.fastaDownloader = fastaDownloader;
+    public DownloadController(StorageService storage, SequenceRepository sequenceRepository) {
         this.storage = storage;
+        this.sequenceRepository = sequenceRepository;
     }
 
     @RequestMapping(value = "/fasta", method = RequestMethod.GET)
     public void download(@RequestParam("trinityId") String sequenceId, @RequestParam("experiment") String experiment,
                          HttpServletResponse response) throws IOException {
-
-        File file = fastaDownloader.createFasta(sequenceId, experiment);
+        FileCreator<Sequence> fileCreator = new FileCreator<>("fasta");
+        File file = fileCreator.createFile(selectLikeOrOne(sequenceId, experiment), new FastaFileWriter());
         returnResponseWithFile(response, file);
+    }
+
+    private Iterable<Sequence> selectLikeOrOne(String sequenceId, String experiment) {
+        return experiment.equals("") ?
+                sequenceRepository.findByTrinityIdLike(sequenceId, new PageRequest(0, Integer.MAX_VALUE))
+                : sequenceRepository.findByTrinityIdAndExperiment(sequenceId, experiment);
     }
 
     @GetMapping(value = "/{experiment}", params = "file")
     public void downloadFile(@PathVariable("experiment") String experiment,
                              @RequestParam("file") String file,
                              HttpServletResponse response) throws IOException {
-
         File toDownload = storage.loadFileFromExperiment(file, experiment).toFile();
         returnResponseWithFile(response, toDownload);
     }
