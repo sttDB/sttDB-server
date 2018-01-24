@@ -13,10 +13,10 @@ public class FileDownloader<E>{
         path = path + typeOfExtension;
     }
 
-    public File createFile(Iterator<E> dataToWrite, FileCreator<E> fileCreator) throws IOException {
+    public File createFile(Iterator<E> dataToWrite, FileWriter<E> fileWriter) throws IOException {
         PrintWriter writer = new PrintWriter(path, "UTF-8");
         while (dataToWrite.hasNext()) {
-            fileCreator.insertDataLine(writer, dataToWrite.next());
+            fileWriter.insertDataLine(writer, dataToWrite.next());
         }
         writer.close();
         return new File(path);

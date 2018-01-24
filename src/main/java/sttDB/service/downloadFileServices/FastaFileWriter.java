@@ -4,7 +4,7 @@ import sttDB.domain.Sequence;
 
 import java.io.PrintWriter;
 
-public class FastaFileCreator implements FileCreator<Sequence>{
+public class FastaFileWriter implements FileWriter<Sequence> {
 
     @Override
     public void insertDataLine(PrintWriter writer, Sequence data) {
