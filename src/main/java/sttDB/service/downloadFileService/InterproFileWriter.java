@@ -1,10 +1,12 @@
 package sttDB.service.downloadFileService;
 
+import sttDB.domain.Family;
+
 import java.io.PrintWriter;
 
-public class InterproFileWriter<E> implements FileWriter<E> {
+public class InterproFileWriter implements FileWriter<Family> {
     @Override
-    public void insertDataLine(PrintWriter writer, E data) {
+    public void insertDataLine(PrintWriter writer, Family data) {
 
     }
 }
