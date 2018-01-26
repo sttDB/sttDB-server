@@ -24,7 +24,10 @@ public interface SequenceRepository extends MongoRepository<Sequence, String> {
     Page<Sequence> findByExperiment( String experiment, Pageable pageable);
 
     @Query(value = "{'families.interproId' : ?0}")
-    List<Sequence> findByFamilyInterproId(@Param("interpro") String interproId);
+    List<Sequence> findByFamilyInterproId(String interproId);
+
+    @Query(value = "{'families.interproId' : ?0}", fields = "{ trinityId : 1, experiment : 1 }")
+    Page<Sequence> findPartialByFamilyInterproId(String interproId, Pageable pageable);
 
     void deleteByExperiment(String experiment);
 }
