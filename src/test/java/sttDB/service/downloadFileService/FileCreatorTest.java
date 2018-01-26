@@ -49,4 +49,11 @@ public class FileCreatorTest {
         BufferedReader fileReader = new BufferedReader(new FileReader(new File("searchedQuery.fasta")));
         assertEquals(null, fileReader.readLine());
     }
+
+    @Test(expected = InvalidObjectException.class)
+    public void createFileEmptySequence() throws IOException {
+        List<Sequence> sequenceList = new ArrayList<>();
+        sequenceList.add(new Sequence());
+        fastaFileCreator.createFile(sequenceList, fastaWriter);
+    }
 }
