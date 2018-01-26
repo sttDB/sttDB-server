@@ -31,5 +31,12 @@ public class ExceptionControllerAdvice {
         return new VndErrors("Error: ", ex.getMessage());
     }
 
+    @ResponseBody
+    @ExceptionHandler(ExperimentNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public VndErrors experimentNotFoundExceptionHandler(ExperimentNotFoundException ex) {
+        return new VndErrors("Error: ", ex.getMessage());
+    }
+
 }
 
