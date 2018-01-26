@@ -19,7 +19,7 @@ public class FileCreator<E>{
         return new File(path);
     }
 
-    private void writeFile(Iterator<E> dataToWrite, FileWriter<E> fileWriter, PrintWriter writer) throws FileNotFoundException, UnsupportedEncodingException {
+    private void writeFile(Iterator<E> dataToWrite, FileWriter<E> fileWriter, PrintWriter writer) throws IOException{
         while (dataToWrite.hasNext()) {
             fileWriter.insertDataLine(writer, dataToWrite.next());
         }
