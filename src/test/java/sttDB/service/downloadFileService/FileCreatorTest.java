@@ -13,9 +13,9 @@ import java.util.Scanner;
 
 public class FileCreatorTest {
 
-    Sequence sequence;
-    FileCreator<Sequence> fastaFileCreator;
-    FileWriter<Sequence> fastaWriter;
+    private Sequence sequence;
+    private FileCreator<Sequence> fastaFileCreator;
+    private FileWriter<Sequence> fastaWriter;
 
     @Before
     public void setUp() {
