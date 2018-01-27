@@ -5,7 +5,7 @@ jdk:
 
 sudo: false
 
-script:
+before_script:
   - rm -rf /home/travis/.embedmongo
 
 branches:
