@@ -2,22 +2,21 @@ version: '2'
 services:
   database-dev:
     image: mongo
-    container_name: database-dev
-    # command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    container_name: sttdb-mongo
     # environment:
     #   - MYSQL_DATABASE=data-dev
     #   - MYSQL_USER=data-dev
     #   - MYSQL_PASSWORD=password
     #   - MYSQL_ROOT_PASSWORD=password
     volumes:
-      - dev_db:/var/lib/mysql
+      - sttdb-mongo-vol:/data/db
     ports:
-      - "3306:3306"
+      - "27017:27017"
   api-dev:
-    image: nector12/sttdb-server-test
-    container_name: api-dev
+    image: nector12/sttdb-server
+    container_name: sttdb-server
     depends_on:
-      - database-dev
+      - sttdb-mongo
     expose:
       - "8080"
     environment:
@@ -25,11 +24,8 @@ services:
       - LETSENCRYPT_HOST=sttdb.dev.rhizomik.net
       - LETSENCRYPT_EMAIL=contact@email.example
       - SPRING_PROFILES_ACTIVE=production
-      - DATABASE_URL=jdbc:mongo://dev.rhizomik.net:3306/data-dev
-      - DATABASE_USERNAME=data-dev
-      - DATABASE_PASSWORD=password
+      - DATABASE_URL=mongodb://dev.rhizomik.net:27017
+#      - DATABASE_USERNAME=data-dev
+#      - DATABASE_PASSWORD=password
       - JAVA_OPTS=-Xmx256m -Xms128m
     network_mode: "bridge"
-volumes:
-  dev_db:
-external: true
