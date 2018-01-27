@@ -27,7 +27,9 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
 
         String rootUser = System.getenv("ROOT_USER");
         String rootPassword = System.getenv("ROOT_PASSWORD");
-        if(!userRepository.exists(rootUser)) {
+        if(rootUser == null || rootPassword == null) {
+            throw new IllegalStateException("Environment variable user or password not defined.");
+        }else if(!userRepository.exists(rootUser)) {
             User user = new User();
             user.setUsername(rootUser);
             user.setPassword(rootPassword);
