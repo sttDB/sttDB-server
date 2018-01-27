@@ -32,4 +32,4 @@ services:
     network_mode: "bridge"
 volumes:
   dev_db:
-    external: true
+external: true

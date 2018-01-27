@@ -8,7 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sttDB.domain.Family;
 import sttDB.domain.PartialSequence;
+import sttDB.domain.Sequence;
 import sttDB.repository.FamilyRepository;
+import sttDB.repository.SequenceRepository;
 
 @RequestMapping(value = "/families")
 @Controller
@@ -16,6 +18,9 @@ public class FamilyRoutes {
 
     @Autowired
     private FamilyRepository familyRepository;
+
+    @Autowired
+    private SequenceRepository sequenceRepository;
 
     @GetMapping(value = "")
     @ResponseBody
@@ -49,11 +54,8 @@ public class FamilyRoutes {
 
     @GetMapping("/{id}/sequences")
     @ResponseBody
-    public Page<PartialSequence> getFamilySequences(@PathVariable("id") String id,
-                                                    @RequestParam(value = "page", defaultValue = "0") int page) {
-        Family searchedFamily = familyRepository.findByInterproId(id);
-        return new PageImpl<>(searchedFamily.getSequences(),
-                new PageRequest(page, 20),
-                searchedFamily.getSequences().size());
+    public Page<Sequence> getFamilySequences(@PathVariable("id") String id,
+                                             @RequestParam(value = "page", defaultValue = "0") int page) {
+        return sequenceRepository.findPartialByFamilyInterproId(id, new PageRequest(page, 20));
     }
 }

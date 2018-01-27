@@ -15,7 +15,7 @@ public class FileCreatorTest {
 
     private Sequence sequence;
     private FileCreator<Sequence> fastaFileCreator;
-    private FileWriter<Sequence> fastaWriter;
+    private FileWriterDouble fileWriter;
 
     @Before
     public void setUp() {
@@ -24,36 +24,36 @@ public class FileCreatorTest {
         sequence.setDynamicFastaInfo("bla");
         sequence.setTranscript("ABC");
         fastaFileCreator = new FileCreator<>("fasta");
-        fastaWriter = new FastaFileWriter();
+        fileWriter = new FileWriterDouble();
     }
 
     @Test
     public void createSimpleFile() throws IOException {
         List<Sequence> sequenceList = new ArrayList<>();
         sequenceList.add(sequence);
-        fastaFileCreator.createFile(sequenceList, fastaWriter);
-        BufferedReader fileReader = new BufferedReader(new FileReader(new File("searchedQuery.fasta")));
-        String actualLine = fileReader.readLine();
-        String expectedLine = ">test bla";
-        assertEquals(expectedLine, actualLine);
-        actualLine = fileReader.readLine();
-        expectedLine = "ABC";
-        assertEquals(expectedLine, actualLine);
-        fileReader.close();
+        fastaFileCreator.createFile(sequenceList, fileWriter);
+        Sequence actualSequence = (Sequence) fileWriter.passedData;
+        assertEquals(sequence.getTrinityId(), actualSequence.getTrinityId());
+        assertEquals(sequence.getTranscript(), actualSequence.getTranscript());
+        assertEquals(sequence.getDynamicFastaInfo(), actualSequence.getDynamicFastaInfo());
     }
 
     @Test
     public void createEmptyFile() throws IOException {
         List<Sequence> sequenceList = new ArrayList<>();
-        fastaFileCreator.createFile(sequenceList, fastaWriter);
+        fastaFileCreator.createFile(sequenceList, fileWriter);
         BufferedReader fileReader = new BufferedReader(new FileReader(new File("searchedQuery.fasta")));
         assertEquals(null, fileReader.readLine());
     }
+}
 
-    @Test(expected = InvalidObjectException.class)
-    public void createFileEmptySequence() throws IOException {
-        List<Sequence> sequenceList = new ArrayList<>();
-        sequenceList.add(new Sequence());
-        fastaFileCreator.createFile(sequenceList, fastaWriter);
+
+class FileWriterDouble implements FileWriter {
+    Object passedData;
+    PrintWriter passedWriter;
+    @Override
+    public void insertDataLine(PrintWriter writer, Object data) throws InvalidObjectException {
+        passedData = data;
+        passedWriter = writer;
     }
 }
