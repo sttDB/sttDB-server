@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import sttDB.domain.Family;
 import sttDB.domain.PartialSequence;
+import sttDB.domain.Sequence;
 import sttDB.repository.FamilyRepository;
+import sttDB.repository.SequenceRepository;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -22,6 +24,10 @@ public class FamilyApiStepdefs {
 
     @Autowired
     private FamilyRepository familyRepository;
+
+    @Autowired
+    private SequenceRepository sequenceRepository;
+
     private Family family;
 
     @Given("^I have one families in the DataBase$")
@@ -29,9 +35,16 @@ public class FamilyApiStepdefs {
         Family families = new Family();
         families.setInterproId("asd");
         families.setDescription("protein");
-        PartialSequence partialSequence = new PartialSequence("asd", "test");
-        families.addSequence(partialSequence);
         familyRepository.save(families);
+    }
+
+    @And("^A sequence with that family$")
+    public void aSequenceWithThatFamily() throws Throwable {
+        Sequence sequence = new Sequence();
+        sequence.setTrinityId("asd");
+        sequence.setExperiment("test");
+        sequence.addFamily(familyRepository.findOne("asd"));
+        sequenceRepository.save(sequence);
     }
 
     @When("^I use family route \"([^\"]*)\"$")
@@ -49,7 +62,7 @@ public class FamilyApiStepdefs {
                 .andExpect(jsonPath("$.totalElements", is(1)));
     }
 
-    @And("^The partial proteins are correct$")
+    @And("^The proteins are correct$")
     public void thePartialProteinsAreCorrect() throws Throwable {
         stepDefs.result.andExpect(jsonPath("$.content[0].trinityId", is("asd")))
                 .andExpect(jsonPath("$.content[0].experiment", is("test")));
