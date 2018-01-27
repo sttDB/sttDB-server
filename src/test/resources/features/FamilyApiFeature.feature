@@ -17,9 +17,10 @@ Feature: Use the family api part
 
   Scenario: A user wants to get all families that contain a description
     Given I have one families in the DataBase
+    And A sequence with that family
     When I use family route "/families/asd/sequences?page=0"
     Then The response code is 200
-    And The partial proteins are correct
+    And The proteins are correct
 
   Scenario: Can't POST a family
     Given I create a family with interpro ID "AB1234" and description "Sample family"
