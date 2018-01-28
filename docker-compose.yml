@@ -29,6 +29,17 @@ services:
     volumes:
       - sttdb-vol:/home/server-files
 
+  sttdb-blast:
+    image: wurmlab/sequenceserver:1.0.11
+    container_name: sttdb-blast
+    depends_on:
+      - sttdb-mongo
+      - sttdb-server
+    ports:
+      - "4567:4567"
+    volumes:
+      - sttdb-vol:/db
+
 volumes:
   sttdb-mongo-vol:
   sttdb-vol:
