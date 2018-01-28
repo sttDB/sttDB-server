@@ -14,7 +14,8 @@ public class IdentityController {
     @RequestMapping("/identity")
     public @ResponseBody
     PersistentEntityResource getAuthenticatedUserIdentity(PersistentEntityResourceAssembler resourceAssembler){
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = (User) obj;
 
         return resourceAssembler.toResource(user);
     }
