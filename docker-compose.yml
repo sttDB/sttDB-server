@@ -13,7 +13,7 @@ services:
       - sttdb-mongo-vol:/data/db
 
   sttdb-server:
-    image: sttdb-server
+    image: sttdb/sttdb-server
     container_name: sttdb-server
     depends_on:
       - sttdb-mongo
