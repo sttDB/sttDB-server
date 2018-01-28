@@ -1,31 +1,34 @@
 version: '2'
 services:
-  database-dev:
+  sttdb-mongo:
     image: mongo
     container_name: sttdb-mongo
-    # environment:
-    #   - MYSQL_DATABASE=data-dev
-    #   - MYSQL_USER=data-dev
-    #   - MYSQL_PASSWORD=password
-    #   - MYSQL_ROOT_PASSWORD=password
+#    ports: # Only for debugging
+#      - "27017:27017"
+    environment:
+#      - MONGODB_USER=admin
+#      - MONGODB_PASS=admin123
+      - MONGODB_APPLICATION_DATABASE=sttdb
     volumes:
       - sttdb-mongo-vol:/data/db
-    ports:
-      - "27017:27017"
-  api-dev:
-    image: nector12/sttdb-server
+
+  sttdb-server:
+    image: sttdb-server
     container_name: sttdb-server
     depends_on:
       - sttdb-mongo
-    expose:
-      - "8080"
+    ports:
+      - "8080:8080"
     environment:
-      - VIRTUAL_HOST=sttdb.dev.rhizomik.net
-      - LETSENCRYPT_HOST=sttdb.dev.rhizomik.net
-      - LETSENCRYPT_EMAIL=contact@email.example
+#      - VIRTUAL_HOST=sttdb.dev.rhizomik.net
+#      - LETSENCRYPT_HOST=sttdb.dev.rhizomik.net
+#      - LETSENCRYPT_EMAIL=contact@email.example
+      - SPRING_DATA_MONGODB_URI=mongodb://sttdb-mongo:27017/sttdb
       - SPRING_PROFILES_ACTIVE=production
-      - DATABASE_URL=mongodb://dev.rhizomik.net:27017
-#      - DATABASE_USERNAME=data-dev
-#      - DATABASE_PASSWORD=password
       - JAVA_OPTS=-Xmx256m -Xms128m
-    network_mode: "bridge"
+    volumes:
+      - sttdb-vol:/home/server-files
+
+volumes:
+  sttdb-mongo-vol:
+  sttdb-vol:
