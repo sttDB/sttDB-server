@@ -3,8 +3,8 @@ services:
   sttdb-mongo:
     image: mongo
     container_name: sttdb-mongo
-#    ports: # Only for debugging
-#      - "27017:27017"
+    ports:
+      - "27017:27017"
     environment:
 #      - MONGODB_USER=admin
 #      - MONGODB_PASS=admin123
@@ -17,17 +17,18 @@ services:
     container_name: sttdb-server
     depends_on:
       - sttdb-mongo
-    ports:
-      - "8080:8080"
+    expose:
+      - 8080
     environment:
-#      - VIRTUAL_HOST=sttdb.dev.rhizomik.net
-#      - LETSENCRYPT_HOST=sttdb.dev.rhizomik.net
-#      - LETSENCRYPT_EMAIL=contact@email.example
-      - SPRING_DATA_MONGODB_URI=mongodb://sttdb-mongo:27017/sttdb
+      - VIRTUAL_HOST=sttdb-server.dev.rhizomik.net
+      - LETSENCRYPT_HOST=sttdb-server.dev.rhizomik.net
+      - LETSENCRYPT_EMAIL=contact@email.example
+      - SPRING_DATA_MONGODB_URI=mongodb://dev.rhizomik.net:27017/sttdb
       - SPRING_PROFILES_ACTIVE=production
       - JAVA_OPTS=-Xmx256m -Xms128m
     volumes:
       - sttdb-vol:/home/server-files
+    network_mode: "bridge"
 
   sttdb-blast:
     image: wurmlab/sequenceserver:1.0.11
