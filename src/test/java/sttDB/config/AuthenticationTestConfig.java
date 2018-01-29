@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import sttDB.domain.User;
-import sttDB.repository.UserRepository;
+import sttDB.domain.CustomUser;
+import sttDB.repository.CustomUserRepository;
 
 @Configuration
 @Profile("Test")
@@ -17,18 +17,18 @@ public class AuthenticationTestConfig extends GlobalAuthenticationConfigurerAdap
     UserDetailsService userDetailsService;
 
     @Autowired
-    UserRepository userRepository;
+    CustomUserRepository customUserRepository;
 
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .userDetailsService(userDetailsService)
-                .passwordEncoder(User.passwordEncoder);
+                .passwordEncoder(CustomUser.passwordEncoder);
 
-        User user = new User();
-        user.setUsername("test");
-        user.setPassword("password");
-        userRepository.save(user);
+        CustomUser customUser = new CustomUser();
+        customUser.setUsername("test");
+        customUser.setPassword("password");
+        customUserRepository.save(customUser);
     }
 
 }

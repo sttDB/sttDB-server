@@ -6,7 +6,7 @@ import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sttDB.domain.User;
+import sttDB.domain.CustomUser;
 
 @BasePathAwareController
 public class IdentityController {
@@ -15,8 +15,8 @@ public class IdentityController {
     public @ResponseBody
     PersistentEntityResource getAuthenticatedUserIdentity(PersistentEntityResourceAssembler resourceAssembler){
         Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = (User) obj;
+        CustomUser customUser = (CustomUser) obj;
 
-        return resourceAssembler.toResource(user);
+        return resourceAssembler.toResource(customUser);
     }
 }

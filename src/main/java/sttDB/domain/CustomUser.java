@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 
-public class User implements UserDetails {
+public class CustomUser implements UserDetails {
 
     public static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -67,8 +67,8 @@ public class User implements UserDetails {
     public boolean equals(Object other) {
         if (other == null) return false;
         if (other == this) return true;
-        if (!(other instanceof User))return false;
-        User user = (User) other;
-        return user.getUsername().equals(this.username);
+        if (!(other instanceof CustomUser))return false;
+        CustomUser customUser = (CustomUser) other;
+        return customUser.getUsername().equals(this.username);
     }
 }
