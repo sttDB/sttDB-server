@@ -10,7 +10,4 @@ branches:
     - master
 
 env:
-  global:
-    - FILES_DIR: "./files",
-    - ROOT_USER: "test"
-    - ROOT_PASSWORD: "password"
+    - FILES_DIR: "./files" ROOT_USER: "test" ROOT_PASSWORD: "password"
