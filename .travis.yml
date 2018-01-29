@@ -11,3 +11,5 @@ branches:
 
 env:
   - FILES_DIR: "./files"
+  - ROOT_USER: "test"
+  - ROOT_PASSWORD: "password"
