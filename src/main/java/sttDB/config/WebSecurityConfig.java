@@ -19,6 +19,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/identity").authenticated()
                 .anyRequest().permitAll()
                 .and()
+                .httpBasic()
+                .and()
                 .addFilterBefore(new CORSFilter(), ChannelProcessingFilter.class)
                 .csrf().disable();
     }
