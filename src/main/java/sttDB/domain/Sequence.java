@@ -25,9 +25,6 @@ public class Sequence {
 
     private String dynamicFastaInfo;
 
-    @DBRef
-    private List<Family> families = new ArrayList<>();
-
     @Indexed
     private String experiment;
 
@@ -77,18 +74,6 @@ public class Sequence {
         this.length = length;
     }
 
-    public List<Family> getFamilies() {
-        return families;
-    }
-
-    public void setFamilies(List<Family> families) {
-        this.families = families;
-    }
-
-    public boolean addFamily(Family family) {
-        return families.add(family);
-    }
-
     public String getExperiment() {
         return experiment;
     }
@@ -123,6 +108,8 @@ public class Sequence {
 
     public List<DynamicInformation> addIntoDynamicInformation(String key, DynamicInformation value) {
         List<DynamicInformation> information = dynamicData.get(key);
+        if(information == null)
+            information = new ArrayList<>();
         information.add(value);
         return dynamicData.put(key, information);
     }
