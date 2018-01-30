@@ -2,12 +2,10 @@ package sttDB.controller.API;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sttDB.domain.Family;
-import sttDB.domain.PartialSequence;
 import sttDB.domain.Sequence;
 import sttDB.repository.FamilyRepository;
 import sttDB.repository.SequenceRepository;

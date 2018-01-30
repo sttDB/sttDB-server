@@ -1,13 +1,11 @@
 package sttDB.steps;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import sttDB.domain.Family;
-import sttDB.domain.PartialSequence;
 import sttDB.domain.Sequence;
 import sttDB.repository.FamilyRepository;
 import sttDB.repository.SequenceRepository;
@@ -43,7 +41,7 @@ public class FamilyApiStepdefs {
         Sequence sequence = new Sequence();
         sequence.setTrinityId("asd");
         sequence.setExperiment("test");
-        sequence.addFamily(familyRepository.findOne("asd"));
+        sequence.addIntoDynamicInformation("families", familyRepository.findOne("asd"));
         sequenceRepository.save(sequence);
     }
 

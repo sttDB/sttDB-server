@@ -57,8 +57,8 @@ public class UploadInterproFileStepDefs {
         Sequence sequenceA = sequenceRepository.findByTrinityId("asd").get(0);
         Sequence sequenceB = sequenceRepository.findByTrinityId("asds").get(0);
 
-        assertThat(sequenceA.getFamilies().get(0).getInterproId(), is(familyA.getInterproId()));
-        assertThat(sequenceB.getFamilies().get(0).getInterproId(), is(familyB.getInterproId()));
+        assertThat(((Family)sequenceA.getDynamicDataDynamicInformation("families").get(0)).getInterproId(), is(familyA.getInterproId()));
+        assertThat(((Family)sequenceB.getDynamicDataDynamicInformation("families").get(0)).getInterproId(), is(familyB.getInterproId()));
     }
 
     @And("^There is an experiment named \"([^\"]*)\"$")
