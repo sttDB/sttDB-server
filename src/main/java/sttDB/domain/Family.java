@@ -14,8 +14,6 @@ public class Family {
 
     private String description;
 
-    private List<PartialSequence> sequences = new ArrayList<>();
-
     public String getInterproId() {
         return interproId;
     }
@@ -30,21 +28,5 @@ public class Family {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<PartialSequence> getSequences() {
-        return sequences;
-    }
-
-    public void setSequences(List<PartialSequence> sequences) {
-        this.sequences = sequences;
-    }
-
-    public boolean addSequence(PartialSequence sequence) {
-        return this.sequences.add(sequence);
-    }
-
-    public void deleteSequence(String experiment) {
-        sequences.removeIf(sequence -> sequence.getExperiment().equals(experiment));
     }
 }
