@@ -25,13 +25,14 @@ public class Sequence {
 
     private String dynamicFastaInfo;
 
-    @DBRef
-    private List<Family> families = new ArrayList<>();
-
     @Indexed
     private String experiment;
 
-    private Map<String, Object> dynamicData = new HashMap<>();
+    // Here we add dynamic information, we know it exists, but it is not always here.
+    private Map<String, List<DynamicInformation>> dynamicData = new HashMap<>();
+
+    // This structure should have information we do not know about.
+    private Map<String, Object> anonymousData = new HashMap<>();
 
     public String getId() {
         return id;
@@ -73,18 +74,6 @@ public class Sequence {
         this.length = length;
     }
 
-    public List<Family> getFamilies() {
-        return families;
-    }
-
-    public void setFamilies(List<Family> families) {
-        this.families = families;
-    }
-
-    public boolean addFamily(Family family) {
-        return families.add(family);
-    }
-
     public String getExperiment() {
         return experiment;
     }
@@ -101,19 +90,39 @@ public class Sequence {
         this.dynamicFastaInfo = dynamicFastaInfo;
     }
 
-    public Map<String, Object> getDynamicData() {
+    public Map<String, List<DynamicInformation>> getDynamicData() {
         return dynamicData;
     }
 
-    public void setDynamicData(Map<String, Object> dynamicData) {
+    public void setDynamicData(Map<String, List<DynamicInformation>> dynamicData) {
         this.dynamicData = dynamicData;
     }
 
-    public Object setDynamicDataProperty(String key, Object value) {
+    public List<DynamicInformation> setDynamicDataDynamicInformation(String key, List<DynamicInformation> value) {
         return dynamicData.put(key, value);
     }
 
-    public Object getDynamicDataProperty(String key) {
+    public List<DynamicInformation> getDynamicDataDynamicInformation(String key) {
         return dynamicData.get(key);
+    }
+
+    public List<DynamicInformation> addIntoDynamicInformation(String key, DynamicInformation value) {
+        List<DynamicInformation> information = dynamicData.get(key);
+        if(information == null)
+            information = new ArrayList<>();
+        information.add(value);
+        return dynamicData.put(key, information);
+    }
+
+    public Map<String, Object> getAnonymousData() {
+        return anonymousData;
+    }
+
+    public void setAnonymousData(Map<String, Object> anonymousData) {
+        this.anonymousData = anonymousData;
+    }
+
+    public Object getAnonymousDataProperty(String key) {
+        return anonymousData.get(key);
     }
 }
