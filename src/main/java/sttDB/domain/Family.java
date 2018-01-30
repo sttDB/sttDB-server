@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Family {
+public class Family implements DynamicInformation{
 
     @Id
     private String interproId;
