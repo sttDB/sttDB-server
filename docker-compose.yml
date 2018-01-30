@@ -26,6 +26,8 @@ services:
       - SPRING_DATA_MONGODB_URI=mongodb://dev.rhizomik.net:27017/sttdb
       - SPRING_PROFILES_ACTIVE=production
       - JAVA_OPTS=-Xmx256m -Xms128m
+      - ROOT_USER=$ROOT_USER # User for the sttdb application
+      - ROOT_PASSWORD=$ROOT_PASSWORD # Password for the user
     volumes:
       - sttdb-vol:/home/server-files
     network_mode: "bridge"
@@ -43,4 +45,6 @@ services:
 
 volumes:
   sttdb-mongo-vol:
+    # external: true
   sttdb-vol:
+    # external: true
