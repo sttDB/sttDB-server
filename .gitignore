@@ -1,6 +1,7 @@
 # User dependant
 .idea/
 *.iml
+*.fasta
 
 # Compiled class file
 *.class
