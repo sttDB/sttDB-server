@@ -98,11 +98,11 @@ public class Sequence {
         this.dynamicData = dynamicData;
     }
 
-    public List<DynamicInformation> setDynamicDataProperty(String key, List<DynamicInformation> value) {
+    public List<DynamicInformation> setDynamicDataDynamicInformation(String key, List<DynamicInformation> value) {
         return dynamicData.put(key, value);
     }
 
-    public List<DynamicInformation> getDynamicDataProperty(String key) {
+    public List<DynamicInformation> getDynamicDataDynamicInformation(String key) {
         return dynamicData.get(key);
     }
 

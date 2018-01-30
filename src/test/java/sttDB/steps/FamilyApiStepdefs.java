@@ -41,7 +41,7 @@ public class FamilyApiStepdefs {
         Sequence sequence = new Sequence();
         sequence.setTrinityId("asd");
         sequence.setExperiment("test");
-        sequence.addFamily(familyRepository.findOne("asd"));
+        sequence.addIntoDynamicInformation("families", familyRepository.findOne("asd"));
         sequenceRepository.save(sequence);
     }
 
