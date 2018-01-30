@@ -4,8 +4,8 @@ Feature: Upload interpro family file
   I want to upload Trapid family file
 
   Scenario: Upload file as admin
-    Given I have two sequences in the DataBase
-#    And I login as Admin
+    Given I login as "test" with password "password"
+    And I have two sequences in the DataBase
     And There is an experiment named "test"
     And I have a file named "families.txt"
     When I upload the file to experiment "test"
