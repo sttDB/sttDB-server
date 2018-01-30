@@ -31,7 +31,7 @@ public class Sequence {
     @Indexed
     private String experiment;
 
-    private Map<String, Object> otherData = new HashMap<>();
+    private Map<String, Object> dynamicData = new HashMap<>();
 
     public String getId() {
         return id;
@@ -101,19 +101,19 @@ public class Sequence {
         this.dynamicFastaInfo = dynamicFastaInfo;
     }
 
-    public Map<String, Object> getOtherData() {
-        return otherData;
+    public Map<String, Object> getDynamicData() {
+        return dynamicData;
     }
 
-    public void setOtherData(Map<String, Object> otherData) {
-        this.otherData = otherData;
+    public void setDynamicData(Map<String, Object> dynamicData) {
+        this.dynamicData = dynamicData;
     }
 
-    public Object setOtherDataProperty(String key, Object value) {
-        return otherData.put(key, value);
+    public Object setDynamicDataProperty(String key, Object value) {
+        return dynamicData.put(key, value);
     }
 
-    public Object getOtherDataProperty(String key) {
-        return otherData.get(key);
+    public Object getDynamicDataProperty(String key) {
+        return dynamicData.get(key);
     }
 }
