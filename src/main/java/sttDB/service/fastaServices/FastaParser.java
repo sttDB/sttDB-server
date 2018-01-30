@@ -45,11 +45,6 @@ public class FastaParser {
 
     private void deleteOldSequences() {
         sequenceRepository.deleteByExperiment(experiment.getName());
-        for (Family family : familyRepository.findFamilySequencesBySequencesExperimentName(experiment.getName(),
-                new PageRequest(0, Integer.MAX_VALUE))) {
-            family.deleteSequence(experiment.getName());
-            familyRepository.save(family);
-        }
     }
 
     private void parseFile() {
