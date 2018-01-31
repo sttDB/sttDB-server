@@ -16,6 +16,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 
 public class ExperimentStorageServiceTest {
 
@@ -121,11 +122,18 @@ public class ExperimentStorageServiceTest {
         MockMultipartFile notFastaFile = notFasta;
         sut.storeFileInExperiment(file, EXPERIMENT);
         sut.storeFileInExperiment(notFastaFile, EXPERIMENT);
-        sut.storeFileInExperiment(error, ERROR_FILE);
+        sut.storeFileInExperiment(error, EXPERIMENT);
 
         List<String> fileNames = sut.getExperimentFileNames(EXPERIMENT);
 
         assertThat(fileNames, containsInAnyOrder(FASTA_FILE, FAMILIES_TXT));
+    }
+
+    @Test
+    public void noFileNamesOfExperiment() {
+        sut.storeFileInExperiment(error, EXPERIMENT);
+        List<String> fileNames = sut.getExperimentFileNames(EXPERIMENT);
+        assertEquals(fileNames.size(), 0);
     }
 
     @Test(expected = StorageException.class)
