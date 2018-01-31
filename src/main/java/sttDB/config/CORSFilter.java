@@ -1,5 +1,6 @@
 package sttDB.config;
 
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -12,12 +13,15 @@ import java.io.IOException;
 @Component
 public class CORSFilter extends OncePerRequestFilter {
 
+    private String allowedHost;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if("GET".equals(request.getMethod())){
+        if ("GET".equals(request.getMethod())) {
             response.setHeader("Access-Control-Allow-Origin", "*");
-        }else{
-            response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+        } else {
+            setAllowedHost();
+            response.setHeader("Access-Control-Allow-Origin", allowedHost);
         }
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -28,5 +32,16 @@ public class CORSFilter extends OncePerRequestFilter {
         } else {
             filterChain.doFilter(request, response);
         }
+    }
+
+    private void setAllowedHost() {
+        Environment env = this.getEnvironment();
+        for (String profile : env.getActiveProfiles()) {
+            if (profile.equalsIgnoreCase("production")) {
+                allowedHost = "http://localhost";
+                return;
+            }
+        }
+        allowedHost = "http://localhost:4200";
     }
 }

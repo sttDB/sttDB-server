@@ -1,0 +1,46 @@
+version: '2'
+services:
+  sttdb-mongo:
+    image: mongo
+    container_name: sttdb-mongo
+    expose:
+      - 27017
+    environment:
+#      - MONGODB_USER=admin
+#      - MONGODB_PASS=admin123
+      - MONGODB_APPLICATION_DATABASE=sttdb
+    volumes:
+      - sttdb-mongo-vol:/data/db
+
+  sttdb-server:
+    image: sttdb/sttdb-server
+    container_name: sttdb-server
+    depends_on:
+      - sttdb-mongo
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://sttdb-mongo/sttdb
+      - SPRING_PROFILES_ACTIVE=production
+      - ROOT_USER=$ROOT_USER # User for the sttdb application
+      - ROOT_PASSWORD=$ROOT_PASSWORD # Password for the user
+    volumes:
+      - sttdb-vol:/home/server-files
+
+  sttdb-blast:
+    image: wurmlab/sequenceserver:1.0.11
+    container_name: sttdb-blast
+    depends_on:
+      - sttdb-mongo
+      - sttdb-server
+    ports:
+      - "4567:4567"
+    volumes:
+      - sttdb-vol:/db
+    restart: always
+
+volumes:
+  sttdb-mongo-vol:
+    external: true
+  sttdb-vol:
+    external: true
