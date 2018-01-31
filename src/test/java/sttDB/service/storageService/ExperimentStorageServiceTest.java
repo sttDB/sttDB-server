@@ -1,9 +1,11 @@
 package sttDB.service.storageService;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.mockito.internal.matchers.Matches;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -15,6 +17,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 
@@ -127,6 +130,7 @@ public class ExperimentStorageServiceTest {
         List<String> fileNames = sut.getExperimentFileNames(EXPERIMENT);
 
         assertThat(fileNames, containsInAnyOrder(FASTA_FILE, FAMILIES_TXT));
+        assertThat(fileNames, not(containsInAnyOrder(ERROR_FILE)));
     }
 
     @Test
