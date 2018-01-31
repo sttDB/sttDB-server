@@ -3,6 +3,7 @@ package sttDB.controller.API;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sttDB.domain.Family;
@@ -22,26 +23,14 @@ public class FamilyRoutes {
 
     @GetMapping(value = "")
     @ResponseBody
-    public Page<Family> getSequences() {
-        return familyRepository.findAll(new PageRequest(0, 20));
-    }
-
-    @GetMapping(value = "", params = "page")
-    @ResponseBody
-    public Page<Family> getSequences(@RequestParam(required = false, defaultValue = "0") int page) {
-        return familyRepository.findAll(new PageRequest(page, 20));
+    public Page<Family> getSequences(Pageable pageable) {
+        return familyRepository.findAll(pageable);
     }
 
     @GetMapping(value = "", params = {"descriptionKeyword"})
     @ResponseBody
-    public Page<Family> getFamilyByKeyWord(@RequestParam String descriptionKeyword) {
-        return familyRepository.findByDescriptionLike(descriptionKeyword, new PageRequest(0, 20));
-    }
-
-    @GetMapping(value = "", params = {"descriptionKeyword", "page"})
-    @ResponseBody
-    public Page<Family> getFamilyByKeyWord(@RequestParam String descriptionKeyword, @RequestParam(defaultValue = "0") int page) {
-        return familyRepository.findByDescriptionLike(descriptionKeyword, new PageRequest(page, 20));
+    public Page<Family> getFamilyByKeyWord(@RequestParam String descriptionKeyword, Pageable pageable) {
+        return familyRepository.findByDescriptionLike(descriptionKeyword, pageable);
     }
 
     @GetMapping("/{interproId}")
@@ -53,7 +42,7 @@ public class FamilyRoutes {
     @GetMapping("/{id}/sequences")
     @ResponseBody
     public Page<Sequence> getFamilySequences(@PathVariable("id") String id,
-                                             @RequestParam(value = "page", defaultValue = "0") int page) {
-        return sequenceRepository.findPartialByFamilyInterproId(id, new PageRequest(page, 20));
+                                             Pageable pageable) {
+        return sequenceRepository.findPartialByFamilyInterproId(id, pageable);
     }
 }
