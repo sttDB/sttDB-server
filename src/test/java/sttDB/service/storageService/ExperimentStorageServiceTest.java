@@ -1,9 +1,11 @@
 package sttDB.service.storageService;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.mockito.internal.matchers.Matches;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -15,7 +17,9 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 
 public class ExperimentStorageServiceTest {
 
@@ -24,6 +28,7 @@ public class ExperimentStorageServiceTest {
     public static final String EXPERIMENT = "fasta.fasta";
     public static final String FAMILIES_TXT = "families.txt";
     public static final String INTERPRO = "interpro";
+    public static final String ERROR_FILE = "error.fasta.bd";
     ExperimentStorageService sut;
 
     @Rule
@@ -31,6 +36,7 @@ public class ExperimentStorageServiceTest {
     public File rootFolder;
     private MockMultipartFile file;
     private MockMultipartFile notFasta;
+    private MockMultipartFile error;
 
     @Before
     public void setUp() throws IOException {
@@ -41,6 +47,8 @@ public class ExperimentStorageServiceTest {
                 new ByteArrayInputStream(TEST_CONTENT.getBytes()));
         notFasta = new MockMultipartFile("file", FAMILIES_TXT, "multipart/form-data",
                 new ByteArrayInputStream(INTERPRO.getBytes()));
+        error = new MockMultipartFile("file", ERROR_FILE, "multipart/form-data",
+                new ByteArrayInputStream(TEST_CONTENT.getBytes()));
     }
 
     @Test
@@ -114,17 +122,26 @@ public class ExperimentStorageServiceTest {
 
     @Test
     public void getFileNamesOfExperiment() {
-        MockMultipartFile familiyFile = notFasta;
+        MockMultipartFile notFastaFile = notFasta;
         sut.storeFileInExperiment(file, EXPERIMENT);
-        sut.storeFileInExperiment(familiyFile, EXPERIMENT);
+        sut.storeFileInExperiment(notFastaFile, EXPERIMENT);
+        sut.storeFileInExperiment(error, EXPERIMENT);
 
         List<String> fileNames = sut.getExperimentFileNames(EXPERIMENT);
 
         assertThat(fileNames, containsInAnyOrder(FASTA_FILE, FAMILIES_TXT));
+        assertThat(fileNames, not(containsInAnyOrder(ERROR_FILE)));
+    }
+
+    @Test
+    public void noFileNamesOfExperiment() {
+        sut.storeFileInExperiment(error, EXPERIMENT);
+        List<String> fileNames = sut.getExperimentFileNames(EXPERIMENT);
+        assertEquals(fileNames.size(), 0);
     }
 
     @Test(expected = StorageException.class)
-    public void getFilesOfExeperimentThatDoesntExist() {
+    public void getFilesOfExperimentThatDoesntExist() {
         List<String> fileNames = sut.getExperimentFileNames("missing-experiment");
     }
 

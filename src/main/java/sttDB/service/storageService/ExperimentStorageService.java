@@ -74,6 +74,7 @@ public class ExperimentStorageService implements StorageService {
             Path path = rootLocation.resolve(experimentName);
             List<String> fileNames = Files.list(path)
                     .map(p -> p.toFile().getName())
+                    .filter(name -> name.split("\\.").length <= 2)
                     .collect(toList());
             return fileNames;
         } catch (IOException e) {
