@@ -24,6 +24,7 @@ public class ExperimentStorageServiceTest {
     public static final String EXPERIMENT = "fasta.fasta";
     public static final String FAMILIES_TXT = "families.txt";
     public static final String INTERPRO = "interpro";
+    public static final String ERROR_FILE = "error.fasta.bd";
     ExperimentStorageService sut;
 
     @Rule
@@ -31,6 +32,7 @@ public class ExperimentStorageServiceTest {
     public File rootFolder;
     private MockMultipartFile file;
     private MockMultipartFile notFasta;
+    private MockMultipartFile error;
 
     @Before
     public void setUp() throws IOException {
@@ -41,6 +43,8 @@ public class ExperimentStorageServiceTest {
                 new ByteArrayInputStream(TEST_CONTENT.getBytes()));
         notFasta = new MockMultipartFile("file", FAMILIES_TXT, "multipart/form-data",
                 new ByteArrayInputStream(INTERPRO.getBytes()));
+        error = new MockMultipartFile("file", ERROR_FILE, "multipart/form-data",
+                new ByteArrayInputStream(TEST_CONTENT.getBytes()));
     }
 
     @Test
@@ -114,9 +118,10 @@ public class ExperimentStorageServiceTest {
 
     @Test
     public void getFileNamesOfExperiment() {
-        MockMultipartFile familiyFile = notFasta;
+        MockMultipartFile notFastaFile = notFasta;
         sut.storeFileInExperiment(file, EXPERIMENT);
-        sut.storeFileInExperiment(familiyFile, EXPERIMENT);
+        sut.storeFileInExperiment(notFastaFile, EXPERIMENT);
+        sut.storeFileInExperiment(error, ERROR_FILE);
 
         List<String> fileNames = sut.getExperimentFileNames(EXPERIMENT);
 
@@ -124,7 +129,7 @@ public class ExperimentStorageServiceTest {
     }
 
     @Test(expected = StorageException.class)
-    public void getFilesOfExeperimentThatDoesntExist() {
+    public void getFilesOfExperimentThatDoesntExist() {
         List<String> fileNames = sut.getExperimentFileNames("missing-experiment");
     }
 
