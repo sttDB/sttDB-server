@@ -21,7 +21,7 @@ services:
       - "8080:8080"
     environment:
       - SPRING_DATA_MONGODB_URI=mongodb://sttdb-mongo/sttdb
-      # - SPRING_PROFILES_ACTIVE=production
+      - SPRING_PROFILES_ACTIVE=production
       - ROOT_USER=$ROOT_USER # User for the sttdb application
       - ROOT_PASSWORD=$ROOT_PASSWORD # Password for the user
     volumes:
