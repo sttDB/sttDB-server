@@ -2,12 +2,7 @@ package sttDB.domain;
 
 import org.springframework.data.annotation.Id;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class Family implements DynamicInformation{
+public class Family implements DomainInformation {
 
     @Id
     private String interproId;

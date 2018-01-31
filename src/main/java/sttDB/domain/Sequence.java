@@ -27,7 +27,7 @@ public class Sequence {
     private String experiment;
 
     // Here we add dynamic information, we know it exists, but it is not always here.
-    private Map<String, List<DynamicInformation>> domainInfo = new HashMap<>();
+    private Map<String, List<DomainInformation>> domainInfo = new HashMap<>();
 
     // This structure should have information we do not know about.
     private Map<String, Object> extraInfo = new HashMap<>();
@@ -88,24 +88,24 @@ public class Sequence {
         this.dynamicFastaInfo = dynamicFastaInfo;
     }
 
-    public Map<String, List<DynamicInformation>> getDomainInfo() {
+    public Map<String, List<DomainInformation>> getDomainInfo() {
         return domainInfo;
     }
 
-    public void setDomainInfo(Map<String, List<DynamicInformation>> domainInfo) {
+    public void setDomainInfo(Map<String, List<DomainInformation>> domainInfo) {
         this.domainInfo = domainInfo;
     }
 
-    public List<DynamicInformation> setDomainInfoValue(String key, List<DynamicInformation> value) {
+    public List<DomainInformation> setDomainInfoValue(String key, List<DomainInformation> value) {
         return domainInfo.put(key, value);
     }
 
-    public List<DynamicInformation> getDomainInfoValue(String key) {
+    public List<DomainInformation> getDomainInfoValue(String key) {
         return domainInfo.get(key);
     }
 
-    public List<DynamicInformation> addIntoDomainInfo(String key, DynamicInformation value) {
-        List<DynamicInformation> information = domainInfo.get(key);
+    public List<DomainInformation> addIntoDomainInfo(String key, DomainInformation value) {
+        List<DomainInformation> information = domainInfo.get(key);
         if(information == null)
             information = new ArrayList<>();
         information.add(value);
