@@ -23,10 +23,10 @@ public interface SequenceRepository extends MongoRepository<Sequence, String> {
 
     Page<Sequence> findByExperiment( String experiment, Pageable pageable);
 
-    @Query(value = "{'dynamicData.families._id' : ?0}")
+    @Query(value = "{'domainInfo.families._id' : ?0}")
     List<Sequence> findByFamilyInterproId(String interproId);
 
-    @Query(value = "{'dynamicData.families._id' : ?0}", fields = "{ trinityId : 1, experiment : 1 }")
+    @Query(value = "{'domainInfo.families._id' : ?0}", fields = "{ trinityId : 1, experiment : 1 }")
     Page<Sequence> findPartialByFamilyInterproId(String interproId, Pageable pageable);
 
     void deleteByExperiment(String experiment);

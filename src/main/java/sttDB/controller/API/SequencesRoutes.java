@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sttDB.domain.Sequence;
@@ -24,40 +25,20 @@ public class SequencesRoutes {
 
     @GetMapping(value = "")
     @ResponseBody
-    public Page<Sequence> getSequences() {
-        return sequenceRepository.findAll(new PageRequest(0, 20));
-    }
-
-    @GetMapping(value = "", params = "page")
-    @ResponseBody
-    public Page<Sequence> getSequences(@RequestParam(defaultValue = "0") int page) {
-        return sequenceRepository.findAll(new PageRequest(page, 20));
+    public Page<Sequence> getSequences(Pageable pageable) {
+        return sequenceRepository.findAll(pageable);
     }
 
     @GetMapping(value = "", params = "trinityId")
     @ResponseBody
-    public Page<Sequence> getSequencesByTrinityId(@RequestParam String trinityId) {
-        return sequenceRepository.findByTrinityIdLike(trinityId, new PageRequest(0, 20));
-    }
-
-    @GetMapping(value = "", params = {"trinityId", "page"})
-    @ResponseBody
-    public Page<Sequence> getSequencesByTrinityId(@RequestParam String trinityId,
-                                                  @RequestParam(defaultValue = "0") int page) {
-        return sequenceRepository.findByTrinityIdLike(trinityId, new PageRequest(page, 20));
+    public Page<Sequence> getSequencesByTrinityId(@RequestParam String trinityId, Pageable pageable) {
+        return sequenceRepository.findByTrinityIdLike(trinityId, pageable);
     }
 
     @GetMapping(value = "", params = "experiment")
     @ResponseBody
-    public Page<Sequence> getSequencesByExperiment(@RequestParam String experiment) {
-        return sequenceRepository.findByExperiment(experiment, new PageRequest(0, 20));
-    }
-
-    @GetMapping(value = "", params = {"experiment", "page"})
-    @ResponseBody
-    public Page<Sequence> getSequencesByExperiment(@RequestParam String experiment,
-                                                   @RequestParam(defaultValue = "0") int page) {
-         return sequenceRepository.findByExperiment(experiment, new PageRequest(page, 20));
+    public Page<Sequence> getSequencesByExperiment(@RequestParam String experiment, Pageable pageable) {
+        return sequenceRepository.findByExperiment(experiment, pageable);
     }
 
     @GetMapping(value = "", params = {"trinityId", "experiment"})

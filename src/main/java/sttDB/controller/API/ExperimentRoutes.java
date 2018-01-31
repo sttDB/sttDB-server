@@ -3,6 +3,7 @@ package sttDB.controller.API;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sttDB.domain.Experiment;
@@ -26,16 +27,10 @@ public class ExperimentRoutes {
         this.manager = manager;
     }
 
-    @GetMapping("")
+    @GetMapping(value = "")
     @ResponseBody
-    public Page<Experiment> getExperiments() {
-        return repository.findAll(new PageRequest(0, 20));
-    }
-
-    @GetMapping(value = "", params = "page")
-    @ResponseBody
-    public Page<Experiment> getExperiments(@RequestParam int page) {
-        return repository.findAll(new PageRequest(page, 20));
+    public Page<Experiment> getExperiments(Pageable page) {
+        return repository.findAll(page);
     }
 
     @GetMapping("/{name}")
