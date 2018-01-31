@@ -3,8 +3,8 @@ services:
   sttdb-mongo:
     image: mongo
     container_name: sttdb-mongo
-    ports:
-      - "27017:27017"
+    expose:
+      - 27017
     environment:
 #      - MONGODB_USER=admin
 #      - MONGODB_PASS=admin123
@@ -17,20 +17,15 @@ services:
     container_name: sttdb-server
     depends_on:
       - sttdb-mongo
-    expose:
-      - 8080
+    ports:
+      - "8080:8080"
     environment:
-      - VIRTUAL_HOST=sttdb-server.dev.rhizomik.net
-      - LETSENCRYPT_HOST=sttdb-server.dev.rhizomik.net
-      - LETSENCRYPT_EMAIL=contact@email.example
-      - SPRING_DATA_MONGODB_URI=mongodb://dev.rhizomik.net:27017/sttdb
-      - SPRING_PROFILES_ACTIVE=production
-      - JAVA_OPTS=-Xmx256m -Xms128m
+      - SPRING_DATA_MONGODB_URI=mongodb://sttdb-mongo/sttdb
+      # - SPRING_PROFILES_ACTIVE=production
       - ROOT_USER=$ROOT_USER # User for the sttdb application
       - ROOT_PASSWORD=$ROOT_PASSWORD # Password for the user
     volumes:
       - sttdb-vol:/home/server-files
-    network_mode: "bridge"
 
   sttdb-blast:
     image: wurmlab/sequenceserver:1.0.11
@@ -42,9 +37,10 @@ services:
       - "4567:4567"
     volumes:
       - sttdb-vol:/db
+    restart: always
 
 volumes:
   sttdb-mongo-vol:
-    # external: true
+    external: true
   sttdb-vol:
-    # external: true
+    external: true
