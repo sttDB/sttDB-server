@@ -15,8 +15,6 @@ public class Sequence {
 
     private String trinityId;
 
-    private String specie;
-
     private String transcript;
 
     private int length;
@@ -46,14 +44,6 @@ public class Sequence {
 
     public void setTrinityId(String trinityId) {
         this.trinityId = trinityId;
-    }
-
-    public String getSpecie() {
-        return specie;
-    }
-
-    public void setSpecie(String specie) {
-        this.specie = specie;
     }
 
     public String getTranscript() {
