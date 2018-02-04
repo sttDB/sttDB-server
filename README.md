@@ -13,6 +13,7 @@ A pull request must contain issue features/solved problems.
 ## Contact
 
 * Joan Fibla (Owner) - [email](mailto:joan.fibla@cmb.udl.cat)
+* Marta Oliva (Supervisor) - [email](mailto:oliva@diei.udl.cat)
 * Marc Ribalta (Developer) - [email](mailto:mrg20@alumnes.udl.cat)
 * Roger Arqués (Developer) - [email](mailto:rav3@alumnes.udl.cat)
 
