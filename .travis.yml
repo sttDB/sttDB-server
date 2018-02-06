@@ -9,6 +9,11 @@ branches:
   only:
     - master
 
+script: "mvn cobertura:cobertura"
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
 env:
   global:
     - FILES_DIR: "./files"
