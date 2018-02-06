@@ -1,4 +1,5 @@
 [![build status](https://secure.travis-ci.org/sttDB/sttDB-server.png)](https://travis-ci.org/sttDB/sttDB-server)
+[![codebeat badge](https://codebeat.co/badges/56b7288f-7a30-4426-b81f-b2ea4a98df81)](https://codebeat.co/projects/github-com-sttdb-sttdb-server-master)
 
 # SttDB-server
 Backend of the salmo-trutta database, a project between the Genetic and Biodiversity Research Group and GRIHO research group, University of Lleida(UdL).
@@ -13,6 +14,7 @@ A pull request must contain issue features/solved problems.
 ## Contact
 
 * Joan Fibla (Owner) - [email](mailto:joan.fibla@cmb.udl.cat)
+* Marta Oliva (Supervisor) - [email](mailto:oliva@diei.udl.cat)
 * Marc Ribalta (Developer) - [email](mailto:mrg20@alumnes.udl.cat)
 * Roger Arqués (Developer) - [email](mailto:rav3@alumnes.udl.cat)
 
