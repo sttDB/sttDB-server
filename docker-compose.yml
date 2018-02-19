@@ -6,8 +6,6 @@ services:
     expose:
       - 27017
     environment:
-#      - MONGODB_USER=admin
-#      - MONGODB_PASS=admin123
       - MONGODB_APPLICATION_DATABASE=sttdb
     volumes:
       - sttdb-mongo-vol:/data/db
@@ -25,7 +23,7 @@ services:
       - ROOT_USER=$ROOT_USER # User for the sttdb application
       - ROOT_PASSWORD=$ROOT_PASSWORD # Password for the user
     volumes:
-      - sttdb-vol:/home/server-files
+      - sttdb-vol:/root/server-files
 
   sttdb-blast:
     image: wurmlab/sequenceserver:1.0.11
