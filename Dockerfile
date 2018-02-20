@@ -1,5 +1,5 @@
 FROM openjdk:8-jre-alpine
-WORKDIR /home/sttDB-server
+WORKDIR /root/sttDB-server
 
 ADD ./target/transcriptoma.db-*.jar ./app.jar
 
