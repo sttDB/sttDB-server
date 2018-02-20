@@ -23,7 +23,7 @@ services:
       - ROOT_USER=$ROOT_USER # User for the sttdb application
       - ROOT_PASSWORD=$ROOT_PASSWORD # Password for the user
     volumes:
-      - sttdb-vol:/root/server-files
+      - sttdb-vol:/root/server-files:z
 
   sttdb-blast:
     image: wurmlab/sequenceserver:1.0.11
@@ -34,7 +34,7 @@ services:
     ports:
       - "4567:4567"
     volumes:
-      - sttdb-vol:/db
+      - sttdb-vol:/db:z
     restart: always
 
 volumes:
