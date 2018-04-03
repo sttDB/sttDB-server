@@ -38,7 +38,7 @@ public class CORSFilter extends OncePerRequestFilter {
         Environment env = this.getEnvironment();
         for (String profile : env.getActiveProfiles()) {
             if (profile.equalsIgnoreCase("production")) {
-                allowedHost = "http://localhost";
+                allowedHost = "http://sttdb.udl.cat";
                 return;
             }
         }
