@@ -11,6 +11,8 @@ import sttDB.domain.Sequence;
 import sttDB.repository.FamilyRepository;
 import sttDB.repository.SequenceRepository;
 
+import java.util.List;
+
 @RequestMapping(value = "/families")
 @Controller
 public class FamilyRoutes {
@@ -39,18 +41,17 @@ public class FamilyRoutes {
         return familyRepository.findByDescriptionLike(descriptionKeyword, pageable);
     }
 
-    @GetMapping(value="", params = {"descriptionKeyword", "secondKeyword"})
+    @GetMapping(value="", params = {"firstKeyword", "secondKeyword"})
     @ResponseBody
-    public Page<Family> getFamilyByKeyWords(@RequestParam String descriptionKeyword,
+    public Page<Family> getFamilyByKeyWords(@RequestParam String firstKeyword,
                                               @RequestParam String secondKeyword, Pageable pageable){
-        return familyRepository.findByDescriptionLikeAndLike(descriptionKeyword, secondKeyword, pageable);
+        return familyRepository.findByDescriptionLikeAndLike(firstKeyword, secondKeyword, pageable);
     }
 
-    @GetMapping(value="", params = {"descriptionKeyword", "wrongWord"})
+    @GetMapping(value="", params = {"orKeywords"})
     @ResponseBody
-    public Page<Family> getFamilyByKeyWordAndWrongWord(@RequestParam String descriptionKeyword,
-                                            @RequestParam String wrongWord, Pageable pageable){
-        return familyRepository.findByDescriptionLikeAndLike(descriptionKeyword, wrongWord, pageable);
+    public Page<Family> getFamilyByKeyWordAndWrongWord(@RequestParam List<String> orKeywords, Pageable pageable){
+        return familyRepository.findByAnyKeyword(orKeywords, pageable);
     }
 
     @GetMapping("/{id}/sequences")

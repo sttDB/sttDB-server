@@ -9,6 +9,8 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import sttDB.domain.Family;
 import sttDB.repository.excerptProjections.FamilyProjection;
 
+import java.util.List;
+
 
 @RepositoryRestResource(excerptProjection = FamilyProjection.class)
 public interface FamilyRepository extends MongoRepository<Family, String>{
@@ -19,5 +21,6 @@ public interface FamilyRepository extends MongoRepository<Family, String>{
     @Query(value = "{$and: [ { 'description' : {$regex : ?0} }, { 'description' : {$regex : ?1} } ]}")
     Page<Family> findByDescriptionLikeAndLike(String keyword, String notword, Pageable pageable);
 
-    //OR https://docs.mongodb.com/manual/reference/operator/query/in/
+    @Query(value = "{'description': {$in: ?0}}")
+    Page<Family> findByAnyKeyword(List<String> keyword, Pageable pageable);
 }
