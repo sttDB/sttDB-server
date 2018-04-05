@@ -50,9 +50,16 @@ public class FamilyRoutes {
 
     @GetMapping(value="", params = {"orKeyword", "otherOrKeyword"})
     @ResponseBody
-    public Page<Family> getFamilyByKeyWordAndWrongWord(@RequestParam String orKeyword,
+    public Page<Family> getFamilyByKeyWordAndOtherKeyWord(@RequestParam String orKeyword,
                                                        @RequestParam String otherOrKeyword, Pageable pageable){
         return familyRepository.findByAnyKeyword(orKeyword, otherOrKeyword, pageable);
+    }
+
+    @GetMapping(value="", params = {"keyword", "notKeyword"})
+    @ResponseBody
+    public Page<Family> getFamilyByKeyWordAndNotKeyWord(@RequestParam String keyword,
+                                                       @RequestParam String notKeyword, Pageable pageable){
+        return familyRepository.findByDescriptionLikeAndNotLike(keyword, notKeyword, pageable);
     }
 
     @GetMapping("/{id}/sequences")

@@ -19,7 +19,10 @@ public interface FamilyRepository extends MongoRepository<Family, String>{
     Page<Family> findByDescriptionLike(String keyword, Pageable pageable);
 
     @Query(value = "{$and: [ { 'description' : {$regex : ?0} }, { 'description' : {$regex : ?1} } ]}")
-    Page<Family> findByDescriptionLikeAndLike(String keyword, String notword, Pageable pageable);
+    Page<Family> findByDescriptionLikeAndLike(String keyword, String otherword, Pageable pageable);
+
+    @Query(value = "{$and: [ { 'description' : {$regex : ?0} }, { 'description' : { $not : { $regex : ?1 } } } ]}")
+    Page<Family> findByDescriptionLikeAndNotLike(String keyword, String notword, Pageable pageable);
 
     @Query(value = "{$or: [ { 'description' : {$regex : ?0} }, { 'description' : {$regex : ?1} } ]}")
     Page<Family> findByAnyKeyword(String keyword, String otherKeyword, Pageable pageable);
