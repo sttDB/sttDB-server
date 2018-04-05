@@ -27,16 +27,30 @@ public class FamilyRoutes {
         return familyRepository.findAll(pageable);
     }
 
+    @GetMapping("/{interproId}")
+    @ResponseBody
+    public Family getFamilyByInterproId(@PathVariable("interproId") String interproId) {
+        return familyRepository.findByInterproId(interproId);
+    }
+
     @GetMapping(value = "", params = {"descriptionKeyword"})
     @ResponseBody
     public Page<Family> getFamilyByKeyWord(@RequestParam String descriptionKeyword, Pageable pageable) {
         return familyRepository.findByDescriptionLike(descriptionKeyword, pageable);
     }
 
-    @GetMapping("/{interproId}")
+    @GetMapping(value="", params = {"descriptionKeyword", "secondKeyword"})
     @ResponseBody
-    public Family getFamilyByInterproId(@PathVariable("interproId") String interproId) {
-        return familyRepository.findByInterproId(interproId);
+    public Page<Family> getFamilyByKeyWords(@RequestParam String descriptionKeyword,
+                                              @RequestParam String secondKeyword, Pageable pageable){
+        return familyRepository.findByDescriptionLikeAndLike(descriptionKeyword, secondKeyword, pageable);
+    }
+
+    @GetMapping(value="", params = {"descriptionKeyword", "wrongWord"})
+    @ResponseBody
+    public Page<Family> getFamilyByKeyWordAndWrongWord(@RequestParam String descriptionKeyword,
+                                            @RequestParam String wrongWord, Pageable pageable){
+        return familyRepository.findByDescriptionLikeAndLike(descriptionKeyword, wrongWord, pageable);
     }
 
     @GetMapping("/{id}/sequences")

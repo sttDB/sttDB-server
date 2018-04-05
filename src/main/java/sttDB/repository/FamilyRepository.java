@@ -15,4 +15,9 @@ public interface FamilyRepository extends MongoRepository<Family, String>{
     Family findByInterproId(@Param("interproId") String interproId);
 
     Page<Family> findByDescriptionLike(String keyword, Pageable pageable);
+
+    @Query(value = "{$and: [ { 'description' : {$regex : ?0} }, { 'description' : {$regex : ?1} } ]}")
+    Page<Family> findByDescriptionLikeAndLike(String keyword, String notword, Pageable pageable);
+
+    //OR https://docs.mongodb.com/manual/reference/operator/query/in/
 }
