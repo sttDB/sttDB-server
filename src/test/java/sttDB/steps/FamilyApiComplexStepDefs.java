@@ -40,6 +40,10 @@ public class FamilyApiComplexStepDefs {
         families4.setInterproId("4");
         families4.setDescription("asd bnm");
         familyRepository.save(families4);
+        Family families5 = new Family();
+        families5.setInterproId("5");
+        families5.setDescription("asd xcv");
+        familyRepository.save(families5);
     }
 
     @When("^I use the complex family route \"([^\"]*)\"$")
