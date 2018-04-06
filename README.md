@@ -3,7 +3,7 @@
 [![codecov](https://codecov.io/gh/sttDB/sttDB-server/branch/master/graph/badge.svg)](https://codecov.io/gh/sttDB/sttDB-server)
 
 # SttDB-server
-Backend of the salmo-trutta database, a project between the Genetic and Biodiversity Research Group and GRIHO research group, University of Lleida(UdL).
+Backend of the [salmo-trutta database](http://sttdb.udl.cat), a project between the Genetic and Biodiversity Research Group and GRIHO research group, University of Lleida(UdL).
 
 ## Objective
 The project objective is to construct, with the SttDB-client github project, a web page to visualize, compare and provide information about DNA sequences of the salmo-trutta specie.
