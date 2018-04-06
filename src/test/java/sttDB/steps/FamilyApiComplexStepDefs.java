@@ -21,6 +21,7 @@ public class FamilyApiComplexStepDefs {
     @Autowired
     private StepDefs stepDefs;
 
+    /*X = asd Y = bnm Z = xcv*/
     @Given("^I have some families in the DataBase$")
     public void iHaveTwoFamiliesInTheDataBase() {
         Family families = new Family();
@@ -51,7 +52,6 @@ public class FamilyApiComplexStepDefs {
 
     @And("^The family has the correct description \"([^\"]*)\"$")
     public void theFamilyIsCorrect(String resultDescription) throws Throwable {
-        stepDefs.result.andExpect(jsonPath("$.content[0].description", is(resultDescription)))
-                .andExpect(jsonPath("$.totalElements", is(1)));
+        stepDefs.result.andExpect(jsonPath("$.content[0].description", is(resultDescription)));
     }
 }

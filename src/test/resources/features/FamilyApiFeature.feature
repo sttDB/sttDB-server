@@ -42,3 +42,9 @@ Feature: Use the family api part
     When I use the complex family route "/families?firstKeyword=asd&secondKeyword=bnm"
     Then The response code is 200
     And The family has the correct description "asd bnm"
+
+  Scenario: A user wants to get families containing two words in the description
+    Given I have some families in the DataBase
+    When I use the complex family route "/families?orKeyword=asd&otherOrKeyword=bnm"
+    Then The response code is 200
+    And The family has the correct description "asd"
