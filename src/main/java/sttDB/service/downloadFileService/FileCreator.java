@@ -2,13 +2,14 @@ package sttDB.service.downloadFileService;
 
 import java.io.*;
 import java.util.Iterator;
+import java.util.UUID;
 
 public class FileCreator<E>{
 
-    private String path = "searchedQuery.";
+    private String path = "searchedQuery";
 
     public FileCreator(String typeOfExtension){
-        path = path + typeOfExtension;
+        path = path + UUID.randomUUID().toString() + "." + typeOfExtension;
     }
 
     //Iterable must be changed for a stream in future work, because of big sets of data not working
