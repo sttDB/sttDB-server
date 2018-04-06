@@ -35,6 +35,7 @@ public class DownloadController {
         FileCreator<Sequence> fileCreator = new FileCreator<>("fasta");
         File file = fileCreator.createFile(selectLikeOrOne(trinityId, experiment), new FastaFileWriter());
         returnResponseWithFile(response, file);
+        file.delete();
     }
 
     private Iterable<Sequence> selectLikeOrOne(String sequenceId, String experiment) {
