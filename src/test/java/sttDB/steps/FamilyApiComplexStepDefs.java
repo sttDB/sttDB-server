@@ -28,16 +28,16 @@ public class FamilyApiComplexStepDefs {
         families.setDescription("asd");
         familyRepository.save(families);
         Family families2 = new Family();
-        families.setInterproId("2");
-        families.setDescription("bnm");
+        families2.setInterproId("2");
+        families2.setDescription("bnm");
         familyRepository.save(families2);
         Family families3 = new Family();
-        families.setInterproId("3");
-        families.setDescription("xcv");
+        families3.setInterproId("3");
+        families3.setDescription("xcv");
         familyRepository.save(families3);
         Family families4 = new Family();
-        families.setInterproId("4");
-        families.setDescription("asd bnm");
+        families4.setInterproId("4");
+        families4.setDescription("asd bnm");
         familyRepository.save(families4);
     }
 
