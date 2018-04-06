@@ -54,8 +54,9 @@ public class FamilyApiComplexStepDefs {
                 .andDo(print());
     }
 
-    @And("^The family has the correct description \"([^\"]*)\"$")
-    public void theFamilyIsCorrect(String resultDescription) throws Throwable {
-        stepDefs.result.andExpect(jsonPath("$.content[0].description", is(resultDescription)));
+    @And("^The family has the correct description \"([^\"]*)\" and encountered responses (\\d+)$")
+    public void theFamilyIsCorrect(String resultDescription, int lengthOfResult) throws Throwable {
+        stepDefs.result.andExpect(jsonPath("$.content[0].description", is(resultDescription)))
+                .andExpect(jsonPath("$.totalElements", is(lengthOfResult)));
     }
 }
