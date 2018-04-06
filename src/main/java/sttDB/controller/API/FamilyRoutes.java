@@ -93,4 +93,12 @@ public class FamilyRoutes {
                                                             @RequestParam String notKeyword, Pageable pageable){
         return familyRepository.findByAnyKeywordNotOther(orKeyword, otherOrKeyword, notKeyword, pageable);
     }
+
+    @GetMapping(value = "", params = {"orKeyword", "otherOrKeyword", "andKeyword"})
+    @ResponseBody
+    public Page<Family> getFamilyByKeywordOrKeywordAndKeyword(@RequestParam String orKeyword,
+                                                              @RequestParam String otherOrKeyword,
+                                                              @RequestParam String andKeyword, Pageable pageable){
+        return familyRepository.findByAnyKeywordAndOther(orKeyword, otherOrKeyword, andKeyword, pageable);
+    }
 }
