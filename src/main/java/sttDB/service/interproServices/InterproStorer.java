@@ -22,9 +22,7 @@ public class InterproStorer {
     public void storeItems(List<LineItems> items, Experiment experiment) {
         for (LineItems item : items) {
             Family family = getFamilyOrNew(item, experiment);
-            Sequence sequence = sequenceRepository.findByTrinityIdAndExperiment(item.trinityID, experiment.getName()).get(0);
-            sequence.addIntoDomainInfo("families",family);
-            sequenceRepository.save(sequence);
+            sequenceRepository.sequenceFamiliesUpload(item.trinityID, experiment, family);
         }
     }
 
