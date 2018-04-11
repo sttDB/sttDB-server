@@ -1,12 +1,12 @@
 package sttDB.service.interproServices;
 
 import org.springframework.stereotype.Service;
+import sttDB.domain.Family;
 import sttDB.exception.InterproParsingException;
 
 import java.io.*;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -15,6 +15,9 @@ public class TrapidInterproParser implements InterproParser {
     private File inputFile;
 
     private List<LineItems> items;
+
+    // Using this structure, the updates over a family will be a lot easier.
+    private Map<String, List<Family>> groupedItems = new HashMap<>();
 
     @Override
     public List<LineItems> parse(Path path) throws InterproParsingException {
@@ -42,6 +45,7 @@ public class TrapidInterproParser implements InterproParser {
         String trinityID = parts.get(1);
         String interproID = parts.get(2);
         String description = getDescription(parts);
+        addIntoGroupedItems(trinityID, new Family(interproID, description));
         return new LineItems(trinityID, interproID, description);
     }
 
@@ -49,5 +53,14 @@ public class TrapidInterproParser implements InterproParser {
         return parts.stream()
                 .skip(3)
                 .collect(Collectors.joining(" "));
+    }
+
+    private void addIntoGroupedItems(String trinityID, Family family) {
+        groupedItems.computeIfAbsent(trinityID, k -> new ArrayList<Family>());
+        groupedItems.get(trinityID).add(family);
+    }
+
+    public Map<String, List<Family>> getGroupedItems(){
+        return this.groupedItems;
     }
 }
