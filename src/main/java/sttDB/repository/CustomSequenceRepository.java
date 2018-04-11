@@ -1,9 +1,10 @@
 package sttDB.repository;
 
-import org.springframework.data.repository.NoRepositoryBean;
 import sttDB.domain.Experiment;
 import sttDB.domain.Family;
 
+import java.util.List;
+
 public interface CustomSequenceRepository {
-    void sequenceFamiliesUpload(String trinityId, Experiment experiment, Family family);
+    void sequenceFamiliesUpload(String trinityId, Experiment experiment, List<Family> family);
 }

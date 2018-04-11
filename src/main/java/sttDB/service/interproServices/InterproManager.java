@@ -19,7 +19,7 @@ public class InterproManager {
     public void treatInterpro(Path path, Experiment experiment) {
         fileToParse = path;
         List<LineItems> parsedItems = interproParser.parse(path);
-        storer.storeItems(parsedItems, experiment);
+        storer.storeItems(parsedItems, experiment, interproParser.getGroupedItems());
     }
 
     @Autowired
