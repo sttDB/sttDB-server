@@ -9,6 +9,13 @@ public class Family implements DomainInformation {
 
     private String description;
 
+    public Family(){}
+
+    public Family(String interproID, String description) {
+        this.interproId = interproID;
+        this.description = description;
+    }
+
     public String getInterproId() {
         return interproId;
     }

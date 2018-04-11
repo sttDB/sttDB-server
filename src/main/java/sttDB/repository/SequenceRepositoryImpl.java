@@ -9,6 +9,8 @@ import sttDB.domain.Experiment;
 import sttDB.domain.Family;
 import sttDB.domain.Sequence;
 
+import java.util.List;
+
 class SequenceRepositoryImpl implements CustomSequenceRepository {
 
     @Autowired
@@ -16,14 +18,14 @@ class SequenceRepositoryImpl implements CustomSequenceRepository {
 
 
     @Override
-    public void sequenceFamiliesUpload(String trinityId, Experiment experiment, Family family) {
+    public void sequenceFamiliesUpload(String trinityId, Experiment experiment, List<Family> family) {
 
         Query query = new Query();
         query.addCriteria(Criteria.where("trinityId").is(trinityId).and("experiment").is(experiment.getName()));
 
 
         Update update = new Update();
-        update.addToSet("domainInfo.families", family);
+        update.pushAll("domainInfo.families", family.toArray());
 
         mongoOperation.updateMulti(query, update, Sequence.class);
     }
