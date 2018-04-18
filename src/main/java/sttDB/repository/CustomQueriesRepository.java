@@ -38,4 +38,7 @@ public interface CustomQueriesRepository<T, ID extends Serializable> extends Mon
 
     @Query(value = "{$and: [{$or: [{'description' : {$regex : ?0}}, {'description' : {$regex : ?1}}]}, {'description' : {$regex : ?2}}] }")
     Page<T> findByAnyKeywordAndOther(String keyword, String otherKeyword, String andWord, Pageable pageable);
+
+    @Query(value = "{$or: [{$and: [{'description' : {$regex : ?0}}, {'description' : {$not : {$regex : ?1}}}]}, {'description' : {$regex : ?2}}]}")
+    Page<T> findByDescriptionLikeAndNotLikeAndOther(String firstKeyword, String secondKeyword, String otherKeyword, Pageable pageable);
 }
