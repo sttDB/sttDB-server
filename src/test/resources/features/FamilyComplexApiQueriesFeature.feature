@@ -44,3 +44,9 @@ Feature: Use the family api part
     When I use the complex family route "/families?orKeyword=asd&otherOrKeyword=bnm&andKeyword=xcv"
     Then The response code is 200
     And The family has the correct description "asd xcv" and encountered responses 1
+
+  Scenario: A user wants to get families containing a description with one word without another, or directly other word
+    Given I have some families in the DataBase
+    When I use the complex family route "/families?orKeyword=asd&notKeyword=bnm&otherKeyword=xcv"
+    Then The response code is 200
+    And The family has the correct description "asd" and encountered responses 3
