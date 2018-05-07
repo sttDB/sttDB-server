@@ -12,12 +12,15 @@ import sttDB.domain.Sequence;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.stream.Stream;
 
 @RepositoryRestResource
 public interface SequenceRepository extends MongoRepository<Sequence, String>, CustomSequenceRepository{
     List<Sequence> findByTrinityId(String trinityId);
 
     Page<Sequence> findByTrinityIdLike(String trinityId, Pageable pageable);
+
+    Stream<Sequence> findByTrinityIdLike(String trinityId);
 
     List<Sequence> findByTrinityIdAndExperiment(String trinityId, String experiment);
 
