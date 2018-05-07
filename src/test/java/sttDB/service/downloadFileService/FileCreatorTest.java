@@ -31,7 +31,7 @@ public class FileCreatorTest {
     public void createSimpleFile() throws IOException {
         List<Sequence> sequenceList = new ArrayList<>();
         sequenceList.add(sequence);
-        fastaFileCreator.createFile(sequenceList, fileWriter);
+        fastaFileCreator.createFile(sequenceList.stream(), fileWriter);
         Sequence actualSequence = (Sequence) fileWriter.passedData;
         assertEquals(sequence.getTrinityId(), actualSequence.getTrinityId());
         assertEquals(sequence.getTranscript(), actualSequence.getTranscript());
@@ -41,7 +41,7 @@ public class FileCreatorTest {
     @Test
     public void createEmptyFile() throws IOException {
         List<Sequence> sequenceList = new ArrayList<>();
-        fastaFileCreator.createFile(sequenceList, fileWriter);
+        fastaFileCreator.createFile(sequenceList.stream(), fileWriter);
         BufferedReader fileReader = new BufferedReader(new FileReader(new File("searchedQuery.fasta")));
         assertEquals(null, fileReader.readLine());
     }

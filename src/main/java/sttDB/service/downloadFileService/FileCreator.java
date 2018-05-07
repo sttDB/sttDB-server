@@ -3,6 +3,7 @@ package sttDB.service.downloadFileService;
 import java.io.*;
 import java.util.Iterator;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public class FileCreator<E>{
 
@@ -13,10 +14,11 @@ public class FileCreator<E>{
     }
 
     //Iterable must be changed for a stream in future work, because of big sets of data not working
-    public File createFile(Iterable<E> dataStructure, FileWriter<E> fileWriter) throws IOException {
+    public File createFile(Stream<E> dataStructure, FileWriter<E> fileWriter) throws IOException {
         PrintWriter writer = new PrintWriter(path, "UTF-8");
         writeFile(dataStructure.iterator(), fileWriter, writer);
         writer.close();
+        dataStructure.close();
         return new File(path);
     }
 
