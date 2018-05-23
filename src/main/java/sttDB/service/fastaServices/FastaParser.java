@@ -13,10 +13,8 @@ import java.util.Scanner;
 @Service
 public class FastaParser {
 
-    private Path filePath;
     private Experiment experiment;
     private FastaInfoSaver infoSaver;
-
 
     public FastaParser(FastaInfoSaver infoSaver) {
         this.infoSaver = infoSaver;
@@ -28,8 +26,6 @@ public class FastaParser {
         try {
             fastaScanner = new Scanner(new FileReader(filePath.toFile()));
             String[] sequenceLine = new String[2];
-            Sequence sequence = new Sequence();
-            String transcript = "";
             while (fastaScanner.hasNextLine()) {
                 String line = fastaScanner.nextLine();
                 sequenceLine = treatLine(sequenceLine, line);
