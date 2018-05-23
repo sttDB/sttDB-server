@@ -29,10 +29,11 @@ public class ExperimentManagerImpl implements ExperimentManager {
     public ExperimentManagerImpl(ExperimentRepository experimentRepository,
                                  StorageService storageService,
                                  InterproManager interproManager,
-                                 NucleotideSaver infoSaver) {
+                                 NucleotideSaver nucleotideSaver) {
         this.experimentRepository = experimentRepository;
         this.storageService = storageService;
         this.interproManager = interproManager;
+        this.nucleotideSaver = nucleotideSaver;
     }
 
     @Override

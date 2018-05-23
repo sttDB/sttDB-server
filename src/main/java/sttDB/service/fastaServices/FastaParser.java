@@ -26,6 +26,8 @@ public class FastaParser {
         try {
             fastaScanner = new Scanner(new FileReader(filePath.toFile()));
             String[] sequenceLine = new String[2];
+            sequenceLine[0] = "";
+            sequenceLine[1] = "";
             while (fastaScanner.hasNextLine()) {
                 String line = fastaScanner.nextLine();
                 sequenceLine = treatLine(sequenceLine, line);
