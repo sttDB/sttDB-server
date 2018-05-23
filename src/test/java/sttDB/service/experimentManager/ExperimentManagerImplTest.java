@@ -9,6 +9,8 @@ import sttDB.domain.Experiment;
 import sttDB.exception.ExperimentNotFoundException;
 import sttDB.repository.ExperimentRepository;
 import sttDB.service.fastaServices.FastaParser;
+import sttDB.service.fastaServices.FastaUploader;
+import sttDB.service.fastaServices.NucleotideSaver;
 import sttDB.service.interproServices.InterproManager;
 import sttDB.service.interproServices.InterproParser;
 import sttDB.service.storageService.StorageService;
@@ -38,6 +40,7 @@ public class ExperimentManagerImplTest {
     private StorageService storage;
     private FastaParser fastaParser;
     private InterproManager interprinterproManagerarser;
+    private NucleotideSaver nucleotideSaver;
     private MockMultipartFile fastaFileMock;
     private MockMultipartFile familyFileMock;
 
@@ -47,7 +50,7 @@ public class ExperimentManagerImplTest {
         storage = mock(StorageService.class);
         fastaParser = mock(FastaParser.class);
         interprinterproManagerarser = mock(InterproManager.class);
-        sut = new ExperimentManagerImpl(repository, storage, fastaParser, interprinterproManagerarser);
+        sut = new ExperimentManagerImpl(repository, storage, interprinterproManagerarser, nucleotideSaver);
         fastaFileMock = new MockMultipartFile("file", EXPERIMENT_FASTA, "multipart/form-data",
                 new ByteArrayInputStream(FASTA_CONTENT.getBytes()));
         familyFileMock = new MockMultipartFile("file", INTERPRO, "multipart/form-data",
@@ -77,8 +80,8 @@ public class ExperimentManagerImplTest {
     }
 
     @Test
-    public void fastaParserIsCalledWithFastaFilePath() {
-        ArgumentCaptor<Path> pathArgument = forClass(Path.class);
+    public void fastaUploaderIsCalledWithFastaFilePath() {
+        ArgumentCaptor<String[]> stringArgument = forClass(String[].class);
         ArgumentCaptor<Experiment> experimentArgument = forClass(Experiment.class);
         Path path = Paths.get("/myPath");
         Experiment mockExperiment = new Experiment(EXPERIMENT_FASTA);
@@ -87,8 +90,8 @@ public class ExperimentManagerImplTest {
 
         sut.processNewExperiment(fastaFileMock);
 
-        verify(fastaParser).treatFasta(pathArgument.capture(), experimentArgument.capture());
-        assertThat(pathArgument.getValue(), is(path));
+        verify(nucleotideSaver).saveInfo(stringArgument.capture(), experimentArgument.capture());
+        assertThat(stringArgument.getValue().length, is(2));
         assertThat(experimentArgument.getValue().getName(), is(getFileWithoutExtension()));
     }
 

@@ -8,6 +8,8 @@ import sttDB.exception.ExperimentNotFoundException;
 import sttDB.exception.WrongFileFormatException;
 import sttDB.repository.ExperimentRepository;
 import sttDB.service.fastaServices.FastaParser;
+import sttDB.service.fastaServices.FastaUploader;
+import sttDB.service.fastaServices.NucleotideSaver;
 import sttDB.service.interproServices.InterproManager;
 import sttDB.service.storageService.StorageException;
 import sttDB.service.storageService.StorageService;
@@ -20,18 +22,18 @@ public class ExperimentManagerImpl implements ExperimentManager {
 
     private ExperimentRepository experimentRepository;
     private StorageService storageService;
-    private FastaParser fastaParser;
     private InterproManager interproManager;
+    private NucleotideSaver nucleotideSaver;
 
     @Autowired
     public ExperimentManagerImpl(ExperimentRepository experimentRepository,
                                  StorageService storageService,
-                                 FastaParser fastaParser,
-                                 InterproManager interproManager) {
+                                 InterproManager interproManager,
+                                 NucleotideSaver nucleotideSaver) {
         this.experimentRepository = experimentRepository;
         this.storageService = storageService;
-        this.fastaParser = fastaParser;
         this.interproManager = interproManager;
+        this.nucleotideSaver = nucleotideSaver;
     }
 
     @Override
@@ -41,8 +43,8 @@ public class ExperimentManagerImpl implements ExperimentManager {
         experimentRepository.save(experiment);
 
         Path path = storageService.storeFileInExperiment(fastaFile, experiment.getName());
-
-        fastaParser.treatFasta(path, experiment);
+        FastaUploader fastaUploader = new FastaUploader(nucleotideSaver, new FastaParser(nucleotideSaver));
+        fastaUploader.treatFasta(path, experiment);
     }
 
     private void checkFastaFormat(MultipartFile fastaFile) {
