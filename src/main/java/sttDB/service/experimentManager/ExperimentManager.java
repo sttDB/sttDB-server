@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ExperimentManager {
 
-    void processNewExperiment(MultipartFile fastaFile) throws IOException;
+    void processNewExperiment(MultipartFile fastaFile);
 
     void addFamilyFileToExperiment(MultipartFile familyFile, String experimentName);
 

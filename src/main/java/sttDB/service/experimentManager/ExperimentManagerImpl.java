@@ -38,7 +38,7 @@ public class ExperimentManagerImpl implements ExperimentManager {
     }
 
     @Override
-    public void processNewExperiment(MultipartFile fastaFile) throws IOException {
+    public void processNewExperiment(MultipartFile fastaFile) {
         checkFastaFormat(fastaFile);
         Experiment experiment = new Experiment(getNameNoExtension(fastaFile));
         experimentRepository.save(experiment);
@@ -46,14 +46,19 @@ public class ExperimentManagerImpl implements ExperimentManager {
         Path path = storageService.storeFileInExperiment(fastaFile, experiment.getName());
         FastaUploader fastaUploader = new FastaUploader(nucleotideSaver, new FastaParser(nucleotideSaver));
         fastaUploader.treatFasta(path, experiment);
-        String rootFile = storageService.getRootLocation().toString();
         restartBlastDatabase();
     }
 
-    private void restartBlastDatabase() throws IOException {
-        Runtime.getRuntime().exec("find . -name \\*.*.* -type f -delete");
-        Runtime.getRuntime().exec("docker stop sttdb-blast");
-        Runtime.getRuntime().exec("docker run --rm -itp 4567:4567 -v ~/db:/db --name sttdb-blast wurmlab/sequenceserver:1.0.11");
+    private void restartBlastDatabase() {
+        String rootFile = storageService.getRootLocation().toString();
+        try {
+            Runtime.getRuntime().exec("find "+ rootFile +" -name \\*.*.* -type f -delete");
+            Runtime.getRuntime().exec("docker stop sttdb-blast");
+            Runtime.getRuntime().exec("docker run --rm -itp 4567:4567 -v ~/db:/db --name sttdb-blast wurmlab/sequenceserver:1.0.11");
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to reset Blast Database");
+        }
+
     }
 
     private void checkFastaFormat(MultipartFile fastaFile) {
