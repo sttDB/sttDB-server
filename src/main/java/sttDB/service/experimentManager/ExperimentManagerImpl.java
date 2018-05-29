@@ -14,6 +14,7 @@ import sttDB.service.interproServices.InterproManager;
 import sttDB.service.storageService.StorageException;
 import sttDB.service.storageService.StorageService;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class ExperimentManagerImpl implements ExperimentManager {
     }
 
     @Override
-    public void processNewExperiment(MultipartFile fastaFile) {
+    public void processNewExperiment(MultipartFile fastaFile) throws IOException {
         checkFastaFormat(fastaFile);
         Experiment experiment = new Experiment(getNameNoExtension(fastaFile));
         experimentRepository.save(experiment);
@@ -45,6 +46,14 @@ public class ExperimentManagerImpl implements ExperimentManager {
         Path path = storageService.storeFileInExperiment(fastaFile, experiment.getName());
         FastaUploader fastaUploader = new FastaUploader(nucleotideSaver, new FastaParser(nucleotideSaver));
         fastaUploader.treatFasta(path, experiment);
+        String rootFile = storageService.getRootLocation().toString();
+        restartBlastDatabase();
+    }
+
+    private void restartBlastDatabase() throws IOException {
+        Runtime.getRuntime().exec("find . -name \\*.*.* -type f -delete");
+        Runtime.getRuntime().exec("docker stop sttdb-blast");
+        Runtime.getRuntime().exec("docker run --rm -itp 4567:4567 -v ~/db:/db --name sttdb-blast wurmlab/sequenceserver:1.0.11");
     }
 
     private void checkFastaFormat(MultipartFile fastaFile) {
