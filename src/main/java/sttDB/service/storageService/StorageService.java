@@ -15,4 +15,5 @@ public interface StorageService {
 
     Path loadFileFromExperiment(String filename, String experimentName) throws StorageFileNotFoundException;
 
+    Path getRootLocation();
 }
