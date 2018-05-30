@@ -14,7 +14,10 @@ import sttDB.service.interproServices.InterproManager;
 import sttDB.service.storageService.StorageException;
 import sttDB.service.storageService.StorageService;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -52,13 +55,12 @@ public class ExperimentManagerImpl implements ExperimentManager {
     private void restartBlastDatabase() {
         String rootFile = storageService.getRootLocation().toString();
         try {
-            Runtime.getRuntime().exec("find "+ rootFile +" -name \\*.*.* -type f -delete");
-            Runtime.getRuntime().exec("docker stop sttdb-blast");
-            Runtime.getRuntime().exec("docker run --rm -itp 4567:4567 -v ~/db:/db --name sttdb-blast wurmlab/sequenceserver:1.0.11");
-        } catch (IOException e) {
+            ProcessBuilder pb = new ProcessBuilder("./reset_blast.sh", rootFile);
+            Process p = pb.start();
+        } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("Failed to reset Blast Database");
         }
-
     }
 
     private void checkFastaFormat(MultipartFile fastaFile) {
