@@ -14,6 +14,10 @@ import sttDB.service.interproServices.InterproManager;
 import sttDB.service.storageService.StorageException;
 import sttDB.service.storageService.StorageService;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -45,6 +49,18 @@ public class ExperimentManagerImpl implements ExperimentManager {
         Path path = storageService.storeFileInExperiment(fastaFile, experiment.getName());
         FastaUploader fastaUploader = new FastaUploader(nucleotideSaver, new FastaParser(nucleotideSaver));
         fastaUploader.treatFasta(path, experiment);
+        restartBlastDatabase();
+    }
+
+    private void restartBlastDatabase() {
+        String rootFile = storageService.getRootLocation().toString();
+        try {
+            ProcessBuilder pb = new ProcessBuilder("./reset_blast.sh", rootFile);
+            Process p = pb.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to reset Blast Database");
+        }
     }
 
     private void checkFastaFormat(MultipartFile fastaFile) {
