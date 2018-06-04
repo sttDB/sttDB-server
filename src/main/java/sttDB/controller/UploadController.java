@@ -27,7 +27,7 @@ public class UploadController {
 
     @PostMapping("/fasta")
     @ResponseBody
-    public void recieveFasta(MultipartHttpServletRequest request) {
+    public void receiveFasta(MultipartHttpServletRequest request) {
         Iterator<String> fileNames = request.getFileNames();
         MultipartFile fastaFile = request.getFile(fileNames.next());
         manager.processNewExperiment(fastaFile);
@@ -35,11 +35,19 @@ public class UploadController {
 
     @PostMapping("/interpro")
     @ResponseBody
-    public void processRequest(MultipartHttpServletRequest request) {
+    public void receiveInterpro(MultipartHttpServletRequest request) {
         Iterator<String> fileNames = request.getFileNames();
         MultipartFile familyFamily = request.getFile(fileNames.next());
         String experiment = request.getRequestHeaders().get("experiment").get(0);
         manager.addFamilyFileToExperiment(familyFamily, experiment);
+    }
+
+    @PostMapping("/go")
+    @ResponseBody
+    public void receiveGo(MultipartHttpServletRequest request) {
+        Iterator<String> fileNames = request.getFileNames();
+        MultipartFile goFile = request.getFile(fileNames.next());
+        String experiment = request.getRequestHeaders().get("experiment").get(0);
     }
 
     @Autowired
