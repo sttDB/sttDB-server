@@ -10,14 +10,11 @@ import sttDB.repository.ExperimentRepository;
 import sttDB.service.fastaServices.FastaParser;
 import sttDB.service.fastaServices.FastaUploader;
 import sttDB.service.fastaServices.NucleotideSaver;
-import sttDB.service.interproServices.InterproManager;
+import sttDB.service.interproServices.InterproUploader;
 import sttDB.service.storageService.StorageException;
 import sttDB.service.storageService.StorageService;
+import sttDB.service.uploadService.FileUploader;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -26,17 +23,17 @@ public class ExperimentManagerImpl implements ExperimentManager {
 
     private ExperimentRepository experimentRepository;
     private StorageService storageService;
-    private InterproManager interproManager;
+    private InterproUploader interproUploader;
     private NucleotideSaver nucleotideSaver;
 
     @Autowired
     public ExperimentManagerImpl(ExperimentRepository experimentRepository,
                                  StorageService storageService,
-                                 InterproManager interproManager,
+                                 InterproUploader interproUploader,
                                  NucleotideSaver nucleotideSaver) {
         this.experimentRepository = experimentRepository;
         this.storageService = storageService;
-        this.interproManager = interproManager;
+        this.interproUploader = interproUploader;
         this.nucleotideSaver = nucleotideSaver;
     }
 
@@ -48,7 +45,7 @@ public class ExperimentManagerImpl implements ExperimentManager {
 
         Path path = storageService.storeFileInExperiment(fastaFile, experiment.getName());
         FastaUploader fastaUploader = new FastaUploader(nucleotideSaver, new FastaParser(nucleotideSaver));
-        fastaUploader.treatFasta(path, experiment);
+        fastaUploader.treatFile(path, experiment);
         restartBlastDatabase();
     }
 
@@ -81,12 +78,18 @@ public class ExperimentManagerImpl implements ExperimentManager {
 
         Path path = storageService.storeFileInExperiment(familyFile, experimentName);
 
-        interproManager.treatInterpro(path, experiment);
+        interproUploader.treatFile(path, experiment);
     }
 
     @Override
-    public void addOtherDataToExperiment(MultipartFile file, String experimentName) {
-        throw new UnsupportedOperationException("Not implemented");
+    public void addOtherDataToExperiment(MultipartFile file, String experimentName, FileUploader fileUploader) {
+        Experiment experiment = experimentRepository.findOne(experimentName);
+        if (experiment == null)
+            throw new ExperimentNotFoundException("Experiment " + experimentName + " not found");
+
+        Path path = storageService.storeFileInExperiment(file, experimentName);
+
+        fileUploader.treatFile(path, experiment);
     }
 
     @Override

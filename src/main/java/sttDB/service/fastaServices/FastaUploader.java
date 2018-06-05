@@ -18,7 +18,7 @@ public class FastaUploader implements FileUploader {
         this.parser = parser;
     }
 
-    public void treatFasta(Path fastaFile, Experiment experiment) {
+    public void treatFile(Path fastaFile, Experiment experiment) {
         try {
             infoSaver.deleteOldSequences(experiment);
             parser.parseFile(fastaFile, experiment);

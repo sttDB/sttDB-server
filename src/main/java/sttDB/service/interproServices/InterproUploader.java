@@ -17,7 +17,7 @@ public class InterproUploader implements FileUploader {
 
     private Path fileToParse;
 
-    public void treatInterpro(Path path, Experiment experiment) {
+    public void treatFile(Path path, Experiment experiment) {
         fileToParse = path;
         List<LineItems> parsedItems = interproParser.parse(path);
         storer.storeItems(parsedItems, experiment, interproParser.getGroupedItems());

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.service.experimentManager.ExperimentManager;
-import sttDB.service.interproServices.InterproManager;
+import sttDB.service.interproServices.InterproUploader;
 
 import java.util.Iterator;
 
@@ -18,7 +18,7 @@ public class UploadController {
 
     private ExperimentManager manager;
 
-    private InterproManager interproManager;
+    private InterproUploader interproUploader;
 
     @Autowired
     public UploadController(ExperimentManager manager) {
@@ -51,7 +51,7 @@ public class UploadController {
     }
 
     @Autowired
-    public void setInterproManager(InterproManager interproManager) {
-        this.interproManager = interproManager;
+    public void setInterproUploader(InterproUploader interproUploader) {
+        this.interproUploader = interproUploader;
     }
 }
