@@ -3,11 +3,12 @@ package sttDB.service.fastaServices;
 import org.springframework.stereotype.Service;
 import sttDB.domain.Experiment;
 import sttDB.exception.FastaParsingException;
+import sttDB.service.uploadService.FileUploader;
 
 import java.nio.file.Path;
 
 @Service
-public class FastaUploader {
+public class FastaUploader implements FileUploader {
 
     private FastaInfoSaver infoSaver;
     private FastaParser parser;

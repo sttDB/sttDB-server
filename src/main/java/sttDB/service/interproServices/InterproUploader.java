@@ -3,12 +3,13 @@ package sttDB.service.interproServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sttDB.domain.Experiment;
+import sttDB.service.uploadService.FileUploader;
 
 import java.nio.file.Path;
 import java.util.List;
 
 @Service
-public class InterproManager {
+public class InterproUploader implements FileUploader {
 
     private InterproParser interproParser;
 
