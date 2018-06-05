@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.service.experimentManager.ExperimentManager;
+import sttDB.service.goService.GoUploader;
 import sttDB.service.interproServices.InterproUploader;
 
 import java.util.Iterator;
@@ -48,6 +49,7 @@ public class UploadController {
         Iterator<String> fileNames = request.getFileNames();
         MultipartFile goFile = request.getFile(fileNames.next());
         String experiment = request.getRequestHeaders().get("experiment").get(0);
+        manager.addOtherDataToExperiment(goFile, experiment, new GoUploader());
     }
 
     @Autowired
