@@ -12,7 +12,13 @@ public class Go implements DomainInformation {
 
     private String inputAccession;
 
-    public Go(){}
+    @Id
+    private String goId;
+
+    private String description;
+
+    public Go() {
+    }
 
     public Go(String goType, String slimId, String goName, String inputAccession, String goId, String description) {
         this.goType = goType;
@@ -70,10 +76,5 @@ public class Go implements DomainInformation {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    @Id
-    private String goId;
-
-    private String description;
 
 }
