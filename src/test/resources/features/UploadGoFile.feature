@@ -8,6 +8,6 @@ Feature: Upload go term file
     And I have two sequences in the DataBase
     And There is an experiment named "test"
     And I have a file named "go.txt"
-    When I upload the file to experiment "test"
+    When I upload the file to experiment "test" using the route "/upload/go"
     Then The go terms are stored
     And The go terms are assigned to the sequences
