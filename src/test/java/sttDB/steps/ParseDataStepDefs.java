@@ -69,7 +69,7 @@ public class ParseDataStepDefs {
         assertThat(sequence.getDynamicFastaInfo(), is("len=4 path=[1:0-144 306:145-298]"));
     }
 
-    @When("^I upload the file to experiment \"([^\"]*)\"$")
+    @When("^I upload the family file to experiment \"([^\"]*)\"$")
     public void iUploadTheFileToExperiment(String experiment) throws Throwable {
         MockMultipartFile file = createMockMultiPartFile();
         stepDefs.result = stepDefs.mockMvc.perform(
