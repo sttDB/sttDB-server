@@ -24,7 +24,7 @@ public class GoParser {
             goScanner.nextLine();
             while (goScanner.hasNextLine()) {
                 String line = goScanner.nextLine();
-                treatLine(line);
+                treatLine(line, experiment);
             }
         } catch (FileNotFoundException e) {
             throw new GoParsingException("File not found: " + filePath, e);
@@ -34,7 +34,7 @@ public class GoParser {
         }
     }
 
-    private void treatLine(String line) {
-        goSaver.save(line.split("\t+"));
+    private void treatLine(String line, Experiment experiment) {
+        goSaver.save(line.split("\t+"), experiment);
     }
 }

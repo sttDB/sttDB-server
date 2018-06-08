@@ -2,6 +2,7 @@ package sttDB.service.goService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sttDB.domain.Experiment;
 import sttDB.domain.Go;
 import sttDB.exception.GoParsingException;
 import sttDB.repository.GoRepository;
@@ -16,11 +17,11 @@ public class GoSaver {
     @Autowired
     private SequenceRepository sequenceRepository;
 
-    void save(String[] parsedGoElements){
+    void save(String[] parsedGoElements, Experiment experiment){
         parsedGoElements[0] = decideGoType(parsedGoElements[0]);
         Go go = new Go(parsedGoElements[0], parsedGoElements[1], parsedGoElements[2], parsedGoElements[3], parsedGoElements[4], parsedGoElements[5]);
         goRepository.save(go);
-
+        sequenceRepository.sequenceGoTermUpload(go.getInputAccession(), experiment,go);
     }
 
     private String decideGoType(String go){

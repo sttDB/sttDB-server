@@ -21,9 +21,12 @@ public class UploadController {
 
     private InterproUploader interproUploader;
 
+    private GoUploader goUploader;
+
     @Autowired
-    public UploadController(ExperimentManager manager) {
+    public UploadController(ExperimentManager manager, GoUploader goUploader) {
         this.manager = manager;
+        this.goUploader = goUploader;
     }
 
     @PostMapping("/fasta")
@@ -49,7 +52,7 @@ public class UploadController {
         Iterator<String> fileNames = request.getFileNames();
         MultipartFile goFile = request.getFile(fileNames.next());
         String experiment = request.getRequestHeaders().get("experiment").get(0);
-        manager.addOtherDataToExperiment(goFile, experiment, new GoUploader());
+        manager.addOtherDataToExperiment(goFile, experiment, goUploader);
     }
 
     @Autowired
