@@ -8,6 +8,6 @@ Feature: Upload interpro family file
     And I have two sequences in the DataBase
     And There is an experiment named "test"
     And I have a file named "families.txt"
-    When I upload the file to experiment "test" using the route "/upload/family"
+    When I upload the file to experiment "test" using the route "/upload/interpro"
     Then The families are stored
     And The families are assigned to the sequences
