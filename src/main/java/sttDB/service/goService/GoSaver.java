@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import sttDB.domain.Go;
 import sttDB.exception.GoParsingException;
 import sttDB.repository.GoRepository;
+import sttDB.repository.SequenceRepository;
 
 @Service
 public class GoSaver {
@@ -12,10 +13,14 @@ public class GoSaver {
     @Autowired
     private GoRepository goRepository;
 
+    @Autowired
+    private SequenceRepository sequenceRepository;
+
     void save(String[] parsedGoElements){
         parsedGoElements[0] = decideGoType(parsedGoElements[0]);
         Go go = new Go(parsedGoElements[0], parsedGoElements[1], parsedGoElements[2], parsedGoElements[3], parsedGoElements[4], parsedGoElements[5]);
         goRepository.save(go);
+
     }
 
     private String decideGoType(String go){
