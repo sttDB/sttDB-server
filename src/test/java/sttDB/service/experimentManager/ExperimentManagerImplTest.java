@@ -9,10 +9,8 @@ import sttDB.domain.Experiment;
 import sttDB.exception.ExperimentNotFoundException;
 import sttDB.repository.ExperimentRepository;
 import sttDB.service.fastaServices.FastaParser;
-import sttDB.service.fastaServices.FastaUploader;
 import sttDB.service.fastaServices.NucleotideSaver;
-import sttDB.service.interproServices.InterproManager;
-import sttDB.service.interproServices.InterproParser;
+import sttDB.service.interproServices.InterproUploader;
 import sttDB.service.storageService.StorageService;
 
 import java.io.ByteArrayInputStream;
@@ -39,7 +37,7 @@ public class ExperimentManagerImplTest {
     private ExperimentRepository repository;
     private StorageService storage;
     private FastaParser fastaParser;
-    private InterproManager interprinterproManagerarser;
+    private InterproUploader interprinterproManagerarser;
     private NucleotideSaver nucleotideSaver;
     private MockMultipartFile fastaFileMock;
     private MockMultipartFile familyFileMock;
@@ -49,7 +47,7 @@ public class ExperimentManagerImplTest {
         repository = mock(ExperimentRepository.class);
         storage = mock(StorageService.class);
         fastaParser = mock(FastaParser.class);
-        interprinterproManagerarser = mock(InterproManager.class);
+        interprinterproManagerarser = mock(InterproUploader.class);
         sut = new ExperimentManagerImpl(repository, storage, interprinterproManagerarser, nucleotideSaver);
         fastaFileMock = new MockMultipartFile("file", EXPERIMENT_FASTA, "multipart/form-data",
                 new ByteArrayInputStream(FASTA_CONTENT.getBytes()));

@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import sttDB.domain.Experiment;
 import sttDB.domain.Family;
+import sttDB.domain.Go;
 import sttDB.domain.Sequence;
 
 import java.util.List;
@@ -29,4 +30,18 @@ class SequenceRepositoryImpl implements CustomSequenceRepository {
 
         mongoOperation.updateMulti(query, update, Sequence.class);
     }
+
+    @Override
+    public void sequenceGoTermUpload(String trinityId, Experiment experiment, Go go) {
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("trinityId").is(trinityId).and("experiment").is(experiment.getName()));
+
+
+        Update update = new Update();
+        update.push("domainInfo.go", go);
+
+        mongoOperation.updateMulti(query, update, Sequence.class);
+    }
+
 }

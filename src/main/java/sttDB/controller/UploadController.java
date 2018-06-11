@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.service.experimentManager.ExperimentManager;
-import sttDB.service.interproServices.InterproManager;
+import sttDB.service.goService.GoUploader;
+import sttDB.service.interproServices.InterproUploader;
 
 import java.util.Iterator;
 
@@ -18,16 +19,19 @@ public class UploadController {
 
     private ExperimentManager manager;
 
-    private InterproManager interproManager;
+    private InterproUploader interproUploader;
+
+    private GoUploader goUploader;
 
     @Autowired
-    public UploadController(ExperimentManager manager) {
+    public UploadController(ExperimentManager manager, GoUploader goUploader) {
         this.manager = manager;
+        this.goUploader = goUploader;
     }
 
     @PostMapping("/fasta")
     @ResponseBody
-    public void recieveFasta(MultipartHttpServletRequest request) {
+    public void receiveFasta(MultipartHttpServletRequest request) {
         Iterator<String> fileNames = request.getFileNames();
         MultipartFile fastaFile = request.getFile(fileNames.next());
         manager.processNewExperiment(fastaFile);
@@ -35,15 +39,24 @@ public class UploadController {
 
     @PostMapping("/interpro")
     @ResponseBody
-    public void processRequest(MultipartHttpServletRequest request) {
+    public void receiveInterpro(MultipartHttpServletRequest request) {
         Iterator<String> fileNames = request.getFileNames();
         MultipartFile familyFamily = request.getFile(fileNames.next());
         String experiment = request.getRequestHeaders().get("experiment").get(0);
         manager.addFamilyFileToExperiment(familyFamily, experiment);
     }
 
+    @PostMapping("/go")
+    @ResponseBody
+    public void receiveGo(MultipartHttpServletRequest request) {
+        Iterator<String> fileNames = request.getFileNames();
+        MultipartFile goFile = request.getFile(fileNames.next());
+        String experiment = request.getRequestHeaders().get("experiment").get(0);
+        manager.addOtherDataToExperiment(goFile, experiment, goUploader);
+    }
+
     @Autowired
-    public void setInterproManager(InterproManager interproManager) {
-        this.interproManager = interproManager;
+    public void setInterproUploader(InterproUploader interproUploader) {
+        this.interproUploader = interproUploader;
     }
 }
