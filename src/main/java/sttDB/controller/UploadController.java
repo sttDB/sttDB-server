@@ -24,9 +24,10 @@ public class UploadController {
     private KeggUploader keggUploader;
 
     @Autowired
-    public UploadController(ExperimentManager manager, GoUploader goUploader) {
+    public UploadController(ExperimentManager manager, GoUploader goUploader, KeggUploader keggUploader) {
         this.manager = manager;
         this.goUploader = goUploader;
+        this.keggUploader = keggUploader;
     }
 
     @PostMapping("/fasta")
