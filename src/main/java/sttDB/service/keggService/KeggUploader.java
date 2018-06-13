@@ -15,6 +15,6 @@ public class KeggUploader implements FileUploader {
 
     @Override
     public void treatFile(Path file, Experiment experiment) {
-
+        keggParser.parseFile(file, experiment);
     }
 }
