@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sttDB.service.experimentManager.ExperimentManager;
 import sttDB.service.goService.GoUploader;
-import sttDB.service.interproServices.InterproUploader;
+import sttDB.service.keggService.KeggUploader;
 
 import java.util.Iterator;
 
@@ -19,9 +19,9 @@ public class UploadController {
 
     private ExperimentManager manager;
 
-    private InterproUploader interproUploader;
-
     private GoUploader goUploader;
+
+    private KeggUploader keggUploader;
 
     @Autowired
     public UploadController(ExperimentManager manager, GoUploader goUploader) {
@@ -55,8 +55,12 @@ public class UploadController {
         manager.addOtherDataToExperiment(goFile, experiment, goUploader);
     }
 
-    @Autowired
-    public void setInterproUploader(InterproUploader interproUploader) {
-        this.interproUploader = interproUploader;
+    @PostMapping("/kegg")
+    @ResponseBody
+    public void receiveKegg(MultipartHttpServletRequest request){
+        Iterator<String> fileNames = request.getFileNames();
+        MultipartFile keggFile = request.getFile(fileNames.next());
+        String experiment = request.getRequestHeaders().get("experiment").get(0);
+        manager.addOtherDataToExperiment(keggFile, experiment, keggUploader);
     }
 }
