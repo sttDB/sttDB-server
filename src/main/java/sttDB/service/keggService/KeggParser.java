@@ -13,12 +13,15 @@ import java.util.Scanner;
 @Service
 public class KeggParser {
 
-    //Not autowired, we are not interested in having a singleton in this case.
-    private KeggSaver keggSaver = new KeggSaver();
+    @Autowired
+    private KeggSaver keggSaver;
 
     private Scanner keggScanner = null;
 
+    private Experiment experiment;
+
     void parseFile(Path filePath, Experiment experiment) {
+        this.experiment = experiment;
         try {
             keggScanner = new Scanner(new FileReader(filePath.toFile()));
             skipFirstLines();
@@ -62,11 +65,30 @@ public class KeggParser {
 
     private void savePaths(String[] keggPaths) {
         keggSaver.setFirstPath(keggPaths[0]);
-        keggSaver.setFirstPath(keggPaths[1]);
-        keggSaver.setFirstPath(keggPaths[2]);
+        keggSaver.setSecondPath(keggPaths[1]);
+        keggSaver.setThirdPath(keggPaths[2]);
     }
 
     private void treatRestOfFile() {
-        //Consider the change of keggPaths in the middle of the file reading.
+        //We asume that the first line always exists, if not, we need an error to occur.
+        String lastLine = keggScanner.nextLine();
+        saveKeggId(lastLine);
+        while(keggScanner.hasNextLine()){
+            String line = keggScanner.nextLine();
+            if(lastLine.endsWith(",")){
+                treatSequenceLine(line);
+            }
+            lastLine = line;
+        }
+    }
+
+    private void saveKeggId(String keggIdLine) {
+        keggSaver.setKeggId(keggIdLine.trim());
+    }
+
+    private void treatSequenceLine(String sequencesLine) {
+        sequencesLine = sequencesLine.trim();
+        String[] sequences = sequencesLine.split(", *");
+        keggSaver.saveSequences(sequences, experiment);
     }
 }
