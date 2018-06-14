@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sttDB.domain.Experiment;
 import sttDB.domain.Kegg;
+import sttDB.repository.KeggRepository;
 import sttDB.repository.SequenceRepository;
 
 import java.util.Arrays;
@@ -13,6 +14,9 @@ public class KeggSaver {
 
     @Autowired
     private SequenceRepository sequenceRepository;
+
+    @Autowired
+    private KeggRepository keggRepository;
 
     private String keggId;
 
@@ -43,6 +47,7 @@ public class KeggSaver {
             throw new UnsupportedOperationException("Kegg data is not defined");
         }
         Kegg kegg = new Kegg(keggId, firstPath, secondPath, thirdPath);
+        keggRepository.save(kegg);
         Arrays.asList(sequences)
                 .forEach(sequence -> sequenceRepository.sequenceKeggTermUpload(sequence, experiment, kegg));
     }
