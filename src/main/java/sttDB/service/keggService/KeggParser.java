@@ -8,8 +8,12 @@ import sttDB.exception.KeggParsingException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Stack;
 
+//God bless this monster
 @Service
 public class KeggParser {
 
@@ -50,13 +54,13 @@ public class KeggParser {
     private void saveFirstPathLines() {
         int pathCount = 0;
         String[] keggPaths = new String[3];
-        while(keggScanner.hasNextLine()){
+        while (keggScanner.hasNextLine()) {
             String line = keggScanner.nextLine();
-            if(line.startsWith(" ")){
+            if (line.startsWith(" ")) {
                 return;
             }
             keggPaths[pathCount] = line;
-            if(pathCount == 2){
+            if (pathCount == 2) {
                 savePaths(keggPaths);
             }
             pathCount++;
@@ -70,15 +74,63 @@ public class KeggParser {
     }
 
     private void treatRestOfFile() {
-        //We asume that the first line always exists, if not, we need an error to occur.
-        String lastLine = keggScanner.nextLine();
-        saveKeggId(lastLine);
-        while(keggScanner.hasNextLine()){
+        String lastLine = saveFirstKeggAndSequences();
+        while (keggScanner.hasNextLine()) {
             String line = keggScanner.nextLine();
-            if(lastLine.endsWith(",")){
+            if (lastLine.endsWith(",")) {
                 treatSequenceLine(line);
+            } else {
+                if (line.startsWith(" ")) {
+                    treatKeggAndFirstSequencesLine(line);
+                } else {//create new kegg paths
+                    Stack<String> keggPaths = new Stack<>();
+                    while (!line.startsWith(" ") && keggScanner.hasNextLine()) {
+                        keggPaths.add(line);
+                        line = keggScanner.nextLine();
+                    }
+                    saveNewKeggPaths(keggPaths);
+                    treatKeggAndFirstSequencesLine(line);
+                }
             }
             lastLine = line;
+        }
+    }
+
+
+    //We asume that the first line always exists, if not, we need an error to occur.
+    private String saveFirstKeggAndSequences() {
+        String lastLine = keggScanner.nextLine();
+        saveKeggId(lastLine);//first keggId
+        lastLine = keggScanner.nextLine();
+        treatSequenceLine(lastLine);//first sequences
+        return lastLine;
+    }
+
+    private void treatKeggAndFirstSequencesLine(String line) {
+        saveKeggId(line);
+        if (keggScanner.hasNextLine()) {
+            treatSequenceLine(keggScanner.nextLine());
+        } else {
+            throw new KeggParsingException("There is a kegg id without sequences related to it");
+        }
+    }
+
+    private void saveNewKeggPaths(Stack<String> keggPaths) {
+        switch (keggPaths.size()) {
+            case 3:
+                keggSaver.setThirdPath(keggPaths.pop());
+                keggSaver.setSecondPath(keggPaths.pop());
+                keggSaver.setFirstPath(keggPaths.pop());
+                break;
+            case 2:
+                keggSaver.setThirdPath(keggPaths.pop());
+                keggSaver.setSecondPath(keggPaths.pop());
+                break;
+            case 1:
+                keggSaver.setThirdPath(keggPaths.pop());
+                break;
+            default:
+                throw new KeggParsingException("KeggPaths variable contains no paths");
         }
     }
 
