@@ -75,23 +75,33 @@ public class KeggParser {
         String lastLine = saveFirstKeggAndSequences();
         while (keggScanner.hasNextLine()) {
             String line = keggScanner.nextLine();
-            if (lastLine.endsWith(",")) {
-                treatSequenceLine(line);
-            } else {
-                if (line.startsWith(" ")) {
-                    treatKeggAndFirstSequencesLine(line);
-                } else {//create new kegg paths
-                    Stack<String> keggPaths = new Stack<>();
-                    while (!line.startsWith(" ") && keggScanner.hasNextLine()) {
-                        keggPaths.add(line);
-                        line = keggScanner.nextLine();
-                    }
-                    saveNewKeggPaths(keggPaths);
-                    treatKeggAndFirstSequencesLine(line);
-                }
-            }
+            line = parseLine(lastLine, line);
             lastLine = line;
         }
+    }
+
+    private String parseLine(String lastLine, String line) {
+        if (lastLine.endsWith(",")) {
+            treatSequenceLine(line);
+        } else {
+            line = createNewKeggStatement(line);
+        }
+        return line;
+    }
+
+    private String createNewKeggStatement(String line) {
+        if (line.startsWith(" ")) {
+            treatKeggAndFirstSequencesLine(line);
+        } else {//create new kegg paths
+            Stack<String> keggPaths = new Stack<>();
+            while (!line.startsWith(" ") && keggScanner.hasNextLine()) {
+                keggPaths.add(line);
+                line = keggScanner.nextLine();
+            }
+            saveNewKeggPaths(keggPaths);
+            treatKeggAndFirstSequencesLine(line);
+        }
+        return line;
     }
 
 
