@@ -13,6 +13,7 @@ import sttDB.service.storageService.StorageService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.stream.Stream;
 
 @RequestMapping(value = "/download")
 @Controller
@@ -38,17 +39,17 @@ public class DownloadController {
         file.delete();
     }
 
-    private Iterable<Sequence> selectLikeOrOne(String sequenceId, String experiment) {
+    private Stream<Sequence> selectLikeOrOne(String sequenceId, String experiment) {
         return experiment.equals("") ?
-                sequenceRepository.findByTrinityIdLike(sequenceId, new PageRequest(0, Integer.MAX_VALUE))
-                : sequenceRepository.findByTrinityIdAndExperiment(sequenceId, experiment);
+                sequenceRepository.findByTrinityIdLike(sequenceId)
+                : sequenceRepository.findByTrinityIdAndExperiment(sequenceId, experiment).stream();
     }
 
     @GetMapping(value = "/fasta", params = "interproId")
     public void downloadFastaFromFamily(@RequestParam("interproId") String interproId, HttpServletResponse response)
             throws IOException {
         FileCreator<Sequence> fileCreator = new FileCreator<>("fasta");
-        File file = fileCreator.createFile(sequenceRepository.findByFamilyInterproId(interproId), new FastaFileWriter());
+        File file = fileCreator.createFile(sequenceRepository.findByFamilyInterproId(interproId).stream(), new FastaFileWriter());
         returnResponseWithFile(response, file);
     }
 
