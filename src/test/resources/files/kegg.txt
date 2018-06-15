@@ -5,7 +5,7 @@ Metabolism
 Global and overview maps
 01100 Metabolic pathways (746)
   K00002
-   comp163412_c0_seq3, comp163412_c0_seq3, comp163412_c0_seq3, comp163412_c0_seq3
+   asd
 01110 Biosynthesis of secondary metabolites (215)
   K00002
-   comp163412_c0_seq3, comp163412_c0_seq3, comp163412_c0_seq3, comp163412_c0_seq3
+   asds
