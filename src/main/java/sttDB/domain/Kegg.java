@@ -18,6 +18,12 @@ public class Kegg implements DomainInformation {
 
     private List<String> path3;
 
+    /**
+     * This attribute will replicate the three paths in one variable.
+     * The reason behind this is to provide a good search when searching by descriptions.
+     */
+    private String description;
+
     public Kegg() {
 
     }
@@ -43,10 +49,12 @@ public class Kegg implements DomainInformation {
 
     public void setPath1(List<String> path1) {
         this.path1 = path1;
+        setDescription();
     }
 
     public void addPath1(String path) {
         path1.add(path);
+        setDescription();
     }
 
     public List<String> getPath2() {
@@ -55,10 +63,12 @@ public class Kegg implements DomainInformation {
 
     public void setPath2(List<String> path2) {
         this.path2 = path2;
+        setDescription();
     }
 
     public void addPath2(String path) {
         path2.add(path);
+        setDescription();
     }
 
     public List<String> getPath3() {
@@ -67,9 +77,20 @@ public class Kegg implements DomainInformation {
 
     public void setPath3(List<String> path3) {
         this.path3 = path3;
+        setDescription();
     }
 
     public void addPath3(String path) {
         path3.add(path);
+        setDescription();
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    private void setDescription() {
+        if(path1 != null && path2 != null && path3 != null)
+            description = path1.toString() + path2.toString() + path3.toString();
     }
 }
