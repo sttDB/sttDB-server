@@ -26,33 +26,55 @@ public class KeggSaver {
 
     private String thirdPath;
 
-    public void setFirstPath(String firstPath) {
+    void setFirstPath(String firstPath) {
         this.firstPath = firstPath;
     }
 
-    public void setSecondPath(String secondPath) {
+    void setSecondPath(String secondPath) {
         this.secondPath = secondPath;
     }
 
-    public void setThirdPath(String thirdPath) {
+    void setThirdPath(String thirdPath) {
         this.thirdPath = thirdPath;
     }
 
-    public void setKeggId(String keggId) {
+    void setKeggId(String keggId) {
         this.keggId = keggId;
     }
 
-    public void saveSequences(String[] sequences, Experiment experiment) {
-        if(keggIsNotDefined()){
+    void saveSequences(String[] sequences, Experiment experiment) {
+        if (keggIsNotDefined()) {
             throw new UnsupportedOperationException("Kegg data is not defined");
         }
-        Kegg kegg = new Kegg(keggId, firstPath, secondPath, thirdPath);
-        keggRepository.save(kegg);
+        Kegg kegg = saveKegg();
         Arrays.asList(sequences)
                 .forEach(sequence -> sequenceRepository.sequenceKeggTermUpload(sequence, experiment, kegg));
     }
 
     private boolean keggIsNotDefined() {
         return keggId == null || firstPath == null || secondPath == null || thirdPath == null;
+    }
+
+    private Kegg saveKegg() {
+        Kegg storedKegg = keggRepository.findByKeggId(keggId);
+        if (storedKegg == null) {
+            storedKegg = new Kegg();
+            storedKegg.setKeggId(keggId);
+            storedKegg.setPath1(Arrays.asList(firstPath));
+            storedKegg.setPath2(Arrays.asList(secondPath));
+            storedKegg.setPath3(Arrays.asList(thirdPath));
+        }else{
+            if (!storedKegg.getPath1().contains(firstPath)){
+                storedKegg.addPath1(firstPath);
+            }
+            if(!storedKegg.getPath2().contains(secondPath)){
+                storedKegg.addPath2(secondPath);
+            }
+            if (!storedKegg.getPath3().contains(thirdPath)){
+                storedKegg.addPath3(thirdPath);
+            }
+        }
+        keggRepository.save(storedKegg);
+        return storedKegg;
     }
 }
