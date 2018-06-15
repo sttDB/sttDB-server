@@ -18,6 +18,10 @@ public class Kegg implements DomainInformation {
 
     private List<String> path3;
 
+    public Kegg() {
+
+    }
+
     public Kegg(String keggId, List<String> path1, List<String> path2, List<String> path3) {
         this.keggId = keggId;
         this.path1 = path1;
@@ -41,7 +45,7 @@ public class Kegg implements DomainInformation {
         this.path1 = path1;
     }
 
-    public void addPath1(String path){
+    public void addPath1(String path) {
         path1.add(path);
     }
 
@@ -53,7 +57,7 @@ public class Kegg implements DomainInformation {
         this.path2 = path2;
     }
 
-    public void addPath2(String path){
+    public void addPath2(String path) {
         path2.add(path);
     }
 
@@ -65,7 +69,7 @@ public class Kegg implements DomainInformation {
         this.path3 = path3;
     }
 
-    public void addPath3(String path){
+    public void addPath3(String path) {
         path3.add(path);
     }
 }
