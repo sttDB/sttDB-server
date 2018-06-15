@@ -52,11 +52,8 @@ public class KeggParser {
     private void saveFirstPathLines() {
         int pathCount = 0;
         String[] keggPaths = new String[3];
-        while (keggScanner.hasNextLine()) {
+        while (keggScanner.hasNextLine() && pathCount < 3) {
             String line = keggScanner.nextLine();
-            if (line.startsWith(" ")) {
-                return;
-            }
             keggPaths[pathCount] = line;
             if (pathCount == 2) {
                 savePaths(keggPaths);
