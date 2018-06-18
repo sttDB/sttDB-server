@@ -6,9 +6,9 @@ public class Go implements DomainInformation {
 
     private String goType;
 
-    private String slimId;
+    private String[] slimId;
 
-    private String goName;
+    private String[] goName;
 
     private String inputAccession;
 
@@ -20,7 +20,7 @@ public class Go implements DomainInformation {
     public Go() {
     }
 
-    public Go(String goType, String slimId, String goName, String inputAccession, String goId, String description) {
+    public Go(String goType, String[] slimId, String[] goName, String inputAccession, String goId, String description) {
         this.goType = goType;
         this.slimId = slimId;
         this.goName = goName;
@@ -37,19 +37,19 @@ public class Go implements DomainInformation {
         this.goType = goType;
     }
 
-    public String getSlimId() {
+    public String[] getSlimId() {
         return slimId;
     }
 
-    public void setSlimId(String slimId) {
+    public void setSlimId(String[] slimId) {
         this.slimId = slimId;
     }
 
-    public String getGoName() {
+    public String[] getGoName() {
         return goName;
     }
 
-    public void setGoName(String goName) {
+    public void setGoName(String[] goName) {
         this.goName = goName;
     }
 
