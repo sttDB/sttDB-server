@@ -28,14 +28,14 @@ public class UploadGoFileStepDefs {
         goB = goRepository.findGoByGoId("GO:0016887");
 
         assertThat(goA.getGoType(), is("Cellular component"));
-        assertThat(goA.getSlimId(), is("GO:0000228"));
-        assertThat(goA.getGoName(), is("nuclear chromosome"));
+        assertThat(goA.getSlimId().get(0), is("GO:0000228"));
+        assertThat(goA.getGoName().get(0), is("nuclear chromosome"));
         assertThat(goA.getInputAccession(), is("asd"));
         assertThat(goA.getDescription(), is("epsilon DNA polymerase complex"));
 
         assertThat(goB.getGoType(), is("Mollecular function"));
-        assertThat(goB.getSlimId(), is("GO:0016887"));
-        assertThat(goB.getGoName(), is("ATPase activity"));
+        assertThat(goB.getSlimId().get(0), is("GO:0016887"));
+        assertThat(goB.getGoName().get(0), is("ATPase activity"));
         assertThat(goB.getInputAccession(), is("asds"));
         assertThat(goB.getDescription(), is("ATPase activity"));
     }
