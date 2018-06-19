@@ -2,13 +2,16 @@ package sttDB.domain;
 
 import org.springframework.data.annotation.Id;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Go implements DomainInformation {
 
     private String goType;
 
-    private String slimId;
+    private List<String> slimId = new ArrayList<>();
 
-    private String goName;
+    private List<String> goName = new ArrayList<>();
 
     private String inputAccession;
 
@@ -22,8 +25,8 @@ public class Go implements DomainInformation {
 
     public Go(String goType, String slimId, String goName, String inputAccession, String goId, String description) {
         this.goType = goType;
-        this.slimId = slimId;
-        this.goName = goName;
+        this.slimId.add(slimId);
+        this.goName.add(goName);
         this.inputAccession = inputAccession;
         this.goId = goId;
         this.description = description;
@@ -37,20 +40,28 @@ public class Go implements DomainInformation {
         this.goType = goType;
     }
 
-    public String getSlimId() {
+    public List<String> getSlimId() {
         return slimId;
     }
 
-    public void setSlimId(String slimId) {
+    public void setSlimId(List<String> slimId) {
         this.slimId = slimId;
     }
 
-    public String getGoName() {
+    public void addSlimId(String newSlimId){
+        slimId.add(newSlimId);
+    }
+
+    public List<String> getGoName() {
         return goName;
     }
 
-    public void setGoName(String goName) {
+    public void setGoName(List<String> goName) {
         this.goName = goName;
+    }
+
+    public void addGoName(String newGoName){
+        goName.add(newGoName);
     }
 
     public String getInputAccession() {
