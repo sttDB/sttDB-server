@@ -11,7 +11,9 @@ import sttDB.service.storageService.StorageService;
 import java.io.File;
 import java.io.FileInputStream;
 
+import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.emptyIterable;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -51,4 +53,10 @@ public class DownloadExperimentfilesStepDefs {
     public void theReceivedListOfFilesContainsTheFile(String fileName) throws Throwable {
         stepDefs.result.andExpect(jsonPath("$", contains(fileName)));
     }
+
+    @And("^The received list of files contains a file$")
+    public void theReceivedListOfFilesContainsOneLike() throws Throwable {
+        stepDefs.result.andExpect(jsonPath("$").exists());
+    }
+
 }
