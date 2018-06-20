@@ -1,0 +1,3 @@
+GO_Type	Slim_ID	GO_Name	Input_Accession	Input_GOID	GOID description
+C	GO:0000228	nuclear chromosome	asd	GO:0008622
+F	GO:0016887	ATPase activity	asds	GO:0016887
