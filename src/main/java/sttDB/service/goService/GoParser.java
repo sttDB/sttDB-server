@@ -28,6 +28,8 @@ public class GoParser {
             }
         } catch (FileNotFoundException e) {
             throw new GoParsingException("File not found: " + filePath, e);
+        } catch (RuntimeException e){
+            throw new GoParsingException("An error ocurred when trying to get the lines from the file", e);
         } finally {
             if (goScanner != null)
                 goScanner.close();
