@@ -2,9 +2,6 @@ package sttDB.exception;
 
 public class InterproParsingException extends RuntimeException {
 
-    public InterproParsingException() {
-    }
-
     public InterproParsingException(String message) {
         super(message);
     }
@@ -17,7 +14,4 @@ public class InterproParsingException extends RuntimeException {
         super(cause);
     }
 
-    public InterproParsingException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 }
