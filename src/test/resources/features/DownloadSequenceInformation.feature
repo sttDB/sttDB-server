@@ -9,6 +9,3 @@ Feature: Download sequence result as file
     When I perform a GET to the url "/download/fasta?trinityId=asd&experiment=test"
     Then The response code is 200
     And The received list of files contains a file
-
-
-  Scenario: Information does not exist
