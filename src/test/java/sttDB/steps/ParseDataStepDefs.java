@@ -17,6 +17,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Iterator;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
@@ -32,6 +33,7 @@ public class ParseDataStepDefs {
 
     private String fileName;
     private File testFile;
+    private boolean exception;
 
     @Given("^I have a file named \"([^\"]*)\"$")
     public void iHaveAFileNamed(String fileName) throws Throwable {
@@ -70,14 +72,23 @@ public class ParseDataStepDefs {
     }
 
     @When("^I upload the file to experiment \"([^\"]*)\" using the route \"([^\"]*)\"$")
-    public void iUploadTheFileToExperiment(String experiment, String route) throws Throwable {
+    public void iUploadTheFileToExperiment(String experiment, String route) throws IOException {
         MockMultipartFile file = createMockMultiPartFile();
-        stepDefs.result = stepDefs.mockMvc.perform(
-                fileUpload(route)
-                        .file(file)
-                        .header("experiment", experiment)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
+        try {
+            stepDefs.result = stepDefs.mockMvc.perform(
+                    fileUpload(route)
+                            .file(file)
+                            .header("experiment", experiment)
+                            .contentType(MediaType.MULTIPART_FORM_DATA)
+                            .accept(MediaType.APPLICATION_JSON))
+                    .andDo(print());
+        } catch (Exception e) {
+            exception = true;
+        }
+    }
+
+    @Then("^An exception has ocurred$")
+    public void anExceptionHasOcurred(){
+        assertTrue(exception);
     }
 }

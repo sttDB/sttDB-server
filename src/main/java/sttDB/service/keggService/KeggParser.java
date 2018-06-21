@@ -31,7 +31,7 @@ public class KeggParser {
             treatRestOfFile();
         } catch (FileNotFoundException e) {
             throw new KeggParsingException("File not found: " + filePath, e);
-        } catch (NullPointerException e) {
+        } catch (RuntimeException e) {
             throw new KeggParsingException("An error ocurred when trying to get the lines from the file", e);
         } finally {
             if (keggScanner != null)
