@@ -17,10 +17,8 @@ class SequenceRepositoryImpl implements CustomSequenceRepository {
 
     @Override
     public void sequenceFamiliesUpload(String trinityId, Experiment experiment, List<Family> family) {
-
         Query query = new Query();
         query.addCriteria(Criteria.where("trinityId").is(trinityId).and("experiment").is(experiment.getName()));
-
 
         Update update = new Update();
         update.pushAll("domainInfo.families", family.toArray());
@@ -41,7 +39,6 @@ class SequenceRepositoryImpl implements CustomSequenceRepository {
     private void uploadTerm(String trinityId, Experiment experiment, DomainInformation information, String domainInfo) {
         Query query = new Query();
         query.addCriteria(Criteria.where("trinityId").is(trinityId).and("experiment").is(experiment.getName()));
-
 
         Update update = new Update();
         update.push(domainInfo, information);
