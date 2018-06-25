@@ -17,10 +17,8 @@ class SequenceRepositoryImpl implements CustomSequenceRepository {
 
     @Override
     public void sequenceFamiliesUpload(String trinityId, Experiment experiment, List<Family> family) {
-
         Query query = new Query();
         query.addCriteria(Criteria.where("trinityId").is(trinityId).and("experiment").is(experiment.getName()));
-
 
         Update update = new Update();
         update.pushAll("domainInfo.families", family.toArray());
@@ -30,26 +28,20 @@ class SequenceRepositoryImpl implements CustomSequenceRepository {
 
     @Override
     public void sequenceGoTermUpload(String trinityId, Experiment experiment, Go go) {
-
-        Query query = new Query();
-        query.addCriteria(Criteria.where("trinityId").is(trinityId).and("experiment").is(experiment.getName()));
-
-
-        Update update = new Update();
-        update.push("domainInfo.go", go);
-
-        mongoOperation.updateMulti(query, update, Sequence.class);
+        uploadTerm(trinityId, experiment, go, "domainInfo.go");
     }
 
     @Override
     public void sequenceKeggTermUpload(String trinityId, Experiment experiment, Kegg kegg) {
+        uploadTerm(trinityId, experiment, kegg, "domainInfo.kegg");
+    }
 
+    private void uploadTerm(String trinityId, Experiment experiment, DomainInformation information, String domainInfo) {
         Query query = new Query();
         query.addCriteria(Criteria.where("trinityId").is(trinityId).and("experiment").is(experiment.getName()));
 
-
         Update update = new Update();
-        update.push("domainInfo.kegg", kegg);
+        update.push(domainInfo, information);
 
         mongoOperation.updateMulti(query, update, Sequence.class);
     }
