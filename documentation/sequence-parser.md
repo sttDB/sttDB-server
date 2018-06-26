@@ -28,4 +28,7 @@ The service contains three classes and one interface:
 - FastaInfoSaver: Interface that must be implemented to save information about sequences.
 - FastaUploader: Receives a FastaInfoSaver and a FastaParser, to parse and treat the old and new sequences.
 - FastaParser: Gets the first line of a sequence, starting by ">" and saves the rest of lines until the next start of sequence.
-- NucleotideSaver: Saves the information of a parsed line in an entity. 
+- NucleotideSaver: Saves the information of a parsed line in an entity, in this case Sequence.
+
+If another kind of sequence is introduced, there is only the need of creating another FastaInfoSaver, according to the new entity.
+
