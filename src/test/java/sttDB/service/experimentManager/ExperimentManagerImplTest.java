@@ -2,8 +2,12 @@ package sttDB.service.experimentManager;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.multipart.MultipartFile;
 import sttDB.domain.Experiment;
 import sttDB.exception.ExperimentNotFoundException;
@@ -25,7 +29,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-
+@SpringBootTest
+@RunWith(SpringRunner.class)
 public class ExperimentManagerImplTest {
 
     public static final String EXPERIMENT_FASTA = "experiment.fasta";
@@ -42,11 +47,18 @@ public class ExperimentManagerImplTest {
     private MockMultipartFile fastaFileMock;
     private MockMultipartFile familyFileMock;
 
+    @Autowired
+    private NucleotideSaver nucleotideSaverWired;
+
+    @Autowired
+    private StorageService storageWired;
+
     @Before
     public void setUp() throws IOException {
         repository = mock(ExperimentRepository.class);
         storage = mock(StorageService.class);
         fastaParser = mock(FastaParser.class);
+        nucleotideSaver = mock(NucleotideSaver.class);
         interprinterproManagerarser = mock(InterproUploader.class);
         sut = new ExperimentManagerImpl(repository, storage, interprinterproManagerarser, nucleotideSaver);
         fastaFileMock = new MockMultipartFile("file", EXPERIMENT_FASTA, "multipart/form-data",
@@ -59,6 +71,8 @@ public class ExperimentManagerImplTest {
     public void createExperimentDocument() {
         ArgumentCaptor<Experiment> argument = forClass(Experiment.class);
 
+
+        sut = new ExperimentManagerImpl(repository, storageWired,interprinterproManagerarser, nucleotideSaverWired);
         sut.processNewExperiment(fastaFileMock);
 
         verify(repository).save(argument.capture());
@@ -86,9 +100,10 @@ public class ExperimentManagerImplTest {
         when(storage.storeFileInExperiment(fastaFileMock, "experiment"))
                 .thenReturn(path);
 
+        sut = new ExperimentManagerImpl(repository, storageWired,interprinterproManagerarser, nucleotideSaverWired);
         sut.processNewExperiment(fastaFileMock);
 
-        verify(nucleotideSaver).saveInfo(stringArgument.capture(), experimentArgument.capture());
+        verify(nucleotideSaverWired).saveInfo(stringArgument.capture(), experimentArgument.capture());
         assertThat(stringArgument.getValue().length, is(2));
         assertThat(experimentArgument.getValue().getName(), is(getFileWithoutExtension()));
     }
