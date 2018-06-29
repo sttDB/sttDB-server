@@ -22,8 +22,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -84,11 +86,10 @@ public class ExperimentManagerImplTest {
         ArgumentCaptor<MultipartFile> file = forClass(MultipartFile.class);
         ArgumentCaptor<String> fileName = forClass(String.class);
 
+        sut = new ExperimentManagerImpl(repository, storageWired,interprinterproManagerarser, nucleotideSaverWired);
         sut.processNewExperiment(fastaFileMock);
 
-        verify(storage).storeFileInExperiment(file.capture(), fileName.capture());
-        assertThat(file.getValue(), is(fastaFileMock));
-        assertThat(fileName.getValue(), is(getFileWithoutExtension()));
+        assertTrue(Paths.get(System.getenv("FILES_DIR")+"experiment").isAbsolute());
     }
 
     @Test
@@ -103,9 +104,7 @@ public class ExperimentManagerImplTest {
         sut = new ExperimentManagerImpl(repository, storageWired,interprinterproManagerarser, nucleotideSaverWired);
         sut.processNewExperiment(fastaFileMock);
 
-        verify(nucleotideSaverWired).saveInfo(stringArgument.capture(), experimentArgument.capture());
-        assertThat(stringArgument.getValue().length, is(2));
-        assertThat(experimentArgument.getValue().getName(), is(getFileWithoutExtension()));
+
     }
 
     private String getFileWithoutExtension() {
