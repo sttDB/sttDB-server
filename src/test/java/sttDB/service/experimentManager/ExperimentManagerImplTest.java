@@ -82,17 +82,6 @@ public class ExperimentManagerImplTest {
     }
 
     @Test
-    public void experimentFileIsStored() {
-        ArgumentCaptor<MultipartFile> file = forClass(MultipartFile.class);
-        ArgumentCaptor<String> fileName = forClass(String.class);
-
-        sut = new ExperimentManagerImpl(repository, storageWired,interprinterproManagerarser, nucleotideSaverWired);
-        sut.processNewExperiment(fastaFileMock);
-
-        assertTrue(Paths.get(System.getenv("FILES_DIR")+"experiment").isAbsolute());
-    }
-
-    @Test
     public void fastaUploaderIsCalledWithFastaFilePath() {
         ArgumentCaptor<String[]> stringArgument = forClass(String[].class);
         ArgumentCaptor<Experiment> experimentArgument = forClass(Experiment.class);
@@ -105,6 +94,17 @@ public class ExperimentManagerImplTest {
         sut.processNewExperiment(fastaFileMock);
 
 
+    }
+
+    @Test
+    public void experimentFileIsStored() {
+        ArgumentCaptor<MultipartFile> file = forClass(MultipartFile.class);
+        ArgumentCaptor<String> fileName = forClass(String.class);
+
+        sut = new ExperimentManagerImpl(repository, storageWired,interprinterproManagerarser, nucleotideSaverWired);
+        sut.processNewExperiment(fastaFileMock);
+
+        assertTrue(Paths.get(System.getenv("FILES_DIR")+"experiment").isAbsolute());
     }
 
     private String getFileWithoutExtension() {
